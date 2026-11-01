@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FinanceAI - Gestão Financeira</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Carregador UMD Oficial do Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <!-- CDN Oficial e Estável do Supabase v2 -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
@@ -47,7 +47,7 @@
   <!-- CONTEÚDO PRINCIPAL -->
   <main class="max-w-7xl mx-auto p-4 md:p-6">
 
-    <!-- BANNER DE AVISO (EXIBIDO CASO HAJA FALHA DE CONEXÃO COM O BANCO) -->
+    <!-- BANNER DE STATUS -->
     <div id="banner-status" style="display: none;" class="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-2xl text-xs md:text-sm mb-6 flex items-center justify-between shadow-sm">
       <div class="flex items-center space-x-3">
         <i class="fa-solid fa-triangle-exclamation text-amber-500 text-base"></i>
@@ -193,7 +193,7 @@
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">Descrição</label>
-          <input type="text" id="t-descricao" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5 focus:ring-1 focus:ring-green-500" placeholder="Ex: Mercado BH">
+          <input type="text" id="t-descricao" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5 focus:ring-1 focus:ring-green-500" placeholder="Ex: Supermercado BH">
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
@@ -276,7 +276,7 @@
     var SUPABASE_KEY = 'sb_publishable_QwZ6A5zyJE0QG-EIiXG95w_xx6c4Aez';
     var TAXA_CDI_ANUAL = 0.1075;
 
-    var supabase = null;
+    var supabaseClient = null;
     var categorias = [];
     var subcategorias = [];
     var transacoes = [];
@@ -285,15 +285,6 @@
     var tipoTransacaoAtual = 'despesa';
     var chartDonut = null;
 
-    // Conexão Segura
-    try {
-      if (window.supabase && window.supabase.createClient) {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      }
-    } catch(err) {
-      console.error("Falha ao inicializar Supabase:", err);
-    }
-
     // Inicialização da Página
     window.addEventListener('DOMContentLoaded', function() {
       var dt = new Date().toISOString().split('T')[0];
@@ -301,6 +292,16 @@
       var elInvData = document.getElementById('inv-data');
       if (elTData) elTData.value = dt;
       if (elInvData) elInvData.value = dt;
+
+      // Criação do cliente de forma resiliente
+      try {
+        var factory = (window.supabase && window.supabase.createClient) ? window.supabase.createClient : (typeof supabase !== 'undefined' && supabase.createClient ? supabase.createClient : null);
+        if (factory) {
+          supabaseClient = factory(SUPABASE_URL, SUPABASE_KEY);
+        }
+      } catch(err) {
+        console.error("Falha ao inicializar Supabase:", err);
+      }
 
       carregarTudo();
     });
@@ -326,7 +327,7 @@
       }
     }
 
-    // 3. CONTROLE DE MODAIS (INLINE DIRECT)
+    // 3. CONTROLE DE MODAIS
     function abrirModalTransacao() {
       var m = document.getElementById('modal-transacao');
       if (m) m.style.display = 'flex';
@@ -355,32 +356,40 @@
       }
     }
 
-    // 4. CARREGAMENTO DOS DADOS COM TRATAMENTO DE ERROS
+    // 4. CARREGAMENTO DOS DADOS
     async function carregarTudo() {
       var banner = document.getElementById('banner-status');
       var msg = document.getElementById('mensagem-status');
 
-      if (!supabase) {
+      if (!supabaseClient) {
+        // Tenta reconectar mais uma vez caso o script tenha demorado
+        var factory = (window.supabase && window.supabase.createClient) ? window.supabase.createClient : (typeof supabase !== 'undefined' && supabase.createClient ? supabase.createClient : null);
+        if (factory) {
+          supabaseClient = factory(SUPABASE_URL, SUPABASE_KEY);
+        }
+      }
+
+      if (!supabaseClient) {
         if (banner) banner.style.display = 'flex';
         if (msg) msg.innerText = "A biblioteca do Supabase não foi carregada. Verifique sua conexão com a internet.";
         return;
       }
 
       try {
-        var resCats = await supabase.from('categorias').select('*').order('nome');
+        var resCats = await supabaseClient.from('categorias').select('*').order('nome');
         if (resCats.error) throw resCats.error;
         categorias = resCats.data || [];
 
-        var resSubs = await supabase.from('subcategorias').select('*').order('nome');
+        var resSubs = await supabaseClient.from('subcategorias').select('*').order('nome');
         subcategorias = resSubs.data || [];
 
-        var resContas = await supabase.from('contas_bancarias').select('*').order('nome');
+        var resContas = await supabaseClient.from('contas_bancarias').select('*').order('nome');
         contas = resContas.data || [];
 
-        var resTrans = await supabase.from('transacoes').select('*, categorias(nome), subcategorias(nome)').order('data', { ascending: false });
+        var resTrans = await supabaseClient.from('transacoes').select('*, categorias(nome), subcategorias(nome)').order('data', { ascending: false });
         transacoes = resTrans.data || [];
 
-        var resInvs = await supabase.from('investimentos_renda_fixa').select('*').order('data_aplicacao', { ascending: false });
+        var resInvs = await supabaseClient.from('investimentos_renda_fixa').select('*').order('data_aplicacao', { ascending: false });
         investimentos = resInvs.data || [];
 
         if (banner) banner.style.display = 'none';
@@ -643,7 +652,7 @@
       var subcategoria_id = document.getElementById('t-subcategoria').value || null;
       var conta_id = document.getElementById('t-conta').value || null;
 
-      var res = await supabase.from('transacoes').insert([{
+      var res = await supabaseClient.from('transacoes').insert([{
         descricao: descricao, valor: valor, tipo: tipoTransacaoAtual, data: data, categoria_id: categoria_id, subcategoria_id: subcategoria_id, conta_id: conta_id
       }]);
 
@@ -653,7 +662,7 @@
         var c = contas.find(function(x) { return x.id === conta_id; });
         if (c) {
           var novoSaldo = tipoTransacaoAtual === 'receita' ? Number(c.saldo_atual) + valor : Number(c.saldo_atual) - valor;
-          await supabase.from('contas_bancarias').update({ saldo_atual: novoSaldo }).eq('id', conta_id);
+          await supabaseClient.from('contas_bancarias').update({ saldo_atual: novoSaldo }).eq('id', conta_id);
         }
       }
 
@@ -670,7 +679,7 @@
       var data_aplicacao = document.getElementById('inv-data').value;
       var is_reserva = document.getElementById('inv-is-reserva').checked;
 
-      var res = await supabase.from('investimentos_renda_fixa').insert([{
+      var res = await supabaseClient.from('investimentos_renda_fixa').insert([{
         nome: nome, tipo: tipo, percentual_cdi: percentual_cdi, valor_aplicado: valor_aplicado, data_aplicacao: data_aplicacao, is_reserva: is_reserva
       }]);
 
@@ -682,13 +691,13 @@
 
     async function excluirTransacao(id) {
       if (!confirm('Deseja realmente excluir este lançamento?')) return;
-      await supabase.from('transacoes').delete().eq('id', id);
+      await supabaseClient.from('transacoes').delete().eq('id', id);
       await carregarTudo();
     }
 
     async function excluirInvestimento(id) {
       if (!confirm('Deseja excluir esta aplicação?')) return;
-      await supabase.from('investimentos_renda_fixa').delete().eq('id', id);
+      await supabaseClient.from('investimentos_renda_fixa').delete().eq('id', id);
       await carregarTudo();
     }
   </script>

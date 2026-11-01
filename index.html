@@ -3,128 +3,238 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FinanceAI - Gestão Financeira</title>
+  <title>FinanceAI - Gestão Inteligente</title>
+  
+  <!-- Fonte Inter (Moderna e Limpa) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- CDN Oficial e Estável do Supabase v2 -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <style>
-    .nav-btn.active {
-      border-bottom: 3px solid #ffffff;
-      color: #ffffff;
-      font-weight: 700;
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81' }
+          }
+        }
+      }
     }
+  </script>
+  <style>
+    body { background-color: #f8fafc; }
+    /* Esconde barra de rolagem mas permite rolar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    
+    .nav-btn { position: relative; color: #64748b; transition: all 0.3s ease; }
+    .nav-btn:hover { color: #0f172a; }
+    .nav-btn.active { color: #4f46e5; font-weight: 600; }
+    .nav-btn.active::after {
+      content: ''; position: absolute; bottom: -16px; left: 0; right: 0; height: 3px;
+      background: #4f46e5; border-radius: 3px 3px 0 0;
+    }
+    
+    .glass-header {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    
+    .row-hover .action-btns { opacity: 0; transition: opacity 0.2s; }
+    .row-hover:hover .action-btns { opacity: 1; }
   </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans min-h-screen">
+<body class="text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white">
 
-  <!-- CABEÇALHO VERDE (ESTILO GRANAZEN) -->
-  <header class="bg-[#1b7a42] text-white sticky top-0 z-40 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
-      <div class="flex items-center space-x-6">
-        <div class="flex items-center space-x-2 font-bold text-xl tracking-tight cursor-pointer" onclick="trocarAba('planeje')">
-          <i class="fa-solid fa-wallet text-green-300"></i>
-          <span>FinanceAI</span>
+  <!-- HEADER MODERNO (GLASSMORPHISM) -->
+  <header class="glass-header sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo -->
+        <div class="flex items-center gap-3 cursor-pointer" onclick="trocarAba('planeje')">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-violet-600 flex items-center justify-center shadow-lg shadow-brand-500/30">
+            <i class="fa-solid fa-layer-group text-white text-lg"></i>
+          </div>
+          <span class="font-bold text-xl tracking-tight text-slate-900">Finance<span class="text-brand-600">AI</span></span>
         </div>
-        <nav class="hidden md:flex space-x-1 text-sm">
-          <button type="button" onclick="trocarAba('planeje')" id="tab-btn-planeje" class="nav-btn active px-3 py-4 text-green-100 hover:text-white transition cursor-pointer">Planeje sua grana</button>
-          <button type="button" onclick="trocarAba('relatorios')" id="tab-btn-relatorios" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition cursor-pointer">Relatórios</button>
-          <button type="button" onclick="trocarAba('investimentos')" id="tab-btn-investimentos" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition cursor-pointer">Investimentos & Reserva</button>
-          <button type="button" onclick="trocarAba('categorias')" id="tab-btn-categorias" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition cursor-pointer">Categorias</button>
-          <button type="button" onclick="trocarAba('contas')" id="tab-btn-contas" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition cursor-pointer">Contas bancárias</button>
+
+        <!-- Navegação Desktop -->
+        <nav class="hidden md:flex space-x-8 text-sm font-medium">
+          <button type="button" onclick="trocarAba('planeje')" id="tab-btn-planeje" class="nav-btn active flex items-center gap-2">
+            <i class="fa-solid fa-chart-pie"></i> Dashboard
+          </button>
+          <button type="button" onclick="trocarAba('relatorios')" id="tab-btn-relatorios" class="nav-btn flex items-center gap-2">
+            <i class="fa-solid fa-chart-line"></i> Relatórios
+          </button>
+          <button type="button" onclick="trocarAba('investimentos')" id="tab-btn-investimentos" class="nav-btn flex items-center gap-2">
+            <i class="fa-solid fa-shield-halved"></i> Investimentos
+          </button>
+          <button type="button" onclick="trocarAba('contas')" id="tab-btn-contas" class="nav-btn flex items-center gap-2">
+            <i class="fa-solid fa-building-columns"></i> Carteiras
+          </button>
         </nav>
-      </div>
-      <div class="flex items-center space-x-3 text-sm">
-        <button type="button" onclick="abrirModalTransacao()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-4 py-2 rounded-xl shadow-sm transition flex items-center space-x-2 cursor-pointer">
-          <i class="fa-solid fa-plus text-xs"></i>
-          <span>Lançamento</span>
-        </button>
+
+        <!-- Botão Ação Principal -->
+        <div class="flex items-center gap-4">
+          <button type="button" onclick="abrirModalTransacao()" class="hidden sm:flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-medium px-5 py-2.5 rounded-full transition-transform transform active:scale-95 shadow-md">
+            <i class="fa-solid fa-plus text-sm"></i> Lançamento
+          </button>
+          <!-- Perfil do Usuário -->
+          <div class="w-10 h-10 rounded-full bg-slate-200 border-2 border-white shadow-sm overflow-hidden">
+            <img src="https://api.dicebear.com/7.x/initials/svg?seed=Daniel+Silva&backgroundColor=4f46e5" alt="Avatar">
+          </div>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- CONTEÚDO PRINCIPAL -->
-  <main class="max-w-7xl mx-auto p-4 md:p-6">
-
-    <!-- BANNER DE STATUS -->
-    <div id="banner-status" style="display: none;" class="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-2xl text-xs md:text-sm mb-6 flex items-center justify-between shadow-sm">
-      <div class="flex items-center space-x-3">
-        <i class="fa-solid fa-triangle-exclamation text-amber-500 text-base"></i>
-        <span id="mensagem-status">Conectando ao banco...</span>
+  <!-- NAVEGAÇÃO MOBILE (BOTTOM BAR) -->
+  <div class="md:hidden fixed bottom-0 left-0 right-0 glass-header border-t border-slate-200 z-40 pb-safe">
+    <div class="flex justify-around items-center h-16 text-xs font-medium text-slate-500">
+      <button onclick="trocarAba('planeje')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-2">
+        <i class="fa-solid fa-chart-pie text-lg"></i> Início
+      </button>
+      <button onclick="trocarAba('investimentos')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-2">
+        <i class="fa-solid fa-shield-halved text-lg"></i> Reserva
+      </button>
+      <!-- FAB Mobile centralizado -->
+      <div class="relative -top-5">
+        <button onclick="abrirModalTransacao()" class="w-14 h-14 bg-gradient-to-tr from-brand-600 to-violet-500 rounded-full text-white shadow-lg shadow-brand-500/40 flex items-center justify-center text-xl active:scale-90 transition">
+          <i class="fa-solid fa-plus"></i>
+        </button>
       </div>
-      <button onclick="carregarTudo()" class="bg-amber-200/60 hover:bg-amber-200 text-amber-900 px-3 py-1 rounded-lg text-xs font-semibold transition">Tentar novamente</button>
+      <button onclick="trocarAba('relatorios')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-2">
+        <i class="fa-solid fa-chart-line text-lg"></i> Gráficos
+      </button>
+      <button onclick="trocarAba('contas')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-2">
+        <i class="fa-solid fa-wallet text-lg"></i> Contas
+      </button>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 mb-20 md:mb-8">
+
+    <!-- SAUDAÇÃO PERSONALIZADA -->
+    <div class="mb-8 hidden sm:block">
+      <h1 class="text-2xl font-bold text-slate-900">Olá, Daniel! 👋</h1>
+      <p class="text-slate-500 text-sm mt-1">Aqui está o resumo da sua saúde financeira hoje.</p>
     </div>
 
-    <!-- 1. ABA: PLANEJE SUA GRANA -->
-    <section id="aba-planeje" class="space-y-6">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-sm">
-          <div class="flex items-center justify-between text-gray-500 text-xs font-semibold uppercase tracking-wider">
-            <span>Receitas do Mês</span>
-            <i class="fa-solid fa-arrow-down-left text-emerald-500 text-sm"></i>
+    <!-- BANNER DE STATUS -->
+    <div id="banner-status" style="display: none;" class="bg-amber-50/80 border border-amber-200/60 text-amber-800 px-4 py-3 rounded-2xl text-sm mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between shadow-sm backdrop-blur-sm gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+          <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
+        </div>
+        <span id="mensagem-status" class="font-medium">Conectando ao banco de dados...</span>
+      </div>
+      <button onclick="carregarTudo()" class="bg-white hover:bg-amber-50 text-amber-700 px-4 py-1.5 rounded-lg border border-amber-200 font-semibold shadow-sm transition w-full sm:w-auto">Tentar novamente</button>
+    </div>
+
+    <!-- ==============================================
+         1. ABA: DASHBOARD MACRO (PLANEJE)
+         ============================================== -->
+    <section id="aba-planeje" class="space-y-8 animate-[fadeIn_0.4s_ease-out]">
+      <!-- KPIs Modernos -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <!-- Receitas -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)] hover:shadow-lg transition-shadow">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500">
+              <i class="fa-solid fa-arrow-down"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Receitas</span>
           </div>
-          <div class="text-2xl font-bold text-emerald-600 mt-2" id="kpi-receitas">R$ 0,00</div>
-          <span class="text-xs text-gray-400 mt-1 block">Entradas confirmadas</span>
+          <div class="text-3xl font-black text-slate-800" id="kpi-receitas">R$ 0,00</div>
+          <p class="text-xs font-medium text-emerald-500 mt-2 flex items-center gap-1">
+            <i class="fa-solid fa-circle-check"></i> Entradas do período
+          </p>
         </div>
 
-        <div class="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-sm">
-          <div class="flex items-center justify-between text-gray-500 text-xs font-semibold uppercase tracking-wider">
-            <span>Despesas do Mês</span>
-            <i class="fa-solid fa-arrow-up-right text-rose-500 text-sm"></i>
+        <!-- Despesas -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)] hover:shadow-lg transition-shadow">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-500">
+              <i class="fa-solid fa-arrow-up"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Despesas</span>
           </div>
-          <div class="text-2xl font-bold text-rose-600 mt-2" id="kpi-despesas">R$ 0,00</div>
-          <span class="text-xs text-gray-400 mt-1 block">Saídas computadas</span>
+          <div class="text-3xl font-black text-slate-800" id="kpi-despesas">R$ 0,00</div>
+          <p class="text-xs font-medium text-rose-500 mt-2 flex items-center gap-1">
+            <i class="fa-solid fa-circle-exclamation"></i> Saídas computadas
+          </p>
         </div>
 
-        <div class="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-sm">
-          <div class="flex items-center justify-between text-gray-500 text-xs font-semibold uppercase tracking-wider">
-            <span>Saldo em Conta</span>
-            <i class="fa-solid fa-building-columns text-blue-500 text-sm"></i>
+        <!-- Saldo Geral -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)] hover:shadow-lg transition-shadow">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 rounded-full bg-sky-50 flex items-center justify-center text-sky-500">
+              <i class="fa-solid fa-building-columns"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Saldo Atual</span>
           </div>
-          <div class="text-2xl font-bold text-gray-800 mt-2" id="kpi-saldo-contas">R$ 0,00</div>
-          <span class="text-xs text-gray-400 mt-1 block">Disponível imediato</span>
+          <div class="text-3xl font-black text-slate-800" id="kpi-saldo-contas">R$ 0,00</div>
+          <p class="text-xs font-medium text-slate-500 mt-2">Soma de todas as contas</p>
         </div>
 
-        <div class="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-sm">
-          <div class="flex items-center justify-between text-gray-500 text-xs font-semibold uppercase tracking-wider">
-            <span>Reserva & Renda Fixa</span>
-            <i class="fa-solid fa-shield-halved text-indigo-500 text-sm"></i>
+        <!-- Investimentos (Destaque) -->
+        <div class="bg-gradient-to-br from-brand-900 to-brand-700 p-6 rounded-3xl shadow-xl shadow-brand-900/20 text-white relative overflow-hidden">
+          <div class="absolute -right-6 -top-6 w-24 h-24 bg-white opacity-5 rounded-full blur-2xl"></div>
+          <div class="flex items-center justify-between mb-4 relative z-10">
+            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm">
+              <i class="fa-solid fa-shield-halved text-brand-100"></i>
+            </div>
+            <span class="text-xs font-bold text-brand-200 uppercase tracking-wider">Patrimônio</span>
           </div>
-          <div class="text-2xl font-bold text-indigo-600 mt-2" id="kpi-saldo-investido">R$ 0,00</div>
-          <span class="text-xs text-gray-400 mt-1 block" id="kpi-rendimento-total">+ R$ 0,00 de rendimento</span>
+          <div class="text-3xl font-black relative z-10" id="kpi-saldo-investido">R$ 0,00</div>
+          <p class="text-xs font-medium text-brand-200 mt-2 flex items-center gap-1 relative z-10" id="kpi-rendimento-total">
+            <i class="fa-solid fa-arrow-trend-up"></i> + R$ 0,00 rendimento CDI
+          </p>
         </div>
       </div>
 
-      <!-- TABELA DE TRANSAÇÕES -->
-      <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-gray-100 gap-3">
-          <h2 class="text-lg font-bold text-gray-800">Transações Recentes</h2>
-          <div class="flex items-center space-x-2">
-            <span class="text-xs text-gray-500">Filtrar:</span>
-            <select id="filtro-tipo" onchange="renderizarTransacoes()" class="text-xs bg-gray-50 border border-gray-200 rounded-lg p-2 focus:ring-1 focus:ring-green-500">
-              <option value="todos">Todas</option>
-              <option value="receita">Receitas</option>
-              <option value="despesa">Despesas</option>
-            </select>
+      <!-- Tabela de Transações Moderna -->
+      <div class="bg-white rounded-3xl border border-slate-100 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)] overflow-hidden">
+        <div class="p-6 border-b border-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50/50">
+          <div>
+            <h2 class="text-lg font-bold text-slate-800">Últimas Movimentações</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Acompanhe seu fluxo de caixa diário</p>
+          </div>
+          <div class="flex items-center gap-2 bg-white rounded-xl p-1 border border-slate-200 shadow-sm w-full sm:w-auto">
+            <button onclick="filtrar('todos', this)" class="filtro-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-800 flex-1 sm:flex-none transition">Todas</button>
+            <button onclick="filtrar('receita', this)" class="filtro-btn px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800 flex-1 sm:flex-none transition">Receitas</button>
+            <button onclick="filtrar('despesa', this)" class="filtro-btn px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800 flex-1 sm:flex-none transition">Despesas</button>
           </div>
         </div>
 
-        <div class="overflow-x-auto mt-4">
-          <table class="w-full text-left text-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
             <thead>
-              <tr class="text-gray-400 text-xs font-semibold uppercase tracking-wider border-b border-gray-100">
-                <th class="pb-3">Data</th>
-                <th class="pb-3">Descrição</th>
-                <th class="pb-3">Categoria</th>
-                <th class="pb-3">Subcategoria</th>
-                <th class="pb-3 text-right">Valor</th>
-                <th class="pb-3 text-center">Ações</th>
+              <tr class="text-xs font-bold text-slate-400 uppercase tracking-wider bg-white border-b border-slate-100">
+                <th class="py-4 px-6 font-semibold">Descrição</th>
+                <th class="py-4 px-6 font-semibold">Categoria</th>
+                <th class="py-4 px-6 font-semibold">Data</th>
+                <th class="py-4 px-6 font-semibold text-right">Valor</th>
+                <th class="py-4 px-6 font-semibold text-center w-16"></th>
               </tr>
             </thead>
-            <tbody id="lista-transacoes-tbody" class="divide-y divide-gray-50">
+            <tbody id="lista-transacoes-tbody" class="divide-y divide-slate-50">
+              <!-- Loading State -->
               <tr>
-                <td colspan="6" class="text-center py-8 text-gray-400 text-sm">Nenhum lançamento encontrado. Cadastre no botão "+ Lançamento".</td>
+                <td colspan="5" class="py-12 text-center">
+                  <i class="fa-solid fa-circle-notch fa-spin text-brand-500 text-2xl mb-3"></i>
+                  <p class="text-sm text-slate-500">Buscando transações...</p>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -132,264 +242,249 @@
       </div>
     </section>
 
-    <!-- 2. ABA: RELATÓRIOS -->
-    <section id="aba-relatorios" style="display: none;" class="space-y-6">
-      <div class="bg-white rounded-2xl border border-gray-200/80 p-6 shadow-sm">
-        <h2 class="text-lg font-bold text-gray-800 mb-4">Distribuição de Despesas por Categoria</h2>
+    <!-- ==============================================
+         2. ABA: RELATÓRIOS
+         ============================================== -->
+    <section id="aba-relatorios" style="display: none;" class="space-y-6 animate-[fadeIn_0.4s_ease-out]">
+      <div class="bg-white rounded-3xl border border-slate-100 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)] p-6 md:p-8">
+        <h2 class="text-xl font-bold text-slate-800 mb-2">Para onde vai seu dinheiro?</h2>
+        <p class="text-sm text-slate-500 mb-8">Análise de despesas por categoria.</p>
+        
         <div class="max-w-md mx-auto h-80 relative flex items-center justify-center">
           <canvas id="graficoDonut"></canvas>
         </div>
       </div>
     </section>
 
-    <!-- 3. ABA: INVESTIMENTOS & RESERVA -->
-    <section id="aba-investimentos" style="display: none;" class="space-y-6">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <!-- ==============================================
+         3. ABA: INVESTIMENTOS & RESERVA
+         ============================================== -->
+    <section id="aba-investimentos" style="display: none;" class="space-y-6 animate-[fadeIn_0.4s_ease-out]">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-3xl border border-slate-100 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)]">
         <div>
-          <h2 class="text-xl font-bold text-gray-800">Reserva de Emergência & Renda Fixa</h2>
-          <p class="text-sm text-gray-500">Rendimento calculado diariamente com base na taxa CDI e tabela regressiva de IR.</p>
+          <h2 class="text-xl font-bold text-slate-800">Meus Investimentos</h2>
+          <p class="text-sm text-slate-500 mt-1">Cálculo diário automático referenciado ao CDI anual.</p>
         </div>
-        <button type="button" onclick="abrirModalInvestimento()" class="bg-[#1b7a42] hover:bg-green-700 text-white font-medium text-sm px-4 py-2 rounded-xl transition flex items-center space-x-2 cursor-pointer">
-          <i class="fa-solid fa-plus text-xs"></i>
-          <span>Nova Aplicação</span>
+        <button type="button" onclick="abrirModalInvestimento()" class="bg-brand-600 hover:bg-brand-700 text-white font-medium px-5 py-2.5 rounded-full transition-transform active:scale-95 shadow-lg shadow-brand-500/30 flex items-center gap-2">
+          <i class="fa-solid fa-chart-simple"></i> Nova Aplicação
         </button>
       </div>
 
-      <div id="grid-investimentos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+      <div id="grid-investimentos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 4. ABA: CATEGORIAS -->
-    <section id="aba-categorias" style="display: none;" class="space-y-6">
-      <div class="bg-white rounded-2xl border border-gray-200/80 p-6 shadow-sm">
-        <h2 class="text-lg font-bold text-gray-800 mb-4">Estrutura de Categorias & Subcategorias</h2>
-        <div id="lista-categorias-container" class="space-y-3"></div>
-      </div>
-    </section>
-
-    <!-- 5. ABA: CONTAS BANCÁRIAS -->
-    <section id="aba-contas" style="display: none;" class="space-y-6">
-      <div class="flex justify-between items-center">
-        <h2 class="text-xl font-bold text-gray-800">Contas e Carteiras</h2>
-      </div>
-      <div id="grid-contas" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
+    <!-- ==============================================
+         4. ABA: CONTAS E CARTEIRAS
+         ============================================== -->
+    <section id="aba-contas" style="display: none;" class="space-y-6 animate-[fadeIn_0.4s_ease-out]">
+      <h2 class="text-xl font-bold text-slate-800 mb-4 px-2">Suas Contas</h2>
+      <div id="grid-contas" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
     </section>
 
   </main>
 
-  <!-- MODAL: NOVA TRANSAÇÃO -->
-  <div id="modal-transacao" style="display: none;" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center pb-3 border-b border-gray-100">
-        <h3 class="font-bold text-gray-800 text-base">Novo Lançamento</h3>
-        <button type="button" onclick="fecharModal('modal-transacao')" class="text-gray-400 hover:text-gray-600 text-xl cursor-pointer p-1"><i class="fa-solid fa-xmark"></i></button>
+  <!-- ==============================================
+       MODAIS (FORMS MODERNOS FLUTUANTES)
+       ============================================== -->
+
+  <!-- Modal: Nova Transação -->
+  <div id="modal-transacao" style="display: none;" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity">
+    <div class="bg-white rounded-[2rem] max-w-md w-full p-8 shadow-2xl overflow-hidden relative">
+      <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-emerald-400 to-brand-500" id="modal-top-bar"></div>
+      
+      <div class="flex justify-between items-center mb-6 mt-2">
+        <h3 class="font-bold text-slate-800 text-xl">Novo Lançamento</h3>
+        <button type="button" onclick="fecharModal('modal-transacao')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600 transition"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <form onsubmit="salvarTransacao(event)" class="mt-4 space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1">Tipo</label>
-          <div class="grid grid-cols-2 gap-2">
-            <button type="button" id="btn-tipo-despesa" onclick="setTipoTransacao('despesa')" class="py-2 text-xs font-bold rounded-lg border-2 border-rose-500 text-rose-600 bg-rose-50 cursor-pointer">Despesa</button>
-            <button type="button" id="btn-tipo-receita" onclick="setTipoTransacao('receita')" class="py-2 text-xs font-bold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 cursor-pointer">Receita</button>
+      
+      <form onsubmit="salvarTransacao(event)" class="space-y-5">
+        
+        <!-- Toggle Tipo -->
+        <div class="bg-slate-100 p-1 rounded-xl flex gap-1">
+          <button type="button" id="btn-tipo-despesa" onclick="setTipoTransacao('despesa')" class="flex-1 py-2 text-sm font-bold rounded-lg bg-white text-rose-600 shadow-sm transition">Despesa</button>
+          <button type="button" id="btn-tipo-receita" onclick="setTipoTransacao('receita')" class="flex-1 py-2 text-sm font-bold rounded-lg text-slate-500 hover:text-slate-700 transition">Receita</button>
+        </div>
+
+        <div class="space-y-4 pt-2">
+          <!-- Valor (Destaque) -->
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">R$</span>
+            <input type="number" step="0.01" id="t-valor" required class="w-full text-2xl font-black text-slate-800 bg-slate-50 border border-slate-200 rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition" placeholder="0,00">
           </div>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1">Descrição</label>
-          <input type="text" id="t-descricao" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5 focus:ring-1 focus:ring-green-500" placeholder="Ex: Supermercado BH">
-        </div>
-        <div class="grid grid-cols-2 gap-3">
+
+          <!-- Descrição -->
           <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Valor (R$)</label>
-            <input type="number" step="0.01" id="t-valor" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5 focus:ring-1 focus:ring-green-500" placeholder="0,00">
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Descrição</label>
+            <input type="text" id="t-descricao" required class="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none transition" placeholder="Ex: Supermercado BH">
           </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Data -->
+            <div>
+              <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Data</label>
+              <input type="date" id="t-data" required class="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none transition">
+            </div>
+            <!-- Conta -->
+            <div>
+              <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Conta</label>
+              <select id="t-conta" class="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none transition appearance-none cursor-pointer"></select>
+            </div>
+          </div>
+
+          <!-- Categoria -->
           <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Data</label>
-            <input type="date" id="t-data" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5 focus:ring-1 focus:ring-green-500">
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Categoria</label>
+            <select id="t-categoria" required class="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none transition appearance-none cursor-pointer"></select>
           </div>
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1">Categoria</label>
-          <select id="t-categoria" onchange="atualizarSelectSubcategorias()" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5 focus:ring-1 focus:ring-green-500"></select>
+
+        <div class="pt-4">
+          <button type="submit" id="btn-submit-transacao" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3.5 rounded-xl transition-transform active:scale-95 shadow-lg shadow-rose-500/30">Registrar Saída</button>
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1">Subcategoria (Opcional)</label>
-          <select id="t-subcategoria" class="w-full text-sm border border-gray-200 rounded-lg p-2.5 focus:ring-1 focus:ring-green-500">
-            <option value="">Selecione uma categoria primeiro</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1">Conta de Débito/Crédito</label>
-          <select id="t-conta" class="w-full text-sm border border-gray-200 rounded-lg p-2.5 focus:ring-1 focus:ring-green-500"></select>
-        </div>
-        <button type="submit" class="w-full bg-[#1b7a42] hover:bg-green-700 text-white font-semibold py-3 rounded-xl transition text-sm cursor-pointer shadow-md">Salvar Lançamento</button>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: NOVO INVESTIMENTO -->
-  <div id="modal-investimento" style="display: none;" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center pb-3 border-b border-gray-100">
-        <h3 class="font-bold text-gray-800 text-base">Cadastrar Renda Fixa / Reserva</h3>
-        <button type="button" onclick="fecharModal('modal-investimento')" class="text-gray-400 hover:text-gray-600 text-xl cursor-pointer p-1"><i class="fa-solid fa-xmark"></i></button>
+  <!-- Modal: Novo Investimento -->
+  <div id="modal-investimento" style="display: none;" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-[2rem] max-w-md w-full p-8 shadow-2xl relative">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-bold text-slate-800 text-xl">Novo Investimento</h3>
+        <button type="button" onclick="fecharModal('modal-investimento')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600 transition"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <form onsubmit="salvarInvestimento(event)" class="mt-4 space-y-4">
+      <form onsubmit="salvarInvestimento(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1">Nome / Banco</label>
-          <input type="text" id="inv-nome" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5" placeholder="Ex: CDB Reserva de Emergência">
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Instituição / Nome</label>
+          <input type="text" id="inv-nome" required class="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none transition" placeholder="Ex: CDB Banco Inter">
         </div>
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Tipo de Título</label>
-            <select id="inv-tipo" class="w-full text-sm border border-gray-200 rounded-lg p-2.5">
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Valor (R$)</label>
+            <input type="number" step="0.01" id="inv-valor" required class="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none transition" placeholder="1000,00">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Data</label>
+            <input type="date" id="inv-data" required class="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none transition">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Ativo</label>
+            <select id="inv-tipo" class="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none appearance-none">
               <option value="CDB">CDB</option>
-              <option value="LCI">LCI (Isento IR)</option>
-              <option value="LCA">LCA (Isento IR)</option>
+              <option value="LCI">LCI</option>
               <option value="Tesouro Selic">Tesouro Selic</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">% do CDI</label>
-            <input type="number" step="0.1" id="inv-cdi" required value="100" class="w-full text-sm border border-gray-200 rounded-lg p-2.5">
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">% CDI</label>
+            <input type="number" step="0.1" id="inv-cdi" required value="100" class="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none transition">
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Valor Aplicado (R$)</label>
-            <input type="number" step="0.01" id="inv-valor" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5" placeholder="1000,00">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Data da Aplicação</label>
-            <input type="date" id="inv-data" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5">
-          </div>
-        </div>
-        <div class="flex items-center space-x-2 pt-2">
-          <input type="checkbox" id="inv-is-reserva" class="rounded text-green-600 focus:ring-green-500 h-4 w-4">
-          <label for="inv-is-reserva" class="text-xs text-gray-700 font-medium">Marcar como Reserva de Emergência Oficial</label>
-        </div>
-        <button type="submit" class="w-full bg-[#1b7a42] hover:bg-green-700 text-white font-semibold py-3 rounded-xl transition text-sm cursor-pointer shadow-md">Salvar Aplicação</button>
+        <label class="flex items-center gap-3 p-3 mt-2 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition">
+          <input type="checkbox" id="inv-is-reserva" class="w-5 h-5 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+          <span class="text-sm font-medium text-slate-700">Reserva de Emergência</span>
+        </label>
+        <button type="submit" class="w-full mt-4 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl transition-transform active:scale-95 shadow-lg shadow-brand-500/30">Criar Aplicação</button>
       </form>
     </div>
   </div>
 
+  <!-- SCRIPT -->
   <script>
-    // 1. CONFIGURAÇÃO GERAL E SUPABASE
-    var SUPABASE_URL = 'https://cpcrmudbnepkodruxtok.supabase.co';
-    var SUPABASE_KEY = 'sb_publishable_QwZ6A5zyJE0QG-EIiXG95w_xx6c4Aez';
-    var TAXA_CDI_ANUAL = 0.1075;
+    const SUPABASE_URL = 'https://cpcrmudbnepkodruxtok.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_QwZ6A5zyJE0QG-EIiXG95w_xx6c4Aez';
+    const TAXA_CDI_ANUAL = 0.1075;
 
-    var supabaseClient = null;
-    var categorias = [];
-    var subcategorias = [];
-    var transacoes = [];
-    var contas = [];
-    var investimentos = [];
-    var tipoTransacaoAtual = 'despesa';
-    var chartDonut = null;
+    let supabaseClient = null;
+    let categorias = [], transacoes = [], contas = [], investimentos = [];
+    let tipoTransacaoAtual = 'despesa';
+    let filtroAtual = 'todos';
+    let chartDonut = null;
 
-    // Inicialização da Página
-    window.addEventListener('DOMContentLoaded', function() {
-      var dt = new Date().toISOString().split('T')[0];
-      var elTData = document.getElementById('t-data');
-      var elInvData = document.getElementById('inv-data');
-      if (elTData) elTData.value = dt;
-      if (elInvData) elInvData.value = dt;
+    // Dicionário Visual para Tabela
+    const configCategoria = {
+      'Alimentação': { icon: 'fa-utensils', color: 'text-orange-500', bg: 'bg-orange-50' },
+      'Transporte': { icon: 'fa-car', color: 'text-sky-500', bg: 'bg-sky-50' },
+      'Moradia': { icon: 'fa-house', color: 'text-indigo-500', bg: 'bg-indigo-50' },
+      'Saúde': { icon: 'fa-heart-pulse', color: 'text-rose-500', bg: 'bg-rose-50' },
+      'Educação': { icon: 'fa-graduation-cap', color: 'text-violet-500', bg: 'bg-violet-50' },
+      'Lazer': { icon: 'fa-gamepad', color: 'text-fuchsia-500', bg: 'bg-fuchsia-50' },
+      'Compras': { icon: 'fa-bag-shopping', color: 'text-pink-500', bg: 'bg-pink-50' },
+      'Renda': { icon: 'fa-money-bill-wave', color: 'text-emerald-500', bg: 'bg-emerald-50' },
+      'default': { icon: 'fa-tag', color: 'text-slate-500', bg: 'bg-slate-100' }
+    };
 
-      // Criação do cliente de forma resiliente
+    window.addEventListener('DOMContentLoaded', () => {
+      const dt = new Date().toISOString().split('T')[0];
+      if(document.getElementById('t-data')) document.getElementById('t-data').value = dt;
+      if(document.getElementById('inv-data')) document.getElementById('inv-data').value = dt;
+
       try {
-        var factory = (window.supabase && window.supabase.createClient) ? window.supabase.createClient : (typeof supabase !== 'undefined' && supabase.createClient ? supabase.createClient : null);
-        if (factory) {
-          supabaseClient = factory(SUPABASE_URL, SUPABASE_KEY);
-        }
-      } catch(err) {
-        console.error("Falha ao inicializar Supabase:", err);
-      }
+        const factory = (window.supabase && window.supabase.createClient) ? window.supabase.createClient : (typeof supabase !== 'undefined' && supabase.createClient ? supabase.createClient : null);
+        if (factory) supabaseClient = factory(SUPABASE_URL, SUPABASE_KEY);
+      } catch(err) { console.error(err); }
 
       carregarTudo();
     });
 
-    // 2. FUNÇÃO INDEPENDENTE DE NAVEGAÇÃO DE ABAS
     function trocarAba(aba) {
-      var abas = ['planeje', 'relatorios', 'investimentos', 'categorias', 'contas'];
-      for (var i = 0; i < abas.length; i++) {
-        var a = abas[i];
-        var sec = document.getElementById('aba-' + a);
-        var btn = document.getElementById('tab-btn-' + a);
+      ['planeje', 'relatorios', 'investimentos', 'contas'].forEach(a => {
+        const sec = document.getElementById(`aba-${a}`);
+        const btn = document.getElementById(`tab-btn-${a}`);
         if (sec) sec.style.display = 'none';
         if (btn) btn.classList.remove('active');
-      }
-
-      var secAtiva = document.getElementById('aba-' + aba);
-      var btnAtivo = document.getElementById('tab-btn-' + aba);
+      });
+      const secAtiva = document.getElementById(`aba-${aba}`);
+      const btnAtiva = document.getElementById(`tab-btn-${aba}`);
       if (secAtiva) secAtiva.style.display = 'block';
-      if (btnAtivo) btnAtivo.classList.add('active');
-
-      if (aba === 'relatorios') {
-        try { renderizarGrafico(); } catch(e) {}
-      }
+      if (btnAtiva) btnAtiva.classList.add('active');
+      if (aba === 'relatorios') renderizarGrafico();
     }
 
-    // 3. CONTROLE DE MODAIS
-    function abrirModalTransacao() {
-      var m = document.getElementById('modal-transacao');
-      if (m) m.style.display = 'flex';
-    }
-
-    function abrirModalInvestimento() {
-      var m = document.getElementById('modal-investimento');
-      if (m) m.style.display = 'flex';
-    }
-
-    function fecharModal(id) {
-      var m = document.getElementById(id);
-      if (m) m.style.display = 'none';
-    }
+    function abrirModalTransacao() { document.getElementById('modal-transacao').style.display = 'flex'; }
+    function abrirModalInvestimento() { document.getElementById('modal-investimento').style.display = 'flex'; }
+    function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
 
     function setTipoTransacao(tipo) {
       tipoTransacaoAtual = tipo;
-      var bDesp = document.getElementById('btn-tipo-despesa');
-      var bRec = document.getElementById('btn-tipo-receita');
+      const bDesp = document.getElementById('btn-tipo-despesa');
+      const bRec = document.getElementById('btn-tipo-receita');
+      const topBar = document.getElementById('modal-top-bar');
+      const btnSubmit = document.getElementById('btn-submit-transacao');
+
       if (tipo === 'despesa') {
-        bDesp.className = 'py-2 text-xs font-bold rounded-lg border-2 border-rose-500 text-rose-600 bg-rose-50 cursor-pointer';
-        bRec.className = 'py-2 text-xs font-bold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 cursor-pointer';
+        bDesp.className = 'flex-1 py-2 text-sm font-bold rounded-lg bg-white text-rose-600 shadow-sm transition';
+        bRec.className = 'flex-1 py-2 text-sm font-bold rounded-lg text-slate-500 hover:text-slate-700 transition';
+        topBar.className = 'absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-rose-400 to-rose-600';
+        btnSubmit.className = 'w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3.5 rounded-xl transition-transform active:scale-95 shadow-lg shadow-rose-500/30';
+        btnSubmit.innerText = 'Registrar Saída';
       } else {
-        bRec.className = 'py-2 text-xs font-bold rounded-lg border-2 border-emerald-500 text-emerald-600 bg-emerald-50 cursor-pointer';
-        bDesp.className = 'py-2 text-xs font-bold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 cursor-pointer';
+        bRec.className = 'flex-1 py-2 text-sm font-bold rounded-lg bg-white text-emerald-600 shadow-sm transition';
+        bDesp.className = 'flex-1 py-2 text-sm font-bold rounded-lg text-slate-500 hover:text-slate-700 transition';
+        topBar.className = 'absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-emerald-400 to-emerald-600';
+        btnSubmit.className = 'w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl transition-transform active:scale-95 shadow-lg shadow-emerald-500/30';
+        btnSubmit.innerText = 'Registrar Entrada';
       }
     }
 
-    // 4. CARREGAMENTO DOS DADOS
     async function carregarTudo() {
-      var banner = document.getElementById('banner-status');
-      var msg = document.getElementById('mensagem-status');
-
-      if (!supabaseClient) {
-        // Tenta reconectar mais uma vez caso o script tenha demorado
-        var factory = (window.supabase && window.supabase.createClient) ? window.supabase.createClient : (typeof supabase !== 'undefined' && supabase.createClient ? supabase.createClient : null);
-        if (factory) {
-          supabaseClient = factory(SUPABASE_URL, SUPABASE_KEY);
-        }
-      }
-
+      const banner = document.getElementById('banner-status');
       if (!supabaseClient) {
         if (banner) banner.style.display = 'flex';
-        if (msg) msg.innerText = "A biblioteca do Supabase não foi carregada. Verifique sua conexão com a internet.";
         return;
       }
-
       try {
-        var resCats = await supabaseClient.from('categorias').select('*').order('nome');
-        if (resCats.error) throw resCats.error;
+        const [resCats, resContas, resTrans, resInvs] = await Promise.all([
+          supabaseClient.from('categorias').select('*').order('nome'),
+          supabaseClient.from('contas_bancarias').select('*').order('nome'),
+          supabaseClient.from('transacoes').select('*, categorias(nome)').order('data', { ascending: false }),
+          supabaseClient.from('investimentos_renda_fixa').select('*').order('data_aplicacao', { ascending: false })
+        ]);
+
         categorias = resCats.data || [];
-
-        var resSubs = await supabaseClient.from('subcategorias').select('*').order('nome');
-        subcategorias = resSubs.data || [];
-
-        var resContas = await supabaseClient.from('contas_bancarias').select('*').order('nome');
         contas = resContas.data || [];
-
-        var resTrans = await supabaseClient.from('transacoes').select('*, categorias(nome), subcategorias(nome)').order('data', { ascending: false });
         transacoes = resTrans.data || [];
-
-        var resInvs = await supabaseClient.from('investimentos_renda_fixa').select('*').order('data_aplicacao', { ascending: false });
         investimentos = resInvs.data || [];
 
         if (banner) banner.style.display = 'none';
@@ -398,134 +493,129 @@
         atualizarKPIs();
         renderizarTransacoes();
         renderizarInvestimentos();
-        renderizarCategorias();
         renderizarContas();
-        renderizarGrafico();
       } catch (err) {
-        console.warn("Aviso de sincronização:", err);
         if (banner) banner.style.display = 'flex';
-        if (msg) msg.innerText = "Aviso ao carregar dados do Supabase: " + (err.message || 'Verifique se rodou o script SQL das tabelas.');
+        console.error(err);
       }
     }
 
     function atualizarSelects() {
-      var selCat = document.getElementById('t-categoria');
+      const selCat = document.getElementById('t-categoria');
       if (selCat) {
         selCat.innerHTML = '<option value="">Selecione uma categoria</option>';
-        categorias.forEach(function(c) {
-          selCat.innerHTML += '<option value="' + c.id + '">' + c.nome + '</option>';
-        });
+        categorias.forEach(c => selCat.innerHTML += `<option value="${c.id}">${c.nome}</option>`);
       }
-
-      var selConta = document.getElementById('t-conta');
+      const selConta = document.getElementById('t-conta');
       if (selConta) {
-        selConta.innerHTML = '';
-        contas.forEach(function(ct) {
-          selConta.innerHTML += '<option value="' + ct.id + '">' + ct.nome + ' (R$ ' + Number(ct.saldo_atual).toFixed(2) + ')</option>';
-        });
+        selConta.innerHTML = '<option value="">Conta Padrão</option>';
+        contas.forEach(ct => selConta.innerHTML += `<option value="${ct.id}">${ct.nome}</option>`);
       }
     }
 
-    function atualizarSelectSubcategorias() {
-      var catId = document.getElementById('t-categoria').value;
-      var selSub = document.getElementById('t-subcategoria');
-      if (!selSub) return;
-      selSub.innerHTML = '<option value="">Sem subcategoria</option>';
-      var filtradas = subcategorias.filter(function(s) { return s.categoria_id === catId; });
-      filtradas.forEach(function(s) {
-        selSub.innerHTML += '<option value="' + s.id + '">' + s.nome + '</option>';
-      });
-    }
-
-    // 5. CÁLCULO DE INVESTIMENTOS & CDI
     function calcularRendimento(inv) {
-      var dataInicio = new Date(inv.data_aplicacao);
-      var dataHoje = new Date();
-      
-      var diasUteis = 0;
-      var cur = new Date(dataInicio);
+      const dataInicio = new Date(inv.data_aplicacao);
+      const dataHoje = new Date();
+      let diasUteis = 0;
+      let cur = new Date(dataInicio);
       while (cur <= dataHoje) {
-        var d = cur.getDay();
-        if (d !== 0 && d !== 6) diasUteis++;
+        if (cur.getDay() !== 0 && cur.getDay() !== 6) diasUteis++;
         cur.setDate(cur.getDate() + 1);
       }
-
-      var taxaDiariaCDI = Math.pow(1 + TAXA_CDI_ANUAL, 1 / 252) - 1;
-      var taxaAtivo = taxaDiariaCDI * (inv.percentual_cdi / 100);
-      var saldoBruto = inv.valor_aplicado * Math.pow(1 + taxaAtivo, diasUteis);
-      var rendimentoBruto = saldoBruto - inv.valor_aplicado;
-
-      var diasCorridos = Math.floor((dataHoje - dataInicio) / (1000 * 60 * 60 * 24));
-      var aliqIR = 0;
-      if (['CDB', 'Tesouro Selic', 'Outro'].includes(inv.tipo)) {
-        if (diasCorridos <= 180) aliqIR = 0.225;
-        else if (diasCorridos <= 360) aliqIR = 0.20;
-        else if (diasCorridos <= 720) aliqIR = 0.175;
-        else aliqIR = 0.15;
+      const txDia = Math.pow(1 + TAXA_CDI_ANUAL, 1/252) - 1;
+      const txAtivo = txDia * (inv.percentual_cdi / 100);
+      const saldoBruto = inv.valor_aplicado * Math.pow(1 + txAtivo, diasUteis);
+      const rend = saldoBruto - inv.valor_aplicado;
+      
+      const diasCorr = Math.floor((dataHoje - dataInicio) / 86400000);
+      let aliq = 0;
+      if (['CDB', 'Tesouro Selic'].includes(inv.tipo)) {
+        if(diasCorr <= 180) aliq=0.225; else if(diasCorr<=360) aliq=0.20; else if(diasCorr<=720) aliq=0.175; else aliq=0.15;
       }
-
-      var valorIR = rendimentoBruto * aliqIR;
-      var saldoLiquido = saldoBruto - valorIR;
-
-      return {
-        diasUteis: diasUteis,
-        saldoBruto: Number(saldoBruto.toFixed(2)),
-        saldoLiquido: Number(saldoLiquido.toFixed(2)),
-        rendimentoLiquido: Number((saldoLiquido - inv.valor_aplicado).toFixed(2))
-      };
+      const saldoLiq = saldoBruto - (rend * aliq);
+      return { diasUteis, saldoLiq, rendLiq: saldoLiq - inv.valor_aplicado };
     }
 
-    // 6. RENDERIZAÇÕES
+    function formatarMoeda(valor) {
+      return Number(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
     function atualizarKPIs() {
-      var rec = 0;
-      var desp = 0;
-      transacoes.forEach(function(t) {
-        if (t.tipo === 'receita') rec += Number(t.valor);
-        if (t.tipo === 'despesa') desp += Number(t.valor);
+      let rec = 0, desp = 0;
+      transacoes.forEach(t => { if (t.tipo === 'receita') rec += Number(t.valor); else desp += Number(t.valor); });
+      let saldoC = contas.reduce((acc, c) => acc + Number(c.saldo_atual), 0);
+      let invTot = 0, rendTot = 0;
+      investimentos.forEach(inv => {
+        const c = calcularRendimento(inv);
+        invTot += c.saldoLiq; rendTot += c.rendLiq;
       });
 
-      var saldoContasTotal = contas.reduce(function(acc, c) { return acc + Number(c.saldo_atual); }, 0);
-      var totalInvestidoLiquido = 0;
-      var totalRendimentoLiquido = 0;
+      document.getElementById('kpi-receitas').innerText = `R$ ${formatarMoeda(rec)}`;
+      document.getElementById('kpi-despesas').innerText = `R$ ${formatarMoeda(desp)}`;
+      document.getElementById('kpi-saldo-contas').innerText = `R$ ${formatarMoeda(saldoC)}`;
+      document.getElementById('kpi-saldo-investido').innerText = `R$ ${formatarMoeda(invTot)}`;
+      document.getElementById('kpi-rendimento-total').innerHTML = `<i class="fa-solid fa-arrow-trend-up"></i> + R$ ${formatarMoeda(rendTot)} rendimento`;
+    }
 
-      investimentos.forEach(function(inv) {
-        var calc = calcularRendimento(inv);
-        totalInvestidoLiquido += calc.saldoLiquido;
-        totalRendimentoLiquido += calc.rendimentoLiquido;
+    function filtrar(tipo, btn) {
+      filtroAtual = tipo;
+      document.querySelectorAll('.filtro-btn').forEach(b => {
+        b.classList.remove('bg-slate-100', 'text-slate-800');
+        b.classList.add('text-slate-500');
       });
-
-      document.getElementById('kpi-receitas').innerText = 'R$ ' + rec.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-      document.getElementById('kpi-despesas').innerText = 'R$ ' + desp.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-      document.getElementById('kpi-saldo-contas').innerText = 'R$ ' + saldoContasTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-      document.getElementById('kpi-saldo-investido').innerText = 'R$ ' + totalInvestidoLiquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-      document.getElementById('kpi-rendimento-total').innerText = '+ R$ ' + totalRendimentoLiquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) + ' líquido';
+      btn.classList.add('bg-slate-100', 'text-slate-800');
+      btn.classList.remove('text-slate-500');
+      renderizarTransacoes();
     }
 
     function renderizarTransacoes() {
-      var filtro = document.getElementById('filtro-tipo').value;
-      var tbody = document.getElementById('lista-transacoes-tbody');
+      const tbody = document.getElementById('lista-transacoes-tbody');
       tbody.innerHTML = '';
-
-      var filtradas = transacoes.filter(function(t) { return filtro === 'todos' ? true : t.tipo === filtro; });
+      const filtradas = transacoes.filter(t => filtroAtual === 'todos' ? true : t.tipo === filtroAtual);
 
       if (filtradas.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-400">Nenhum lançamento encontrado. Cadastre no botão "+ Lançamento".</td></tr>';
+        tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center text-slate-400">Nenhum lançamento encontrado.</td></tr>`;
         return;
       }
 
-      filtradas.forEach(function(t) {
-        var isDesp = t.tipo === 'despesa';
+      filtradas.forEach(t => {
+        const isDesp = t.tipo === 'despesa';
+        const catNome = t.categorias ? t.categorias.nome : 'Outros';
+        const conf = configCategoria[catNome] || configCategoria['default'];
+        
+        // Formatar Data (Ex: 01 Nov)
+        const dateObj = new Date(t.data + 'T12:00:00');
+        const dia = String(dateObj.getDate()).padStart(2, '0');
+        const mes = dateObj.toLocaleString('pt-BR', { month: 'short' }).replace('.','');
+
         tbody.innerHTML += `
-          <tr class="hover:bg-gray-50/80 transition">
-            <td class="py-3 text-xs text-gray-500">${t.data}</td>
-            <td class="py-3 font-semibold text-gray-800">${t.descricao}</td>
-            <td class="py-3 text-xs text-gray-600">${t.categorias ? t.categorias.nome : '-'}</td>
-            <td class="py-3 text-xs text-gray-400">${t.subcategorias ? t.subcategorias.nome : '-'}</td>
-            <td class="py-3 text-right font-bold ${isDesp ? 'text-rose-600' : 'text-emerald-600'}">
-              ${isDesp ? '-' : '+'} R$ ${Number(t.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+          <tr class="group border-b border-slate-50 hover:bg-slate-50/80 transition-colors row-hover cursor-default">
+            <td class="py-4 px-6">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full ${conf.bg} ${conf.color} flex items-center justify-center text-sm flex-shrink-0">
+                  <i class="fa-solid ${conf.icon}"></i>
+                </div>
+                <div>
+                  <p class="font-bold text-slate-800 text-sm leading-tight">${t.descricao}</p>
+                  <p class="text-[11px] text-slate-400 font-medium mt-0.5 uppercase tracking-wider">${t.tipo}</p>
+                </div>
+              </div>
             </td>
-            <td class="py-3 text-center">
-              <button type="button" onclick="excluirTransacao('${t.id}')" class="text-gray-300 hover:text-rose-500 text-xs transition cursor-pointer p-1"><i class="fa-solid fa-trash"></i></button>
+            <td class="py-4 px-6">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold ${conf.bg} ${conf.color} border border-white/50">
+                ${catNome}
+              </span>
+            </td>
+            <td class="py-4 px-6 text-sm font-medium text-slate-500">${dia} ${mes}</td>
+            <td class="py-4 px-6 text-right">
+              <span class="font-bold ${isDesp ? 'text-slate-800' : 'text-emerald-600'}">
+                ${isDesp ? '- ' : '+ '}R$ ${formatarMoeda(t.valor)}
+              </span>
+            </td>
+            <td class="py-4 px-6 text-center action-btns">
+              <button onclick="excluirTransacao('${t.id}')" class="w-8 h-8 rounded-full bg-white hover:bg-rose-50 text-slate-300 hover:text-rose-500 shadow-sm border border-slate-100 transition">
+                <i class="fa-solid fa-trash-can text-xs"></i>
+              </button>
             </td>
           </tr>
         `;
@@ -533,172 +623,143 @@
     }
 
     function renderizarInvestimentos() {
-      var container = document.getElementById('grid-investimentos');
-      container.innerHTML = '';
+      const cont = document.getElementById('grid-investimentos');
+      cont.innerHTML = '';
+      if(investimentos.length === 0) return cont.innerHTML = '<div class="col-span-full py-10 text-center text-slate-400 border-2 border-dashed border-slate-200 rounded-3xl">Nenhum título cadastrado.</div>';
 
-      if (investimentos.length === 0) {
-        container.innerHTML = '<div class="col-span-full bg-white p-8 rounded-2xl border text-center text-gray-400">Nenhum título cadastrado ainda.</div>';
-        return;
-      }
-
-      investimentos.forEach(function(inv) {
-        var c = calcularRendimento(inv);
-        container.innerHTML += `
-          <div class="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-sm relative overflow-hidden">
-            ${inv.is_reserva ? '<span class="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-bl-lg">RESERVA</span>' : ''}
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">${inv.tipo} • ${inv.percentual_cdi}% CDI</div>
-            <h3 class="font-bold text-gray-800 text-base mt-1">${inv.nome}</h3>
+      investimentos.forEach(inv => {
+        const c = calcularRendimento(inv);
+        cont.innerHTML += `
+          <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)] relative group hover:border-brand-200 transition">
+            ${inv.is_reserva ? '<div class="absolute -top-3 -right-2 bg-gradient-to-r from-emerald-400 to-emerald-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-md border-2 border-white">RESERVA</div>' : ''}
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50 px-2 py-1 rounded-md border border-slate-100">${inv.tipo} • ${inv.percentual_cdi}% CDI</span>
+              <button onclick="excluirInvestimento('${inv.id}')" class="text-slate-300 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-trash"></i></button>
+            </div>
+            <h3 class="font-bold text-slate-800 text-lg mb-5">${inv.nome}</h3>
             
-            <div class="mt-4 pt-3 border-t border-gray-100 space-y-1 text-xs">
-              <div class="flex justify-between text-gray-500">
-                <span>Aplicado:</span>
-                <span class="font-medium">R$ ${Number(inv.valor_aplicado).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+            <div class="space-y-2">
+              <div class="flex justify-between items-end text-sm">
+                <span class="text-slate-500 font-medium">Aplicado</span>
+                <span class="font-bold text-slate-700">R$ ${formatarMoeda(inv.valor_aplicado)}</span>
               </div>
-              <div class="flex justify-between text-gray-500">
-                <span>Rendimento Líquido:</span>
-                <span class="text-emerald-600 font-bold">+ R$ ${c.rendimentoLiquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-              </div>
-              <div class="flex justify-between text-sm font-bold text-gray-800 pt-1">
-                <span>Saldo Atual Líquido:</span>
-                <span class="text-indigo-600">R$ ${c.saldoLiquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+              <div class="flex justify-between items-end text-sm">
+                <span class="text-slate-500 font-medium">Lucro Líquido</span>
+                <span class="font-bold text-emerald-500">+ R$ ${formatarMoeda(c.rendLiq)}</span>
               </div>
             </div>
-            <div class="mt-4 flex justify-between items-center text-[11px] text-gray-400">
-              <span>${c.diasUteis} dias úteis</span>
-              <button type="button" onclick="excluirInvestimento('${inv.id}')" class="text-rose-400 hover:text-rose-600 transition cursor-pointer p-1"><i class="fa-solid fa-trash"></i></button>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function renderizarCategorias() {
-      var container = document.getElementById('lista-categorias-container');
-      container.innerHTML = '';
-
-      categorias.forEach(function(cat) {
-        var subs = subcategorias.filter(function(s) { return s.categoria_id === cat.id; });
-        container.innerHTML += `
-          <div class="border border-gray-100 rounded-xl p-3 bg-gray-50/50">
-            <div class="flex items-center space-x-3 font-semibold text-sm text-gray-800">
-              <i class="fa-solid fa-${cat.icone || 'tag'} text-green-600 w-5"></i>
-              <span>${cat.nome}</span>
-              <span class="text-xs text-gray-400">(${subs.length} subcategorias)</span>
-            </div>
-            ${subs.length > 0 ? `
-              <div class="mt-2 pl-8 flex flex-wrap gap-1.5">
-                ${subs.map(function(s) { return '<span class="bg-white border text-gray-600 text-xs px-2 py-0.5 rounded-md">' + s.nome + '</span>'; }).join('')}
+            <div class="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center">
+              <div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase">Saldo Atual</p>
+                <p class="text-xl font-black text-brand-600">R$ ${formatarMoeda(c.saldoLiq)}</p>
               </div>
-            ` : ''}
+              <div class="w-10 h-10 rounded-full bg-brand-50 flex items-center justify-center text-brand-500">
+                <i class="fa-solid fa-piggy-bank"></i>
+              </div>
+            </div>
           </div>
         `;
       });
     }
 
     function renderizarContas() {
-      var container = document.getElementById('grid-contas');
-      container.innerHTML = '';
-      contas.forEach(function(ct) {
-        container.innerHTML += `
-          <div class="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-sm">
-            <div class="text-xs text-gray-400 font-semibold uppercase">Conta Bancária</div>
-            <h3 class="font-bold text-gray-800 text-lg mt-1">${ct.nome}</h3>
-            <div class="text-xl font-bold text-emerald-600 mt-3">R$ ${Number(ct.saldo_atual).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</div>
+      const cont = document.getElementById('grid-contas');
+      cont.innerHTML = '';
+      contas.forEach(ct => {
+        cont.innerHTML += `
+          <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)] hover:-translate-y-1 transition-transform cursor-pointer">
+            <div class="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center mb-4">
+              <i class="fa-solid fa-building-columns"></i>
+            </div>
+            <h3 class="font-bold text-slate-800">${ct.nome}</h3>
+            <p class="text-[11px] font-bold text-slate-400 uppercase mt-1">Saldo Atual</p>
+            <p class="text-2xl font-black text-slate-900 mt-1">R$ ${formatarMoeda(ct.saldo_atual)}</p>
           </div>
         `;
       });
     }
 
     function renderizarGrafico() {
-      var ctx = document.getElementById('graficoDonut');
+      const ctx = document.getElementById('graficoDonut');
       if (!ctx) return;
 
-      var despesasPorCat = {};
-      transacoes.filter(function(t) { return t.tipo === 'despesa'; }).forEach(function(t) {
-        var catNome = t.categorias ? t.categorias.nome : 'Outros';
-        despesasPorCat[catNome] = (despesasPorCat[catNome] || 0) + Number(t.valor);
+      const desp = {};
+      transacoes.filter(t => t.tipo === 'despesa').forEach(t => {
+        const c = t.categorias ? t.categorias.nome : 'Outros';
+        desp[c] = (desp[c] || 0) + Number(t.valor);
       });
 
-      var labels = Object.keys(despesasPorCat);
-      var data = Object.values(despesasPorCat);
-
-      if (chartDonut) chartDonut.destroy();
+      if(chartDonut) chartDonut.destroy();
 
       chartDonut = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: labels.length ? labels : ['Sem despesas cadastradas'],
+          labels: Object.keys(desp).length ? Object.keys(desp) : ['Sem dados'],
           datasets: [{
-            data: data.length ? data : [1],
-            backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#64748b']
+            data: Object.values(desp).length ? Object.values(desp) : [1],
+            backgroundColor: ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#0ea5e9', '#8b5cf6'],
+            borderWidth: 0,
+            hoverOffset: 4
           }]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom' } },
-          cutout: '70%'
+          responsive: true, maintainAspectRatio: false, cutout: '75%',
+          plugins: {
+            legend: { position: 'right', labels: { usePointStyle: true, padding: 20, font: { family: 'Inter', size: 12 } } },
+            tooltip: { backgroundColor: '#0f172a', titleFont: { family: 'Inter' }, bodyFont: { family: 'Inter' }, padding: 12, cornerRadius: 12 }
+          }
         }
       });
     }
 
-    // 7. AÇÕES DE INSERÇÃO E EXCLUSÃO
     async function salvarTransacao(e) {
       e.preventDefault();
-      var descricao = document.getElementById('t-descricao').value;
-      var valor = parseFloat(document.getElementById('t-valor').value);
-      var data = document.getElementById('t-data').value;
-      var categoria_id = document.getElementById('t-categoria').value || null;
-      var subcategoria_id = document.getElementById('t-subcategoria').value || null;
-      var conta_id = document.getElementById('t-conta').value || null;
+      const obj = {
+        descricao: document.getElementById('t-descricao').value,
+        valor: parseFloat(document.getElementById('t-valor').value),
+        tipo: tipoTransacaoAtual,
+        data: document.getElementById('t-data').value,
+        categoria_id: document.getElementById('t-categoria').value || null,
+        conta_id: document.getElementById('t-conta').value || null
+      };
 
-      var res = await supabaseClient.from('transacoes').insert([{
-        descricao: descricao, valor: valor, tipo: tipoTransacaoAtual, data: data, categoria_id: categoria_id, subcategoria_id: subcategoria_id, conta_id: conta_id
-      }]);
+      await supabaseClient.from('transacoes').insert([obj]);
 
-      if (res.error) return alert('Erro ao salvar no banco: ' + res.error.message);
-
-      if (conta_id) {
-        var c = contas.find(function(x) { return x.id === conta_id; });
+      if (obj.conta_id) {
+        const c = contas.find(x => x.id === obj.conta_id);
         if (c) {
-          var novoSaldo = tipoTransacaoAtual === 'receita' ? Number(c.saldo_atual) + valor : Number(c.saldo_atual) - valor;
-          await supabaseClient.from('contas_bancarias').update({ saldo_atual: novoSaldo }).eq('id', conta_id);
+          const nSaldo = obj.tipo === 'receita' ? Number(c.saldo_atual) + obj.valor : Number(c.saldo_atual) - obj.valor;
+          await supabaseClient.from('contas_bancarias').update({ saldo_atual: nSaldo }).eq('id', obj.conta_id);
         }
       }
-
       fecharModal('modal-transacao');
-      await carregarTudo();
+      carregarTudo();
     }
 
     async function salvarInvestimento(e) {
       e.preventDefault();
-      var nome = document.getElementById('inv-nome').value;
-      var tipo = document.getElementById('inv-tipo').value;
-      var percentual_cdi = parseFloat(document.getElementById('inv-cdi').value);
-      var valor_aplicado = parseFloat(document.getElementById('inv-valor').value);
-      var data_aplicacao = document.getElementById('inv-data').value;
-      var is_reserva = document.getElementById('inv-is-reserva').checked;
-
-      var res = await supabaseClient.from('investimentos_renda_fixa').insert([{
-        nome: nome, tipo: tipo, percentual_cdi: percentual_cdi, valor_aplicado: valor_aplicado, data_aplicacao: data_aplicacao, is_reserva: is_reserva
+      await supabaseClient.from('investimentos_renda_fixa').insert([{
+        nome: document.getElementById('inv-nome').value,
+        tipo: document.getElementById('inv-tipo').value,
+        percentual_cdi: parseFloat(document.getElementById('inv-cdi').value),
+        valor_aplicado: parseFloat(document.getElementById('inv-valor').value),
+        data_aplicacao: document.getElementById('inv-data').value,
+        is_reserva: document.getElementById('inv-is-reserva').checked
       }]);
-
-      if (res.error) return alert('Erro ao salvar investimento: ' + res.error.message);
-
       fecharModal('modal-investimento');
-      await carregarTudo();
+      carregarTudo();
     }
 
     async function excluirTransacao(id) {
-      if (!confirm('Deseja realmente excluir este lançamento?')) return;
+      if(!confirm('Excluir lançamento?')) return;
       await supabaseClient.from('transacoes').delete().eq('id', id);
-      await carregarTudo();
+      carregarTudo();
     }
-
+    
     async function excluirInvestimento(id) {
-      if (!confirm('Deseja excluir esta aplicação?')) return;
+      if(!confirm('Excluir aplicação?')) return;
       await supabaseClient.from('investimentos_renda_fixa').delete().eq('id', id);
-      await carregarTudo();
+      carregarTudo();
     }
   </script>
 </body>

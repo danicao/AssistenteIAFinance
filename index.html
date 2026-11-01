@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestão Financeira & Investimentos</title>
+  <title>FinanceAI - Gestão Financeira</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Carregador UMD Oficial do Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     .nav-btn.active {
       border-bottom: 3px solid #ffffff;
       color: #ffffff;
-      font-weight: 600;
+      font-weight: 700;
     }
   </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans min-h-screen">
 
   <!-- CABEÇALHO VERDE (ESTILO GRANAZEN) -->
-  <header class="bg-[#1b7a42] text-white sticky top-0 z-30 shadow-sm">
+  <header class="bg-[#1b7a42] text-white sticky top-0 z-40 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
       <div class="flex items-center space-x-6">
         <div class="flex items-center space-x-2 font-bold text-xl tracking-tight cursor-pointer" onclick="trocarAba('planeje')">
@@ -27,15 +28,15 @@
           <span>FinanceAI</span>
         </div>
         <nav class="hidden md:flex space-x-1 text-sm">
-          <button type="button" onclick="trocarAba('planeje')" id="tab-btn-planeje" class="nav-btn active px-3 py-4 text-green-100 hover:text-white transition">Planeje sua grana</button>
-          <button type="button" onclick="trocarAba('relatorios')" id="tab-btn-relatorios" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition">Relatórios</button>
-          <button type="button" onclick="trocarAba('investimentos')" id="tab-btn-investimentos" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition">Investimentos & Reserva</button>
-          <button type="button" onclick="trocarAba('categorias')" id="tab-btn-categorias" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition">Categorias</button>
-          <button type="button" onclick="trocarAba('contas')" id="tab-btn-contas" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition">Contas bancárias</button>
+          <button type="button" onclick="trocarAba('planeje')" id="tab-btn-planeje" class="nav-btn active px-3 py-4 text-green-100 hover:text-white transition cursor-pointer">Planeje sua grana</button>
+          <button type="button" onclick="trocarAba('relatorios')" id="tab-btn-relatorios" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition cursor-pointer">Relatórios</button>
+          <button type="button" onclick="trocarAba('investimentos')" id="tab-btn-investimentos" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition cursor-pointer">Investimentos & Reserva</button>
+          <button type="button" onclick="trocarAba('categorias')" id="tab-btn-categorias" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition cursor-pointer">Categorias</button>
+          <button type="button" onclick="trocarAba('contas')" id="tab-btn-contas" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition cursor-pointer">Contas bancárias</button>
         </nav>
       </div>
       <div class="flex items-center space-x-3 text-sm">
-        <button type="button" onclick="abrirModalTransacao()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-3.5 py-1.5 rounded-lg shadow-sm transition flex items-center space-x-1 cursor-pointer">
+        <button type="button" onclick="abrirModalTransacao()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-4 py-2 rounded-xl shadow-sm transition flex items-center space-x-2 cursor-pointer">
           <i class="fa-solid fa-plus text-xs"></i>
           <span>Lançamento</span>
         </button>
@@ -45,6 +46,15 @@
 
   <!-- CONTEÚDO PRINCIPAL -->
   <main class="max-w-7xl mx-auto p-4 md:p-6">
+
+    <!-- BANNER DE AVISO (EXIBIDO CASO HAJA FALHA DE CONEXÃO COM O BANCO) -->
+    <div id="banner-status" style="display: none;" class="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-2xl text-xs md:text-sm mb-6 flex items-center justify-between shadow-sm">
+      <div class="flex items-center space-x-3">
+        <i class="fa-solid fa-triangle-exclamation text-amber-500 text-base"></i>
+        <span id="mensagem-status">Conectando ao banco...</span>
+      </div>
+      <button onclick="carregarTudo()" class="bg-amber-200/60 hover:bg-amber-200 text-amber-900 px-3 py-1 rounded-lg text-xs font-semibold transition">Tentar novamente</button>
+    </div>
 
     <!-- 1. ABA: PLANEJE SUA GRANA -->
     <section id="aba-planeje" class="space-y-6">
@@ -114,7 +124,7 @@
             </thead>
             <tbody id="lista-transacoes-tbody" class="divide-y divide-gray-50">
               <tr>
-                <td colspan="6" class="text-center py-8 text-gray-400 text-sm">Nenhum lançamento encontrado.</td>
+                <td colspan="6" class="text-center py-8 text-gray-400 text-sm">Nenhum lançamento encontrado. Cadastre no botão "+ Lançamento".</td>
               </tr>
             </tbody>
           </table>
@@ -166,12 +176,12 @@
 
   </main>
 
-  <!-- MODAL: NOVA TRANSAÇÃO (COM DISPLAY NONE DIRETO PARA NÃO TRAVAR O SITE) -->
-  <div id="modal-transacao" style="display: none;" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-gray-100">
+  <!-- MODAL: NOVA TRANSAÇÃO -->
+  <div id="modal-transacao" style="display: none;" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center pb-3 border-b border-gray-100">
         <h3 class="font-bold text-gray-800 text-base">Novo Lançamento</h3>
-        <button type="button" onclick="fecharModal('modal-transacao')" class="text-gray-400 hover:text-gray-600 text-lg cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" onclick="fecharModal('modal-transacao')" class="text-gray-400 hover:text-gray-600 text-xl cursor-pointer p-1"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form onsubmit="salvarTransacao(event)" class="mt-4 space-y-4">
         <div>
@@ -183,7 +193,7 @@
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">Descrição</label>
-          <input type="text" id="t-descricao" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5 focus:ring-1 focus:ring-green-500" placeholder="Ex: Supermercado BH">
+          <input type="text" id="t-descricao" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5 focus:ring-1 focus:ring-green-500" placeholder="Ex: Mercado BH">
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
@@ -206,20 +216,20 @@
           </select>
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1">Conta</label>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Conta de Débito/Crédito</label>
           <select id="t-conta" class="w-full text-sm border border-gray-200 rounded-lg p-2.5 focus:ring-1 focus:ring-green-500"></select>
         </div>
-        <button type="submit" class="w-full bg-[#1b7a42] hover:bg-green-700 text-white font-semibold py-2.5 rounded-xl transition text-sm cursor-pointer">Salvar Lançamento</button>
+        <button type="submit" class="w-full bg-[#1b7a42] hover:bg-green-700 text-white font-semibold py-3 rounded-xl transition text-sm cursor-pointer shadow-md">Salvar Lançamento</button>
       </form>
     </div>
   </div>
 
   <!-- MODAL: NOVO INVESTIMENTO -->
-  <div id="modal-investimento" style="display: none;" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-gray-100">
+  <div id="modal-investimento" style="display: none;" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center pb-3 border-b border-gray-100">
         <h3 class="font-bold text-gray-800 text-base">Cadastrar Renda Fixa / Reserva</h3>
-        <button type="button" onclick="fecharModal('modal-investimento')" class="text-gray-400 hover:text-gray-600 text-lg cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" onclick="fecharModal('modal-investimento')" class="text-gray-400 hover:text-gray-600 text-xl cursor-pointer p-1"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form onsubmit="salvarInvestimento(event)" class="mt-4 space-y-4">
         <div>
@@ -255,117 +265,189 @@
           <input type="checkbox" id="inv-is-reserva" class="rounded text-green-600 focus:ring-green-500 h-4 w-4">
           <label for="inv-is-reserva" class="text-xs text-gray-700 font-medium">Marcar como Reserva de Emergência Oficial</label>
         </div>
-        <button type="submit" class="w-full bg-[#1b7a42] hover:bg-green-700 text-white font-semibold py-2.5 rounded-xl transition text-sm cursor-pointer">Salvar Aplicação</button>
+        <button type="submit" class="w-full bg-[#1b7a42] hover:bg-green-700 text-white font-semibold py-3 rounded-xl transition text-sm cursor-pointer shadow-md">Salvar Aplicação</button>
       </form>
     </div>
   </div>
 
   <script>
-    // ==========================================
-    // 1. CONFIGURAÇÃO DO SUPABASE
-    // ==========================================
-    const SUPABASE_URL = 'https://cpcrmudbnepkodruxtok.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_QwZ6A5zyJE0QG-EIiXG95w_xx6c4Aez';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // 1. CONFIGURAÇÃO GERAL E SUPABASE
+    var SUPABASE_URL = 'https://cpcrmudbnepkodruxtok.supabase.co';
+    var SUPABASE_KEY = 'sb_publishable_QwZ6A5zyJE0QG-EIiXG95w_xx6c4Aez';
+    var TAXA_CDI_ANUAL = 0.1075;
 
-    const TAXA_CDI_ANUAL = 0.1075;
+    var supabase = null;
+    var categorias = [];
+    var subcategorias = [];
+    var transacoes = [];
+    var contas = [];
+    var investimentos = [];
+    var tipoTransacaoAtual = 'despesa';
+    var chartDonut = null;
 
-    let categorias = [];
-    let subcategorias = [];
-    let transacoes = [];
-    let contas = [];
-    let investimentos = [];
-    let tipoTransacaoAtual = 'despesa';
-    let chartDonut = null;
+    // Conexão Segura
+    try {
+      if (window.supabase && window.supabase.createClient) {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+    } catch(err) {
+      console.error("Falha ao inicializar Supabase:", err);
+    }
 
-    window.addEventListener('DOMContentLoaded', async () => {
-      const dt = new Date().toISOString().split('T')[0];
-      const elTData = document.getElementById('t-data');
-      const elInvData = document.getElementById('inv-data');
+    // Inicialização da Página
+    window.addEventListener('DOMContentLoaded', function() {
+      var dt = new Date().toISOString().split('T')[0];
+      var elTData = document.getElementById('t-data');
+      var elInvData = document.getElementById('inv-data');
       if (elTData) elTData.value = dt;
       if (elInvData) elInvData.value = dt;
 
-      try {
-        await carregarTudo();
-      } catch (err) {
-        console.error("Erro ao carregar dados do Supabase:", err);
-      }
+      carregarTudo();
     });
 
+    // 2. FUNÇÃO INDEPENDENTE DE NAVEGAÇÃO DE ABAS
+    function trocarAba(aba) {
+      var abas = ['planeje', 'relatorios', 'investimentos', 'categorias', 'contas'];
+      for (var i = 0; i < abas.length; i++) {
+        var a = abas[i];
+        var sec = document.getElementById('aba-' + a);
+        var btn = document.getElementById('tab-btn-' + a);
+        if (sec) sec.style.display = 'none';
+        if (btn) btn.classList.remove('active');
+      }
+
+      var secAtiva = document.getElementById('aba-' + aba);
+      var btnAtivo = document.getElementById('tab-btn-' + aba);
+      if (secAtiva) secAtiva.style.display = 'block';
+      if (btnAtivo) btnAtivo.classList.add('active');
+
+      if (aba === 'relatorios') {
+        try { renderizarGrafico(); } catch(e) {}
+      }
+    }
+
+    // 3. CONTROLE DE MODAIS (INLINE DIRECT)
+    function abrirModalTransacao() {
+      var m = document.getElementById('modal-transacao');
+      if (m) m.style.display = 'flex';
+    }
+
+    function abrirModalInvestimento() {
+      var m = document.getElementById('modal-investimento');
+      if (m) m.style.display = 'flex';
+    }
+
+    function fecharModal(id) {
+      var m = document.getElementById(id);
+      if (m) m.style.display = 'none';
+    }
+
+    function setTipoTransacao(tipo) {
+      tipoTransacaoAtual = tipo;
+      var bDesp = document.getElementById('btn-tipo-despesa');
+      var bRec = document.getElementById('btn-tipo-receita');
+      if (tipo === 'despesa') {
+        bDesp.className = 'py-2 text-xs font-bold rounded-lg border-2 border-rose-500 text-rose-600 bg-rose-50 cursor-pointer';
+        bRec.className = 'py-2 text-xs font-bold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 cursor-pointer';
+      } else {
+        bRec.className = 'py-2 text-xs font-bold rounded-lg border-2 border-emerald-500 text-emerald-600 bg-emerald-50 cursor-pointer';
+        bDesp.className = 'py-2 text-xs font-bold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 cursor-pointer';
+      }
+    }
+
+    // 4. CARREGAMENTO DOS DADOS COM TRATAMENTO DE ERROS
     async function carregarTudo() {
-      await Promise.allSettled([
-        carregarCategorias(),
-        carregarContas(),
-        carregarTransacoes(),
-        carregarInvestimentos()
-      ]);
-      atualizarKPIs();
-      renderizarTransacoes();
-      renderizarInvestimentos();
-      renderizarCategorias();
-      renderizarContas();
-      renderizarGrafico();
+      var banner = document.getElementById('banner-status');
+      var msg = document.getElementById('mensagem-status');
+
+      if (!supabase) {
+        if (banner) banner.style.display = 'flex';
+        if (msg) msg.innerText = "A biblioteca do Supabase não foi carregada. Verifique sua conexão com a internet.";
+        return;
+      }
+
+      try {
+        var resCats = await supabase.from('categorias').select('*').order('nome');
+        if (resCats.error) throw resCats.error;
+        categorias = resCats.data || [];
+
+        var resSubs = await supabase.from('subcategorias').select('*').order('nome');
+        subcategorias = resSubs.data || [];
+
+        var resContas = await supabase.from('contas_bancarias').select('*').order('nome');
+        contas = resContas.data || [];
+
+        var resTrans = await supabase.from('transacoes').select('*, categorias(nome), subcategorias(nome)').order('data', { ascending: false });
+        transacoes = resTrans.data || [];
+
+        var resInvs = await supabase.from('investimentos_renda_fixa').select('*').order('data_aplicacao', { ascending: false });
+        investimentos = resInvs.data || [];
+
+        if (banner) banner.style.display = 'none';
+
+        atualizarSelects();
+        atualizarKPIs();
+        renderizarTransacoes();
+        renderizarInvestimentos();
+        renderizarCategorias();
+        renderizarContas();
+        renderizarGrafico();
+      } catch (err) {
+        console.warn("Aviso de sincronização:", err);
+        if (banner) banner.style.display = 'flex';
+        if (msg) msg.innerText = "Aviso ao carregar dados do Supabase: " + (err.message || 'Verifique se rodou o script SQL das tabelas.');
+      }
     }
 
-    async function carregarCategorias() {
-      const { data: cats } = await supabase.from('categorias').select('*').order('nome');
-      const { data: subcats } = await supabase.from('subcategorias').select('*').order('nome');
-      categorias = cats || [];
-      subcategorias = subcats || [];
+    function atualizarSelects() {
+      var selCat = document.getElementById('t-categoria');
+      if (selCat) {
+        selCat.innerHTML = '<option value="">Selecione uma categoria</option>';
+        categorias.forEach(function(c) {
+          selCat.innerHTML += '<option value="' + c.id + '">' + c.nome + '</option>';
+        });
+      }
 
-      const select = document.getElementById('t-categoria');
-      if (select) {
-        select.innerHTML = '<option value="">Selecione uma categoria</option>';
-        categorias.forEach(c => {
-          select.innerHTML += `<option value="${c.id}">${c.nome}</option>`;
+      var selConta = document.getElementById('t-conta');
+      if (selConta) {
+        selConta.innerHTML = '';
+        contas.forEach(function(ct) {
+          selConta.innerHTML += '<option value="' + ct.id + '">' + ct.nome + ' (R$ ' + Number(ct.saldo_atual).toFixed(2) + ')</option>';
         });
       }
     }
 
-    async function carregarContas() {
-      const { data } = await supabase.from('contas_bancarias').select('*').order('nome');
-      contas = data || [];
-      const select = document.getElementById('t-conta');
-      if (select) {
-        select.innerHTML = '';
-        contas.forEach(ct => {
-          select.innerHTML += `<option value="${ct.id}">${ct.nome} (R$ ${Number(ct.saldo_atual).toFixed(2)})</option>`;
-        });
-      }
+    function atualizarSelectSubcategorias() {
+      var catId = document.getElementById('t-categoria').value;
+      var selSub = document.getElementById('t-subcategoria');
+      if (!selSub) return;
+      selSub.innerHTML = '<option value="">Sem subcategoria</option>';
+      var filtradas = subcategorias.filter(function(s) { return s.categoria_id === catId; });
+      filtradas.forEach(function(s) {
+        selSub.innerHTML += '<option value="' + s.id + '">' + s.nome + '</option>';
+      });
     }
 
-    async function carregarTransacoes() {
-      const { data } = await supabase
-        .from('transacoes')
-        .select('*, categorias(nome), subcategorias(nome)')
-        .order('data', { ascending: false });
-      transacoes = data || [];
-    }
-
-    async function carregarInvestimentos() {
-      const { data } = await supabase.from('investimentos_renda_fixa').select('*').order('data_aplicacao', { ascending: false });
-      investimentos = data || [];
-    }
-
+    // 5. CÁLCULO DE INVESTIMENTOS & CDI
     function calcularRendimento(inv) {
-      const dataInicio = new Date(inv.data_aplicacao);
-      const dataHoje = new Date();
+      var dataInicio = new Date(inv.data_aplicacao);
+      var dataHoje = new Date();
       
-      let diasUteis = 0;
-      let cur = new Date(dataInicio);
+      var diasUteis = 0;
+      var cur = new Date(dataInicio);
       while (cur <= dataHoje) {
-        const d = cur.getDay();
+        var d = cur.getDay();
         if (d !== 0 && d !== 6) diasUteis++;
         cur.setDate(cur.getDate() + 1);
       }
 
-      const taxaDiariaCDI = Math.pow(1 + TAXA_CDI_ANUAL, 1 / 252) - 1;
-      const taxaAtivo = taxaDiariaCDI * (inv.percentual_cdi / 100);
-      const saldoBruto = inv.valor_aplicado * Math.pow(1 + taxaAtivo, diasUteis);
-      const rendimentoBruto = saldoBruto - inv.valor_aplicado;
+      var taxaDiariaCDI = Math.pow(1 + TAXA_CDI_ANUAL, 1 / 252) - 1;
+      var taxaAtivo = taxaDiariaCDI * (inv.percentual_cdi / 100);
+      var saldoBruto = inv.valor_aplicado * Math.pow(1 + taxaAtivo, diasUteis);
+      var rendimentoBruto = saldoBruto - inv.valor_aplicado;
 
-      const diasCorridos = Math.floor((dataHoje - dataInicio) / (1000 * 60 * 60 * 24));
-      let aliqIR = 0;
+      var diasCorridos = Math.floor((dataHoje - dataInicio) / (1000 * 60 * 60 * 24));
+      var aliqIR = 0;
       if (['CDB', 'Tesouro Selic', 'Outro'].includes(inv.tipo)) {
         if (diasCorridos <= 180) aliqIR = 0.225;
         else if (diasCorridos <= 360) aliqIR = 0.20;
@@ -373,67 +455,68 @@
         else aliqIR = 0.15;
       }
 
-      const valorIR = rendimentoBruto * aliqIR;
-      const saldoLiquido = saldoBruto - valorIR;
+      var valorIR = rendimentoBruto * aliqIR;
+      var saldoLiquido = saldoBruto - valorIR;
 
       return {
-        diasUteis,
+        diasUteis: diasUteis,
         saldoBruto: Number(saldoBruto.toFixed(2)),
         saldoLiquido: Number(saldoLiquido.toFixed(2)),
         rendimentoLiquido: Number((saldoLiquido - inv.valor_aplicado).toFixed(2))
       };
     }
 
+    // 6. RENDERIZAÇÕES
     function atualizarKPIs() {
-      let rec = 0;
-      let desp = 0;
-      transacoes.forEach(t => {
+      var rec = 0;
+      var desp = 0;
+      transacoes.forEach(function(t) {
         if (t.tipo === 'receita') rec += Number(t.valor);
         if (t.tipo === 'despesa') desp += Number(t.valor);
       });
 
-      let saldoContasTotal = contas.reduce((acc, c) => acc + Number(c.saldo_atual), 0);
-      let totalInvestidoLiquido = 0;
-      let totalRendimentoLiquido = 0;
+      var saldoContasTotal = contas.reduce(function(acc, c) { return acc + Number(c.saldo_atual); }, 0);
+      var totalInvestidoLiquido = 0;
+      var totalRendimentoLiquido = 0;
 
-      investimentos.forEach(inv => {
-        const calc = calcularRendimento(inv);
+      investimentos.forEach(function(inv) {
+        var calc = calcularRendimento(inv);
         totalInvestidoLiquido += calc.saldoLiquido;
         totalRendimentoLiquido += calc.rendimentoLiquido;
       });
 
-      document.getElementById('kpi-receitas').innerText = `R$ ${rec.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-      document.getElementById('kpi-despesas').innerText = `R$ ${desp.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-      document.getElementById('kpi-saldo-contas').innerText = `R$ ${saldoContasTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-      document.getElementById('kpi-saldo-investido').innerText = `R$ ${totalInvestidoLiquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-      document.getElementById('kpi-rendimento-total').innerText = `+ R$ ${totalRendimentoLiquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} líquido`;
+      document.getElementById('kpi-receitas').innerText = 'R$ ' + rec.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+      document.getElementById('kpi-despesas').innerText = 'R$ ' + desp.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+      document.getElementById('kpi-saldo-contas').innerText = 'R$ ' + saldoContasTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+      document.getElementById('kpi-saldo-investido').innerText = 'R$ ' + totalInvestidoLiquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+      document.getElementById('kpi-rendimento-total').innerText = '+ R$ ' + totalRendimentoLiquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) + ' líquido';
     }
 
     function renderizarTransacoes() {
-      const filtro = document.getElementById('filtro-tipo').value;
-      const tbody = document.getElementById('lista-transacoes-tbody');
+      var filtro = document.getElementById('filtro-tipo').value;
+      var tbody = document.getElementById('lista-transacoes-tbody');
       tbody.innerHTML = '';
 
-      const filtradas = transacoes.filter(t => filtro === 'todos' ? true : t.tipo === filtro);
+      var filtradas = transacoes.filter(function(t) { return filtro === 'todos' ? true : t.tipo === filtro; });
 
       if (filtradas.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-gray-400">Nenhum lançamento encontrado.</td></tr>`;
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-400">Nenhum lançamento encontrado. Cadastre no botão "+ Lançamento".</td></tr>';
         return;
       }
 
-      filtradas.forEach(t => {
-        const isDesp = t.tipo === 'despesa';
+      filtradas.forEach(function(t) {
+        var isDesp = t.tipo === 'despesa';
         tbody.innerHTML += `
           <tr class="hover:bg-gray-50/80 transition">
             <td class="py-3 text-xs text-gray-500">${t.data}</td>
             <td class="py-3 font-semibold text-gray-800">${t.descricao}</td>
-            <td class="py-3 text-xs text-gray-600">${t.categorias?.nome || '-'}</td>
-            <td class="py-3 text-xs text-gray-400">${t.subcategorias?.nome || '-'}</td>
+            <td class="py-3 text-xs text-gray-600">${t.categorias ? t.categorias.nome : '-'}</td>
+            <td class="py-3 text-xs text-gray-400">${t.subcategorias ? t.subcategorias.nome : '-'}</td>
             <td class="py-3 text-right font-bold ${isDesp ? 'text-rose-600' : 'text-emerald-600'}">
               ${isDesp ? '-' : '+'} R$ ${Number(t.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
             </td>
             <td class="py-3 text-center">
-              <button type="button" onclick="excluirTransacao('${t.id}')" class="text-gray-300 hover:text-rose-500 text-xs transition cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+              <button type="button" onclick="excluirTransacao('${t.id}')" class="text-gray-300 hover:text-rose-500 text-xs transition cursor-pointer p-1"><i class="fa-solid fa-trash"></i></button>
             </td>
           </tr>
         `;
@@ -441,16 +524,16 @@
     }
 
     function renderizarInvestimentos() {
-      const container = document.getElementById('grid-investimentos');
+      var container = document.getElementById('grid-investimentos');
       container.innerHTML = '';
 
       if (investimentos.length === 0) {
-        container.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border text-center text-gray-400">Nenhum título cadastrado ainda.</div>`;
+        container.innerHTML = '<div class="col-span-full bg-white p-8 rounded-2xl border text-center text-gray-400">Nenhum título cadastrado ainda.</div>';
         return;
       }
 
-      investimentos.forEach(inv => {
-        const c = calcularRendimento(inv);
+      investimentos.forEach(function(inv) {
+        var c = calcularRendimento(inv);
         container.innerHTML += `
           <div class="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-sm relative overflow-hidden">
             ${inv.is_reserva ? '<span class="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-bl-lg">RESERVA</span>' : ''}
@@ -473,7 +556,7 @@
             </div>
             <div class="mt-4 flex justify-between items-center text-[11px] text-gray-400">
               <span>${c.diasUteis} dias úteis</span>
-              <button type="button" onclick="excluirInvestimento('${inv.id}')" class="text-rose-400 hover:text-rose-600 transition cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+              <button type="button" onclick="excluirInvestimento('${inv.id}')" class="text-rose-400 hover:text-rose-600 transition cursor-pointer p-1"><i class="fa-solid fa-trash"></i></button>
             </div>
           </div>
         `;
@@ -481,11 +564,11 @@
     }
 
     function renderizarCategorias() {
-      const container = document.getElementById('lista-categorias-container');
+      var container = document.getElementById('lista-categorias-container');
       container.innerHTML = '';
 
-      categorias.forEach(cat => {
-        const subs = subcategorias.filter(s => s.categoria_id === cat.id);
+      categorias.forEach(function(cat) {
+        var subs = subcategorias.filter(function(s) { return s.categoria_id === cat.id; });
         container.innerHTML += `
           <div class="border border-gray-100 rounded-xl p-3 bg-gray-50/50">
             <div class="flex items-center space-x-3 font-semibold text-sm text-gray-800">
@@ -495,7 +578,7 @@
             </div>
             ${subs.length > 0 ? `
               <div class="mt-2 pl-8 flex flex-wrap gap-1.5">
-                ${subs.map(s => `<span class="bg-white border text-gray-600 text-xs px-2 py-0.5 rounded-md">${s.nome}</span>`).join('')}
+                ${subs.map(function(s) { return '<span class="bg-white border text-gray-600 text-xs px-2 py-0.5 rounded-md">' + s.nome + '</span>'; }).join('')}
               </div>
             ` : ''}
           </div>
@@ -504,9 +587,9 @@
     }
 
     function renderizarContas() {
-      const container = document.getElementById('grid-contas');
+      var container = document.getElementById('grid-contas');
       container.innerHTML = '';
-      contas.forEach(ct => {
+      contas.forEach(function(ct) {
         container.innerHTML += `
           <div class="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-sm">
             <div class="text-xs text-gray-400 font-semibold uppercase">Conta Bancária</div>
@@ -518,17 +601,17 @@
     }
 
     function renderizarGrafico() {
-      const ctx = document.getElementById('graficoDonut');
+      var ctx = document.getElementById('graficoDonut');
       if (!ctx) return;
 
-      const despesasPorCat = {};
-      transacoes.filter(t => t.tipo === 'despesa').forEach(t => {
-        const catNome = t.categorias?.nome || 'Outros';
+      var despesasPorCat = {};
+      transacoes.filter(function(t) { return t.tipo === 'despesa'; }).forEach(function(t) {
+        var catNome = t.categorias ? t.categorias.nome : 'Outros';
         despesasPorCat[catNome] = (despesasPorCat[catNome] || 0) + Number(t.valor);
       });
 
-      const labels = Object.keys(despesasPorCat);
-      const data = Object.values(despesasPorCat);
+      var labels = Object.keys(despesasPorCat);
+      var data = Object.values(despesasPorCat);
 
       if (chartDonut) chartDonut.destroy();
 
@@ -550,25 +633,26 @@
       });
     }
 
+    // 7. AÇÕES DE INSERÇÃO E EXCLUSÃO
     async function salvarTransacao(e) {
       e.preventDefault();
-      const descricao = document.getElementById('t-descricao').value;
-      const valor = parseFloat(document.getElementById('t-valor').value);
-      const data = document.getElementById('t-data').value;
-      const categoria_id = document.getElementById('t-categoria').value || null;
-      const subcategoria_id = document.getElementById('t-subcategoria').value || null;
-      const conta_id = document.getElementById('t-conta').value || null;
+      var descricao = document.getElementById('t-descricao').value;
+      var valor = parseFloat(document.getElementById('t-valor').value);
+      var data = document.getElementById('t-data').value;
+      var categoria_id = document.getElementById('t-categoria').value || null;
+      var subcategoria_id = document.getElementById('t-subcategoria').value || null;
+      var conta_id = document.getElementById('t-conta').value || null;
 
-      const { error } = await supabase.from('transacoes').insert([{
-        descricao, valor, tipo: tipoTransacaoAtual, data, categoria_id, subcategoria_id, conta_id
+      var res = await supabase.from('transacoes').insert([{
+        descricao: descricao, valor: valor, tipo: tipoTransacaoAtual, data: data, categoria_id: categoria_id, subcategoria_id: subcategoria_id, conta_id: conta_id
       }]);
 
-      if (error) return alert('Erro ao salvar no banco: ' + error.message);
+      if (res.error) return alert('Erro ao salvar no banco: ' + res.error.message);
 
       if (conta_id) {
-        const c = contas.find(x => x.id === conta_id);
+        var c = contas.find(function(x) { return x.id === conta_id; });
         if (c) {
-          const novoSaldo = tipoTransacaoAtual === 'receita' ? Number(c.saldo_atual) + valor : Number(c.saldo_atual) - valor;
+          var novoSaldo = tipoTransacaoAtual === 'receita' ? Number(c.saldo_atual) + valor : Number(c.saldo_atual) - valor;
           await supabase.from('contas_bancarias').update({ saldo_atual: novoSaldo }).eq('id', conta_id);
         }
       }
@@ -579,18 +663,18 @@
 
     async function salvarInvestimento(e) {
       e.preventDefault();
-      const nome = document.getElementById('inv-nome').value;
-      const tipo = document.getElementById('inv-tipo').value;
-      const percentual_cdi = parseFloat(document.getElementById('inv-cdi').value);
-      const valor_aplicado = parseFloat(document.getElementById('inv-valor').value);
-      const data_aplicacao = document.getElementById('inv-data').value;
-      const is_reserva = document.getElementById('inv-is-reserva').checked;
+      var nome = document.getElementById('inv-nome').value;
+      var tipo = document.getElementById('inv-tipo').value;
+      var percentual_cdi = parseFloat(document.getElementById('inv-cdi').value);
+      var valor_aplicado = parseFloat(document.getElementById('inv-valor').value);
+      var data_aplicacao = document.getElementById('inv-data').value;
+      var is_reserva = document.getElementById('inv-is-reserva').checked;
 
-      const { error } = await supabase.from('investimentos_renda_fixa').insert([{
-        nome, tipo, percentual_cdi, valor_aplicado, data_aplicacao, is_reserva
+      var res = await supabase.from('investimentos_renda_fixa').insert([{
+        nome: nome, tipo: tipo, percentual_cdi: percentual_cdi, valor_aplicado: valor_aplicado, data_aplicacao: data_aplicacao, is_reserva: is_reserva
       }]);
 
-      if (error) return alert('Erro ao salvar investimento: ' + error.message);
+      if (res.error) return alert('Erro ao salvar investimento: ' + res.error.message);
 
       fecharModal('modal-investimento');
       await carregarTudo();
@@ -606,61 +690,6 @@
       if (!confirm('Deseja excluir esta aplicação?')) return;
       await supabase.from('investimentos_renda_fixa').delete().eq('id', id);
       await carregarTudo();
-    }
-
-    function trocarAba(aba) {
-      ['planeje', 'relatorios', 'investimentos', 'categorias', 'contas'].forEach(a => {
-        const el = document.getElementById(`aba-${a}`);
-        const btn = document.getElementById(`tab-btn-${a}`);
-        if (el) el.style.display = 'none';
-        if (btn) btn.classList.remove('active');
-      });
-
-      const abaAtiva = document.getElementById(`aba-${aba}`);
-      const btnAtivo = document.getElementById(`tab-btn-${aba}`);
-      if (abaAtiva) abaAtiva.style.display = 'block';
-      if (btnAtivo) btnAtivo.classList.add('active');
-
-      if (aba === 'relatorios') renderizarGrafico();
-    }
-
-    function setTipoTransacao(tipo) {
-      tipoTransacaoAtual = tipo;
-      const bDesp = document.getElementById('btn-tipo-despesa');
-      const bRec = document.getElementById('btn-tipo-receita');
-      if (tipo === 'despesa') {
-        bDesp.className = 'py-2 text-xs font-bold rounded-lg border-2 border-rose-500 text-rose-600 bg-rose-50 cursor-pointer';
-        bRec.className = 'py-2 text-xs font-bold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 cursor-pointer';
-      } else {
-        bRec.className = 'py-2 text-xs font-bold rounded-lg border-2 border-emerald-500 text-emerald-600 bg-emerald-50 cursor-pointer';
-        bDesp.className = 'py-2 text-xs font-bold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 cursor-pointer';
-      }
-    }
-
-    function atualizarSelectSubcategorias() {
-      const catId = document.getElementById('t-categoria').value;
-      const selectSub = document.getElementById('t-subcategoria');
-      if (!selectSub) return;
-      selectSub.innerHTML = '<option value="">Sem subcategoria</option>';
-      const filtradas = subcategorias.filter(s => s.categoria_id === catId);
-      filtradas.forEach(s => {
-        selectSub.innerHTML += `<option value="${s.id}">${s.nome}</option>`;
-      });
-    }
-
-    function abrirModalTransacao() { 
-      const m = document.getElementById('modal-transacao');
-      if (m) m.style.display = 'flex'; 
-    }
-    
-    function abrirModalInvestimento() { 
-      const m = document.getElementById('modal-investimento');
-      if (m) m.style.display = 'flex'; 
-    }
-    
-    function fecharModal(id) { 
-      const m = document.getElementById(id);
-      if (m) m.style.display = 'none'; 
     }
   </script>
 </body>

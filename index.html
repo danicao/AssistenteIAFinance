@@ -88,7 +88,7 @@
   </div>
 
   <!-- ==============================================
-       HEADER COM BOTÕES (TELEGRAM, DARK MODE, LANÇAMENTO)
+       HEADER COM BOTÕES DE NAVEGAÇÃO E AÇÕES
        ============================================== -->
   <header class="glass-header sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -122,7 +122,7 @@
             <i class="fa-solid fa-chart-line"></i> Relatórios
           </button>
 
-          <!-- BOTÃO PAINEL ADM -->
+          <!-- Botão Painel Adm -->
           <button type="button" onclick="trocarAba('admin')" id="tab-btn-admin" style="display: none;" class="nav-btn flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold hover:text-violet-700">
             <i class="fa-solid fa-user-shield"></i> Painel Adm
           </button>
@@ -130,18 +130,18 @@
 
         <!-- Ações do Topo -->
         <div class="flex items-center gap-2.5">
-          <!-- BOTÃO CONECTAR TELEGRAM -->
+          <!-- Botão Vincular Telegram Modal -->
           <button type="button" onclick="abrirModalTelegram()" class="flex items-center gap-1.5 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-sky-600 dark:text-sky-400 px-3.5 py-2 rounded-full text-xs font-bold transition shadow-sm border border-sky-100 dark:border-sky-800" title="Conectar ou gerenciar o bot do Telegram">
             <i class="fa-brands fa-telegram text-sm"></i>
-            <span class="hidden sm:inline">Telegram</span>
+            <span class="hidden sm:inline">Conectar Telegram</span>
           </button>
 
-          <!-- BOTÃO TEMA CLARO / ESCURO -->
+          <!-- Alternar Tema Claro / Escuro -->
           <button type="button" onclick="alternarTema()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition shadow-sm" title="Alternar Modo Escuro / Claro">
             <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
           </button>
 
-          <!-- Botão Lançamento -->
+          <!-- Lançamento Manual -->
           <button type="button" onclick="abrirModalTransacao()" class="hidden sm:flex items-center gap-2 bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 dark:hover:bg-brand-500 text-white font-medium px-4 py-2 rounded-full transition-transform active:scale-95 shadow-md text-xs">
             <i class="fa-solid fa-plus text-xs"></i> Lançamento
           </button>
@@ -265,7 +265,7 @@
       </div>
     </section>
 
-    <!-- PAINEL ADMINISTRATIVO -->
+    <!-- 2. ABA: PAINEL ADMINISTRATIVO (danielgatao20@gmail.com) -->
     <section id="aba-admin" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -323,7 +323,7 @@
       </div>
     </section>
 
-    <!-- LIMITES, METAS, CONTAS, INVESTIMENTOS, RELATÓRIOS -->
+    <!-- 3. ABA: LIMITES DE GASTOS -->
     <section id="aba-limites" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -363,6 +363,7 @@
       </div>
     </section>
 
+    <!-- 4. ABA: METAS -->
     <section id="aba-metas" style="display: none;" class="space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-slate-900 dark:to-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 p-6 rounded-3xl flex justify-between items-center">
@@ -407,6 +408,7 @@
       </div>
     </section>
 
+    <!-- 5. ABA: CONTAS BANCÁRIAS -->
     <section id="aba-contas" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -421,6 +423,7 @@
       <div id="grid-contas-completas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
+    <!-- 6. ABA: INVESTIMENTOS -->
     <section id="aba-investimentos" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -435,6 +438,7 @@
       <div id="grid-investimentos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
+    <!-- 7. ABA: RELATÓRIOS -->
     <section id="aba-relatorios" style="display: none;" class="space-y-6">
       <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm p-6 md:p-8">
         <h2 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Divisão de Gastos por Categoria</h2>
@@ -447,10 +451,21 @@
   </main>
 
   <!-- ==============================================
+       BOTÃO FLUTUANTE DO TELEGRAM
+       ============================================== -->
+  <a href="https://t.me/financeiroIAgestor_bot" 
+     target="_blank" 
+     rel="noopener noreferrer"
+     class="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 flex items-center gap-2.5 bg-[#229ED9] hover:bg-[#1e8bc0] text-white px-4 py-3 rounded-full shadow-xl shadow-sky-500/30 transition-all hover:scale-105 active:scale-95 group">
+    <i class="fa-brands fa-telegram text-2xl group-hover:rotate-12 transition-transform"></i>
+    <span class="text-xs font-bold tracking-wide pr-1">Falar com Assessor</span>
+  </a>
+
+  <!-- ==============================================
        MODAIS DO SISTEMA
        ============================================== -->
 
-  <!-- MODAL CONECTAR TELEGRAM COM GERADOR DE CÓDIGO -->
+  <!-- MODAL VINCULAR TELEGRAM COM GERADOR DE CÓDIGO -->
   <div id="modal-telegram" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
       <div class="flex justify-between items-center mb-6">
@@ -498,7 +513,7 @@
             <i class="fa-solid fa-paper-plane"></i> Passo a passo:
           </span>
           <ol class="text-xs text-sky-700 dark:text-sky-400 space-y-1 list-decimal list-inside">
-            <li>Abra o seu robô no Telegram.</li>
+            <li>Abra o seu robô no Telegram: <a href="https://t.me/financeiroIAgestor_bot" target="_blank" class="font-bold underline">@financeiroIAgestor_bot</a></li>
             <li>Envie exatamente a mensagem: <br><strong class="bg-white/80 dark:bg-slate-800 px-2 py-0.5 rounded text-sky-900 dark:text-sky-200 font-mono text-[11px]" id="telegram-comando-copia">/conectar ------</strong></li>
             <li>O bot responderá confirmando seu e-mail!</li>
           </ol>
@@ -979,7 +994,7 @@
 
     async function gerarNovoCodigoTelegram() {
       const codigo = Math.floor(100000 + Math.random() * 900000).toString();
-      const expiraEm = new Date(Date.now() + 15 * 60 * 1000).toISOString(); // 15 minutos
+      const expiraEm = new Date(Date.now() + 15 * 60 * 1000).toISOString();
 
       exibirCodigoTelegramNaTela(codigo);
 

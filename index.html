@@ -18,8 +18,8 @@
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans min-h-screen">
 
-  <!-- CABEÇALHO VERDE (GRANAZEN STYLE) -->
-  <header class="bg-[#1b7a42] text-white sticky top-0 z-40 shadow-sm">
+  <!-- CABEÇALHO VERDE (ESTILO GRANAZEN) -->
+  <header class="bg-[#1b7a42] text-white sticky top-0 z-30 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
       <div class="flex items-center space-x-6">
         <div class="flex items-center space-x-2 font-bold text-xl tracking-tight cursor-pointer" onclick="trocarAba('planeje')">
@@ -27,15 +27,15 @@
           <span>FinanceAI</span>
         </div>
         <nav class="hidden md:flex space-x-1 text-sm">
-          <button onclick="trocarAba('planeje')" id="tab-btn-planeje" class="nav-btn active px-3 py-4 text-green-100 hover:text-white transition">Planeje sua grana</button>
-          <button onclick="trocarAba('relatorios')" id="tab-btn-relatorios" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition">Relatórios</button>
-          <button onclick="trocarAba('investimentos')" id="tab-btn-investimentos" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition">Investimentos & Reserva</button>
-          <button onclick="trocarAba('categorias')" id="tab-btn-categorias" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition">Categorias</button>
-          <button onclick="trocarAba('contas')" id="tab-btn-contas" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition">Contas bancárias</button>
+          <button type="button" onclick="trocarAba('planeje')" id="tab-btn-planeje" class="nav-btn active px-3 py-4 text-green-100 hover:text-white transition">Planeje sua grana</button>
+          <button type="button" onclick="trocarAba('relatorios')" id="tab-btn-relatorios" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition">Relatórios</button>
+          <button type="button" onclick="trocarAba('investimentos')" id="tab-btn-investimentos" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition">Investimentos & Reserva</button>
+          <button type="button" onclick="trocarAba('categorias')" id="tab-btn-categorias" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition">Categorias</button>
+          <button type="button" onclick="trocarAba('contas')" id="tab-btn-contas" class="nav-btn px-3 py-4 text-green-100 hover:text-white transition">Contas bancárias</button>
         </nav>
       </div>
       <div class="flex items-center space-x-3 text-sm">
-        <button onclick="abrirModalTransacao()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-3.5 py-1.5 rounded-lg shadow-sm transition flex items-center space-x-1">
+        <button type="button" onclick="abrirModalTransacao()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-3.5 py-1.5 rounded-lg shadow-sm transition flex items-center space-x-1 cursor-pointer">
           <i class="fa-solid fa-plus text-xs"></i>
           <span>Lançamento</span>
         </button>
@@ -43,7 +43,7 @@
     </div>
   </header>
 
-  <!-- CONTAINER DE CONTEÚDO PRINCIPAL -->
+  <!-- CONTEÚDO PRINCIPAL -->
   <main class="max-w-7xl mx-auto p-4 md:p-6">
 
     <!-- 1. ABA: PLANEJE SUA GRANA -->
@@ -114,7 +114,7 @@
             </thead>
             <tbody id="lista-transacoes-tbody" class="divide-y divide-gray-50">
               <tr>
-                <td colspan="6" class="text-center py-8 text-gray-400 text-sm">Carregando transações...</td>
+                <td colspan="6" class="text-center py-8 text-gray-400 text-sm">Nenhum lançamento encontrado.</td>
               </tr>
             </tbody>
           </table>
@@ -123,7 +123,7 @@
     </section>
 
     <!-- 2. ABA: RELATÓRIOS -->
-    <section id="aba-relatorios" class="hidden space-y-6">
+    <section id="aba-relatorios" style="display: none;" class="space-y-6">
       <div class="bg-white rounded-2xl border border-gray-200/80 p-6 shadow-sm">
         <h2 class="text-lg font-bold text-gray-800 mb-4">Distribuição de Despesas por Categoria</h2>
         <div class="max-w-md mx-auto h-80 relative flex items-center justify-center">
@@ -133,13 +133,13 @@
     </section>
 
     <!-- 3. ABA: INVESTIMENTOS & RESERVA -->
-    <section id="aba-investimentos" class="hidden space-y-6">
+    <section id="aba-investimentos" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 class="text-xl font-bold text-gray-800">Reserva de Emergência & Renda Fixa</h2>
           <p class="text-sm text-gray-500">Rendimento calculado diariamente com base na taxa CDI e tabela regressiva de IR.</p>
         </div>
-        <button onclick="abrirModalInvestimento()" class="bg-[#1b7a42] hover:bg-green-700 text-white font-medium text-sm px-4 py-2 rounded-xl transition flex items-center space-x-2">
+        <button type="button" onclick="abrirModalInvestimento()" class="bg-[#1b7a42] hover:bg-green-700 text-white font-medium text-sm px-4 py-2 rounded-xl transition flex items-center space-x-2 cursor-pointer">
           <i class="fa-solid fa-plus text-xs"></i>
           <span>Nova Aplicação</span>
         </button>
@@ -149,7 +149,7 @@
     </section>
 
     <!-- 4. ABA: CATEGORIAS -->
-    <section id="aba-categorias" class="hidden space-y-6">
+    <section id="aba-categorias" style="display: none;" class="space-y-6">
       <div class="bg-white rounded-2xl border border-gray-200/80 p-6 shadow-sm">
         <h2 class="text-lg font-bold text-gray-800 mb-4">Estrutura de Categorias & Subcategorias</h2>
         <div id="lista-categorias-container" class="space-y-3"></div>
@@ -157,36 +157,33 @@
     </section>
 
     <!-- 5. ABA: CONTAS BANCÁRIAS -->
-    <section id="aba-contas" class="hidden space-y-6">
+    <section id="aba-contas" style="display: none;" class="space-y-6">
       <div class="flex justify-between items-center">
         <h2 class="text-xl font-bold text-gray-800">Contas e Carteiras</h2>
-        <button onclick="abrirModalConta()" class="bg-[#1b7a42] hover:bg-green-700 text-white font-medium text-sm px-4 py-2 rounded-xl transition">
-          + Nova Conta
-        </button>
       </div>
       <div id="grid-contas" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
     </section>
 
   </main>
 
-  <!-- MODAL: NOVA TRANSAÇÃO -->
-  <div id="modal-transacao" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <!-- MODAL: NOVA TRANSAÇÃO (COM DISPLAY NONE DIRETO PARA NÃO TRAVAR O SITE) -->
+  <div id="modal-transacao" style="display: none;" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-gray-100">
       <div class="flex justify-between items-center pb-3 border-b border-gray-100">
         <h3 class="font-bold text-gray-800 text-base">Novo Lançamento</h3>
-        <button onclick="fecharModal('modal-transacao')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" onclick="fecharModal('modal-transacao')" class="text-gray-400 hover:text-gray-600 text-lg cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form onsubmit="salvarTransacao(event)" class="mt-4 space-y-4">
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">Tipo</label>
           <div class="grid grid-cols-2 gap-2">
-            <button type="button" id="btn-tipo-despesa" onclick="setTipoTransacao('despesa')" class="py-2 text-xs font-bold rounded-lg border-2 border-rose-500 text-rose-600 bg-rose-50">Despesa</button>
-            <button type="button" id="btn-tipo-receita" onclick="setTipoTransacao('receita')" class="py-2 text-xs font-bold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50">Receita</button>
+            <button type="button" id="btn-tipo-despesa" onclick="setTipoTransacao('despesa')" class="py-2 text-xs font-bold rounded-lg border-2 border-rose-500 text-rose-600 bg-rose-50 cursor-pointer">Despesa</button>
+            <button type="button" id="btn-tipo-receita" onclick="setTipoTransacao('receita')" class="py-2 text-xs font-bold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 cursor-pointer">Receita</button>
           </div>
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">Descrição</label>
-          <input type="text" id="t-descricao" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5 focus:ring-1 focus:ring-green-500" placeholder="Ex: Supermercado">
+          <input type="text" id="t-descricao" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5 focus:ring-1 focus:ring-green-500" placeholder="Ex: Supermercado BH">
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
@@ -209,33 +206,33 @@
           </select>
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1">Conta de Débito/Crédito</label>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Conta</label>
           <select id="t-conta" class="w-full text-sm border border-gray-200 rounded-lg p-2.5 focus:ring-1 focus:ring-green-500"></select>
         </div>
-        <button type="submit" class="w-full bg-[#1b7a42] hover:bg-green-700 text-white font-semibold py-2.5 rounded-xl transition text-sm">Salvar Lançamento</button>
+        <button type="submit" class="w-full bg-[#1b7a42] hover:bg-green-700 text-white font-semibold py-2.5 rounded-xl transition text-sm cursor-pointer">Salvar Lançamento</button>
       </form>
     </div>
   </div>
 
   <!-- MODAL: NOVO INVESTIMENTO -->
-  <div id="modal-investimento" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <div id="modal-investimento" style="display: none;" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-gray-100">
       <div class="flex justify-between items-center pb-3 border-b border-gray-100">
         <h3 class="font-bold text-gray-800 text-base">Cadastrar Renda Fixa / Reserva</h3>
-        <button onclick="fecharModal('modal-investimento')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" onclick="fecharModal('modal-investimento')" class="text-gray-400 hover:text-gray-600 text-lg cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form onsubmit="salvarInvestimento(event)" class="mt-4 space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1">Nome / Instituição</label>
-          <input type="text" id="inv-nome" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5" placeholder="Ex: Reserva de Emergência Nubank">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Nome / Banco</label>
+          <input type="text" id="inv-nome" required class="w-full text-sm border border-gray-200 rounded-lg p-2.5" placeholder="Ex: CDB Reserva de Emergência">
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-semibold text-gray-600 mb-1">Tipo de Título</label>
             <select id="inv-tipo" class="w-full text-sm border border-gray-200 rounded-lg p-2.5">
               <option value="CDB">CDB</option>
-              <option value="LCI">LCI (Isento de IR)</option>
-              <option value="LCA">LCA (Isento de IR)</option>
+              <option value="LCI">LCI (Isento IR)</option>
+              <option value="LCA">LCA (Isento IR)</option>
               <option value="Tesouro Selic">Tesouro Selic</option>
             </select>
           </div>
@@ -258,7 +255,7 @@
           <input type="checkbox" id="inv-is-reserva" class="rounded text-green-600 focus:ring-green-500 h-4 w-4">
           <label for="inv-is-reserva" class="text-xs text-gray-700 font-medium">Marcar como Reserva de Emergência Oficial</label>
         </div>
-        <button type="submit" class="w-full bg-[#1b7a42] hover:bg-green-700 text-white font-semibold py-2.5 rounded-xl transition text-sm">Salvar Aplicação</button>
+        <button type="submit" class="w-full bg-[#1b7a42] hover:bg-green-700 text-white font-semibold py-2.5 rounded-xl transition text-sm cursor-pointer">Salvar Aplicação</button>
       </form>
     </div>
   </div>
@@ -282,13 +279,21 @@
     let chartDonut = null;
 
     window.addEventListener('DOMContentLoaded', async () => {
-      document.getElementById('t-data').valueAsDate = new Date();
-      document.getElementById('inv-data').valueAsDate = new Date();
-      await carregarTudo();
+      const dt = new Date().toISOString().split('T')[0];
+      const elTData = document.getElementById('t-data');
+      const elInvData = document.getElementById('inv-data');
+      if (elTData) elTData.value = dt;
+      if (elInvData) elInvData.value = dt;
+
+      try {
+        await carregarTudo();
+      } catch (err) {
+        console.error("Erro ao carregar dados do Supabase:", err);
+      }
     });
 
     async function carregarTudo() {
-      await Promise.all([
+      await Promise.allSettled([
         carregarCategorias(),
         carregarContas(),
         carregarTransacoes(),
@@ -309,20 +314,24 @@
       subcategorias = subcats || [];
 
       const select = document.getElementById('t-categoria');
-      select.innerHTML = '<option value="">Selecione uma categoria</option>';
-      categorias.forEach(c => {
-        select.innerHTML += `<option value="${c.id}">${c.nome}</option>`;
-      });
+      if (select) {
+        select.innerHTML = '<option value="">Selecione uma categoria</option>';
+        categorias.forEach(c => {
+          select.innerHTML += `<option value="${c.id}">${c.nome}</option>`;
+        });
+      }
     }
 
     async function carregarContas() {
       const { data } = await supabase.from('contas_bancarias').select('*').order('nome');
       contas = data || [];
       const select = document.getElementById('t-conta');
-      select.innerHTML = '';
-      contas.forEach(ct => {
-        select.innerHTML += `<option value="${ct.id}">${ct.nome} (R$ ${Number(ct.saldo_atual).toFixed(2)})</option>`;
-      });
+      if (select) {
+        select.innerHTML = '';
+        contas.forEach(ct => {
+          select.innerHTML += `<option value="${ct.id}">${ct.nome} (R$ ${Number(ct.saldo_atual).toFixed(2)})</option>`;
+        });
+      }
     }
 
     async function carregarTransacoes() {
@@ -408,7 +417,7 @@
       const filtradas = transacoes.filter(t => filtro === 'todos' ? true : t.tipo === filtro);
 
       if (filtradas.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-gray-400">Nenhum lançamento encontrado.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-gray-400">Nenhum lançamento encontrado.</td></tr>`;
         return;
       }
 
@@ -424,7 +433,7 @@
               ${isDesp ? '-' : '+'} R$ ${Number(t.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
             </td>
             <td class="py-3 text-center">
-              <button onclick="excluirTransacao('${t.id}')" class="text-gray-300 hover:text-rose-500 text-xs transition"><i class="fa-solid fa-trash"></i></button>
+              <button type="button" onclick="excluirTransacao('${t.id}')" class="text-gray-300 hover:text-rose-500 text-xs transition cursor-pointer"><i class="fa-solid fa-trash"></i></button>
             </td>
           </tr>
         `;
@@ -464,7 +473,7 @@
             </div>
             <div class="mt-4 flex justify-between items-center text-[11px] text-gray-400">
               <span>${c.diasUteis} dias úteis</span>
-              <button onclick="excluirInvestimento('${inv.id}')" class="text-rose-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash"></i></button>
+              <button type="button" onclick="excluirInvestimento('${inv.id}')" class="text-rose-400 hover:text-rose-600 transition cursor-pointer"><i class="fa-solid fa-trash"></i></button>
             </div>
           </div>
         `;
@@ -526,7 +535,7 @@
       chartDonut = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: labels.length ? labels : ['Sem despesas'],
+          labels: labels.length ? labels : ['Sem despesas cadastradas'],
           datasets: [{
             data: data.length ? data : [1],
             backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#64748b']
@@ -554,7 +563,7 @@
         descricao, valor, tipo: tipoTransacaoAtual, data, categoria_id, subcategoria_id, conta_id
       }]);
 
-      if (error) return alert('Erro ao salvar: ' + error.message);
+      if (error) return alert('Erro ao salvar no banco: ' + error.message);
 
       if (conta_id) {
         const c = contas.find(x => x.id === conta_id);
@@ -581,7 +590,7 @@
         nome, tipo, percentual_cdi, valor_aplicado, data_aplicacao, is_reserva
       }]);
 
-      if (error) return alert('Erro ao salvar: ' + error.message);
+      if (error) return alert('Erro ao salvar investimento: ' + error.message);
 
       fecharModal('modal-investimento');
       await carregarTudo();
@@ -601,11 +610,17 @@
 
     function trocarAba(aba) {
       ['planeje', 'relatorios', 'investimentos', 'categorias', 'contas'].forEach(a => {
-        document.getElementById(`aba-${a}`).classList.add('hidden');
-        document.getElementById(`tab-btn-${a}`).classList.remove('active');
+        const el = document.getElementById(`aba-${a}`);
+        const btn = document.getElementById(`tab-btn-${a}`);
+        if (el) el.style.display = 'none';
+        if (btn) btn.classList.remove('active');
       });
-      document.getElementById(`aba-${aba}`).classList.remove('hidden');
-      document.getElementById(`tab-btn-${aba}`).classList.add('active');
+
+      const abaAtiva = document.getElementById(`aba-${aba}`);
+      const btnAtivo = document.getElementById(`tab-btn-${aba}`);
+      if (abaAtiva) abaAtiva.style.display = 'block';
+      if (btnAtivo) btnAtivo.classList.add('active');
+
       if (aba === 'relatorios') renderizarGrafico();
     }
 
@@ -614,17 +629,18 @@
       const bDesp = document.getElementById('btn-tipo-despesa');
       const bRec = document.getElementById('btn-tipo-receita');
       if (tipo === 'despesa') {
-        bDesp.className = 'py-2 text-xs font-bold rounded-lg border-2 border-rose-500 text-rose-600 bg-rose-50';
-        bRec.className = 'py-2 text-xs font-bold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50';
+        bDesp.className = 'py-2 text-xs font-bold rounded-lg border-2 border-rose-500 text-rose-600 bg-rose-50 cursor-pointer';
+        bRec.className = 'py-2 text-xs font-bold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 cursor-pointer';
       } else {
-        bRec.className = 'py-2 text-xs font-bold rounded-lg border-2 border-emerald-500 text-emerald-600 bg-emerald-50';
-        bDesp.className = 'py-2 text-xs font-bold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50';
+        bRec.className = 'py-2 text-xs font-bold rounded-lg border-2 border-emerald-500 text-emerald-600 bg-emerald-50 cursor-pointer';
+        bDesp.className = 'py-2 text-xs font-bold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 cursor-pointer';
       }
     }
 
     function atualizarSelectSubcategorias() {
       const catId = document.getElementById('t-categoria').value;
       const selectSub = document.getElementById('t-subcategoria');
+      if (!selectSub) return;
       selectSub.innerHTML = '<option value="">Sem subcategoria</option>';
       const filtradas = subcategorias.filter(s => s.categoria_id === catId);
       filtradas.forEach(s => {
@@ -632,9 +648,20 @@
       });
     }
 
-    function abrirModalTransacao() { document.getElementById('modal-transacao').classList.remove('hidden'); }
-    function abrirModalInvestimento() { document.getElementById('modal-investimento').classList.remove('hidden'); }
-    function fecharModal(id) { document.getElementById(id).classList.add('hidden'); }
+    function abrirModalTransacao() { 
+      const m = document.getElementById('modal-transacao');
+      if (m) m.style.display = 'flex'; 
+    }
+    
+    function abrirModalInvestimento() { 
+      const m = document.getElementById('modal-investimento');
+      if (m) m.style.display = 'flex'; 
+    }
+    
+    function fecharModal(id) { 
+      const m = document.getElementById(id);
+      if (m) m.style.display = 'none'; 
+    }
   </script>
 </body>
 </html>

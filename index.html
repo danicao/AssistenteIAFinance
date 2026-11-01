@@ -88,7 +88,7 @@
   </div>
 
   <!-- ==============================================
-       HEADER COM BOTÃO ADMIN CONDICIONAL
+       HEADER COM BOTÕES (TELEGRAM, DARK MODE, LANÇAMENTO)
        ============================================== -->
   <header class="glass-header sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -122,22 +122,31 @@
             <i class="fa-solid fa-chart-line"></i> Relatórios
           </button>
 
-          <!-- BOTÃO PAINEL ADM (EXIBIDO SOMENTE PARA danielgatao20@gmail.com) -->
+          <!-- BOTÃO PAINEL ADM -->
           <button type="button" onclick="trocarAba('admin')" id="tab-btn-admin" style="display: none;" class="nav-btn flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold hover:text-violet-700">
             <i class="fa-solid fa-user-shield"></i> Painel Adm
           </button>
         </nav>
 
         <!-- Ações do Topo -->
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2.5">
+          <!-- BOTÃO CONECTAR TELEGRAM -->
+          <button type="button" onclick="abrirModalTelegram()" class="flex items-center gap-1.5 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-sky-600 dark:text-sky-400 px-3.5 py-2 rounded-full text-xs font-bold transition shadow-sm border border-sky-100 dark:border-sky-800" title="Conectar ou gerenciar o bot do Telegram">
+            <i class="fa-brands fa-telegram text-sm"></i>
+            <span class="hidden sm:inline">Telegram</span>
+          </button>
+
+          <!-- BOTÃO TEMA CLARO / ESCURO -->
           <button type="button" onclick="alternarTema()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition shadow-sm" title="Alternar Modo Escuro / Claro">
             <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
           </button>
 
+          <!-- Botão Lançamento -->
           <button type="button" onclick="abrirModalTransacao()" class="hidden sm:flex items-center gap-2 bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 dark:hover:bg-brand-500 text-white font-medium px-4 py-2 rounded-full transition-transform active:scale-95 shadow-md text-xs">
             <i class="fa-solid fa-plus text-xs"></i> Lançamento
           </button>
 
+          <!-- Perfil e Logout -->
           <div class="flex items-center gap-2 pl-2">
             <div class="hidden sm:flex flex-col text-right">
               <span id="user-display-name" class="text-xs font-bold text-slate-800 dark:text-white leading-tight">Usuário</span>
@@ -256,9 +265,7 @@
       </div>
     </section>
 
-    <!-- ==============================================
-         PAINEL ADMINISTRATIVO (EXCLUSIVO danielgatao20@gmail.com)
-         ============================================== -->
+    <!-- PAINEL ADMINISTRATIVO -->
     <section id="aba-admin" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -266,14 +273,13 @@
             <h2 class="text-xl font-bold text-slate-800 dark:text-white">Painel Administrativo</h2>
             <span class="bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-violet-200 dark:border-violet-800">ADMIN MASTER</span>
           </div>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gerencie os usuários do sistema. A privacidade dos dados financeiros e saldos de cada usuário permanece inviolável.</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gerencie os usuários do sistema sem violar a privacidade dos saldos e lançamentos.</p>
         </div>
         <button onclick="carregarUsuariosAdmin()" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition flex items-center gap-2">
           <i class="fa-solid fa-rotate text-xs"></i> Atualizar Lista
         </button>
       </div>
 
-      <!-- KPIs Administrativos -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
         <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
           <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total de Contas</span>
@@ -288,11 +294,10 @@
         <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
           <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Confirmação Pendente</span>
           <div class="text-3xl font-black text-amber-500 mt-1" id="kpi-admin-pendentes">0</div>
-          <p class="text-[11px] text-slate-500 mt-1">Aguardando link de ativação</p>
+          <p class="text-[11px] text-slate-500 mt-1">Aguardando ativação</p>
         </div>
       </div>
 
-      <!-- Tabela de Gerenciamento de Usuários -->
       <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
         <div class="p-6 border-b border-slate-100 dark:border-slate-800">
           <h3 class="text-base font-bold text-slate-800 dark:text-white">Usuários Cadastrados</h3>
@@ -305,7 +310,7 @@
                 <th class="py-4 px-6">Data de Cadastro</th>
                 <th class="py-4 px-6">Último Acesso</th>
                 <th class="py-4 px-6 text-center">Status</th>
-                <th class="py-4 px-6 text-right">Ações de Gerenciamento</th>
+                <th class="py-4 px-6 text-right">Ações</th>
               </tr>
             </thead>
             <tbody id="lista-usuarios-admin-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
@@ -318,7 +323,7 @@
       </div>
     </section>
 
-    <!-- OUTRAS ABAS (Limites, Metas, Contas, Investimentos, Relatórios) -->
+    <!-- LIMITES, METAS, CONTAS, INVESTIMENTOS, RELATÓRIOS -->
     <section id="aba-limites" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -444,6 +449,73 @@
   <!-- ==============================================
        MODAIS DO SISTEMA
        ============================================== -->
+
+  <!-- MODAL CONECTAR TELEGRAM COM GERADOR DE CÓDIGO -->
+  <div id="modal-telegram" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
+      <div class="flex justify-between items-center mb-6">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-sky-500 text-white flex items-center justify-center text-xl shadow-md shadow-sky-500/20">
+            <i class="fa-brands fa-telegram"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 dark:text-white text-xl">Conectar Telegram</h3>
+        </div>
+        <button type="button" onclick="fecharModal('modal-telegram')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- ESTADO 1: JÁ CONECTADO -->
+      <div id="telegram-status-conectado" style="display: none;" class="text-center py-4 space-y-4">
+        <div class="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto text-3xl">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div>
+          <h4 class="font-bold text-slate-800 dark:text-white text-lg">Telegram Conectado!</h4>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Sua conta já está recebendo mensagens, áudios e comprovantes normalmente.</p>
+        </div>
+        <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl text-xs text-slate-500 flex justify-between items-center">
+          <span>Identificador (Chat ID):</span>
+          <span class="font-bold text-slate-800 dark:text-slate-200" id="telegram-chat-id-texto">Carregando...</span>
+        </div>
+        <button onclick="desvincularTelegram()" class="w-full py-3 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-bold transition">
+          Desconectar este Telegram
+        </button>
+      </div>
+
+      <!-- ESTADO 2: NÃO CONECTADO (GERADOR DE CÓDIGO) -->
+      <div id="telegram-status-desconectado" style="display: none;" class="space-y-4">
+        <p class="text-xs text-slate-500 dark:text-slate-400">
+          Envie o código abaixo para o seu robô no Telegram para parear esta conta com segurança:
+        </p>
+        
+        <div class="bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 text-center relative">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Seu Código de Pareamento</span>
+          <div class="text-4xl font-black text-brand-600 dark:text-brand-400 tracking-widest font-mono" id="telegram-codigo-display">------</div>
+          <span class="text-[11px] text-slate-400 mt-1 block">Válido por 15 minutos</span>
+        </div>
+
+        <div class="p-4 bg-sky-50 dark:bg-sky-950/40 rounded-2xl border border-sky-100 dark:border-sky-900/50 space-y-2">
+          <span class="text-xs font-bold text-sky-800 dark:text-sky-300 flex items-center gap-1.5">
+            <i class="fa-solid fa-paper-plane"></i> Passo a passo:
+          </span>
+          <ol class="text-xs text-sky-700 dark:text-sky-400 space-y-1 list-decimal list-inside">
+            <li>Abra o seu robô no Telegram.</li>
+            <li>Envie exatamente a mensagem: <br><strong class="bg-white/80 dark:bg-slate-800 px-2 py-0.5 rounded text-sky-900 dark:text-sky-200 font-mono text-[11px]" id="telegram-comando-copia">/conectar ------</strong></li>
+            <li>O bot responderá confirmando seu e-mail!</li>
+          </ol>
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="gerarNovoCodigoTelegram()" class="flex-1 py-3 text-xs font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 rounded-xl transition">
+            <i class="fa-solid fa-rotate mr-1"></i> Gerar Novo
+          </button>
+          <button type="button" onclick="copiarComandoTelegram()" class="flex-1 py-3 text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl transition shadow-md shadow-brand-500/20">
+            <i class="fa-solid fa-copy mr-1"></i> Copiar Comando
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
   <!-- Modal Admin: Alterar E-mail -->
   <div id="modal-admin-email" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -578,11 +650,11 @@
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Valor Alvo (R$)</label>
-            <input type="number" step="0.01" id="meta-valor-alvo" required class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="5000,00">
+            <input type="number" step="0.01" id="meta-valor-alvo" required class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="5000,00">
           </div>
           <div>
             <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Já Guardado (R$)</label>
-            <input type="number" step="0.01" id="meta-valor-atual" value="0" class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="0,00">
+            <input type="number" step="0.01" id="meta-valor-atual" value="0" class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="0,00">
           </div>
         </div>
         <div>
@@ -836,7 +908,6 @@
       const nomeCurto = user.email ? user.email.split('@')[0] : 'Usuário';
       document.getElementById('user-display-name').innerText = nomeCurto;
 
-      // Trava e ativação do Painel Administrador
       const btnAdmin = document.getElementById('tab-btn-admin');
       const mobileBtnAdmin = document.getElementById('mobile-btn-admin');
       const mobileBtnContas = document.getElementById('mobile-btn-contas');
@@ -869,10 +940,94 @@
     }
 
     // ==========================================
+    // INTEGRAÇÃO TELEGRAM (GERADOR DE CÓDIGO)
+    // ==========================================
+    let codigoTelegramAtual = '';
+
+    async function abrirModalTelegram() {
+      if (!usuarioAtual) return;
+      document.getElementById('modal-telegram').style.display = 'flex';
+      await verificarStatusTelegram();
+    }
+
+    async function verificarStatusTelegram() {
+      try {
+        const { data, error } = await supabaseClient
+          .from('perfis_telegram')
+          .select('*')
+          .eq('user_id', usuarioAtual.id)
+          .maybeSingle();
+
+        if (data && data.telegram_chat_id) {
+          document.getElementById('telegram-status-conectado').style.display = 'block';
+          document.getElementById('telegram-status-desconectado').style.display = 'none';
+          document.getElementById('telegram-chat-id-texto').innerText = data.telegram_chat_id;
+        } else {
+          document.getElementById('telegram-status-conectado').style.display = 'none';
+          document.getElementById('telegram-status-desconectado').style.display = 'block';
+          
+          if (data && data.codigo_vinculo && new Date(data.codigo_expira_em) > new Date()) {
+            exibirCodigoTelegramNaTela(data.codigo_vinculo);
+          } else {
+            await gerarNovoCodigoTelegram();
+          }
+        }
+      } catch (err) {
+        console.error("Erro ao verificar status Telegram:", err);
+      }
+    }
+
+    async function gerarNovoCodigoTelegram() {
+      const codigo = Math.floor(100000 + Math.random() * 900000).toString();
+      const expiraEm = new Date(Date.now() + 15 * 60 * 1000).toISOString(); // 15 minutos
+
+      exibirCodigoTelegramNaTela(codigo);
+
+      try {
+        await supabaseClient.from('perfis_telegram').upsert({
+          user_id: usuarioAtual.id,
+          codigo_vinculo: codigo,
+          codigo_expira_em: expiraEm
+        }, { onConflict: 'user_id' });
+      } catch (err) {
+        alert('Erro ao gerar código no Supabase: ' + err.message);
+      }
+    }
+
+    function exibirCodigoTelegramNaTela(cod) {
+      codigoTelegramAtual = cod;
+      document.getElementById('telegram-codigo-display').innerText = cod;
+      document.getElementById('telegram-comando-copia').innerText = `/conectar ${cod}`;
+    }
+
+    function copiarComandoTelegram() {
+      if (!codigoTelegramAtual) return;
+      const cmd = `/conectar ${codigoTelegramAtual}`;
+      navigator.clipboard.writeText(cmd).then(() => {
+        alert(`Comando copiado: ${cmd}\n\nCole agora na conversa com seu bot no Telegram!`);
+      });
+    }
+
+    async function desvincularTelegram() {
+      if (!confirm('Deseja realmente desconectar o seu Telegram desta conta?')) return;
+      try {
+        await supabaseClient.from('perfis_telegram').update({
+          telegram_chat_id: null,
+          codigo_vinculo: null,
+          codigo_expira_em: null
+        }).eq('user_id', usuarioAtual.id);
+
+        alert('Telegram desconectado com sucesso.');
+        await verificarStatusTelegram();
+      } catch (err) {
+        alert('Erro ao desconectar: ' + err.message);
+      }
+    }
+
+    // ==========================================
     // NAVEGAÇÃO DE ABAS
     // ==========================================
     function trocarAba(aba) {
-      // Bloqueio no front caso tente acessar o admin sem ser o admin
       if (aba === 'admin' && (!usuarioAtual || usuarioAtual.email !== ADMIN_EMAIL)) {
         alert('Acesso restrito ao Administrador do Sistema.');
         return;

@@ -8,7 +8,6 @@
   <!-- FAVICON NATIVO SVG -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%236366f1'/><stop offset='100%' stop-color='%234338ca'/></linearGradient></defs><rect width='100' height='100' rx='28' fill='url(%23g)'/><path d='M30 35 h40 a5 5 0 0 1 5 5 v25 a5 5 0 0 1 -5 5 h-40 a5 5 0 0 1 -5 -5 v-25 a5 5 0 0 1 5 -5 z' fill='none' stroke='white' stroke-width='6'/><circle cx='62' cy='52.5' r='4' fill='white'/><path d='M30 45 h45' stroke='white' stroke-width='4'/></svg>">
   
-  <!-- Fonte Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -54,7 +53,7 @@
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans antialiased min-h-screen transition-colors duration-200">
 
   <!-- ==============================================
-       GATEKEEPER: TELA DE LOGIN OBRIGATÓRIA (SEM BYPASS)
+       GATEKEEPER: TELA DE LOGIN OBRIGATÓRIA
        ============================================== -->
   <div id="auth-screen" class="fixed inset-0 z-50 bg-slate-900/90 dark:bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
@@ -89,7 +88,7 @@
   </div>
 
   <!-- ==============================================
-       HEADER (COM TOGGLE MODO ESCURO/CLARO)
+       HEADER COM BOTÃO ADMIN CONDICIONAL
        ============================================== -->
   <header class="glass-header sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -108,7 +107,7 @@
             <i class="fa-solid fa-chart-pie"></i> Dashboard
           </button>
           <button type="button" onclick="trocarAba('limites')" id="tab-btn-limites" class="nav-btn flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
-            <i class="fa-solid fa-gauge-high"></i> Limites de Gastos
+            <i class="fa-solid fa-gauge-high"></i> Limites
           </button>
           <button type="button" onclick="trocarAba('metas')" id="tab-btn-metas" class="nav-btn flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
             <i class="fa-solid fa-bullseye"></i> Metas
@@ -122,25 +121,27 @@
           <button type="button" onclick="trocarAba('relatorios')" id="tab-btn-relatorios" class="nav-btn flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
             <i class="fa-solid fa-chart-line"></i> Relatórios
           </button>
+
+          <!-- BOTÃO PAINEL ADM (EXIBIDO SOMENTE PARA danielgatao20@gmail.com) -->
+          <button type="button" onclick="trocarAba('admin')" id="tab-btn-admin" style="display: none;" class="nav-btn flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold hover:text-violet-700">
+            <i class="fa-solid fa-user-shield"></i> Painel Adm
+          </button>
         </nav>
 
         <!-- Ações do Topo -->
         <div class="flex items-center gap-3">
-          <!-- BOTÃO TEMA CLARO / ESCURO -->
           <button type="button" onclick="alternarTema()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition shadow-sm" title="Alternar Modo Escuro / Claro">
             <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
           </button>
 
-          <!-- Botão Lançamento -->
           <button type="button" onclick="abrirModalTransacao()" class="hidden sm:flex items-center gap-2 bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 dark:hover:bg-brand-500 text-white font-medium px-4 py-2 rounded-full transition-transform active:scale-95 shadow-md text-xs">
             <i class="fa-solid fa-plus text-xs"></i> Lançamento
           </button>
 
-          <!-- Perfil e Logout -->
           <div class="flex items-center gap-2 pl-2">
             <div class="hidden sm:flex flex-col text-right">
               <span id="user-display-name" class="text-xs font-bold text-slate-800 dark:text-white leading-tight">Usuário</span>
-              <span class="text-[10px] text-slate-400">Logado</span>
+              <span id="user-role-badge" class="text-[10px] text-slate-400 font-medium">Logado</span>
             </div>
             <button onclick="fazerLogout()" class="w-10 h-10 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50 flex items-center justify-center transition" title="Sair da Conta">
               <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
@@ -168,7 +169,10 @@
       <button onclick="trocarAba('metas')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-1">
         <i class="fa-solid fa-bullseye text-base"></i> Metas
       </button>
-      <button onclick="trocarAba('contas')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-1">
+      <button id="mobile-btn-admin" onclick="trocarAba('admin')" style="display: none;" class="flex flex-col items-center gap-1 text-violet-600 w-full py-1">
+        <i class="fa-solid fa-user-shield text-base"></i> Adm
+      </button>
+      <button id="mobile-btn-contas" onclick="trocarAba('contas')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-1">
         <i class="fa-solid fa-building-columns text-base"></i> Contas
       </button>
     </div>
@@ -252,7 +256,69 @@
       </div>
     </section>
 
-    <!-- 2. ABA: LIMITES DE GASTOS -->
+    <!-- ==============================================
+         PAINEL ADMINISTRATIVO (EXCLUSIVO danielgatao20@gmail.com)
+         ============================================== -->
+    <section id="aba-admin" style="display: none;" class="space-y-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-xl font-bold text-slate-800 dark:text-white">Painel Administrativo</h2>
+            <span class="bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-violet-200 dark:border-violet-800">ADMIN MASTER</span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gerencie os usuários do sistema. A privacidade dos dados financeiros e saldos de cada usuário permanece inviolável.</p>
+        </div>
+        <button onclick="carregarUsuariosAdmin()" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition flex items-center gap-2">
+          <i class="fa-solid fa-rotate text-xs"></i> Atualizar Lista
+        </button>
+      </div>
+
+      <!-- KPIs Administrativos -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total de Contas</span>
+          <div class="text-3xl font-black text-slate-800 dark:text-white mt-1" id="kpi-admin-total">0</div>
+          <p class="text-[11px] text-slate-500 mt-1">Usuários registrados no banco</p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Contas Confirmadas</span>
+          <div class="text-3xl font-black text-emerald-600 mt-1" id="kpi-admin-confirmados">0</div>
+          <p class="text-[11px] text-slate-500 mt-1">E-mails verificados</p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Confirmação Pendente</span>
+          <div class="text-3xl font-black text-amber-500 mt-1" id="kpi-admin-pendentes">0</div>
+          <p class="text-[11px] text-slate-500 mt-1">Aguardando link de ativação</p>
+        </div>
+      </div>
+
+      <!-- Tabela de Gerenciamento de Usuários -->
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="text-base font-bold text-slate-800 dark:text-white">Usuários Cadastrados</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-100 dark:border-slate-800">
+                <th class="py-4 px-6">Usuário (E-mail)</th>
+                <th class="py-4 px-6">Data de Cadastro</th>
+                <th class="py-4 px-6">Último Acesso</th>
+                <th class="py-4 px-6 text-center">Status</th>
+                <th class="py-4 px-6 text-right">Ações de Gerenciamento</th>
+              </tr>
+            </thead>
+            <tbody id="lista-usuarios-admin-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
+              <tr>
+                <td colspan="5" class="py-10 text-center text-slate-400">Carregando usuários...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- OUTRAS ABAS (Limites, Metas, Contas, Investimentos, Relatórios) -->
     <section id="aba-limites" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -292,7 +358,6 @@
       </div>
     </section>
 
-    <!-- 3. ABA: METAS -->
     <section id="aba-metas" style="display: none;" class="space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-slate-900 dark:to-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 p-6 rounded-3xl flex justify-between items-center">
@@ -337,7 +402,6 @@
       </div>
     </section>
 
-    <!-- 4. ABA: CONTAS BANCÁRIAS -->
     <section id="aba-contas" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -352,7 +416,6 @@
       <div id="grid-contas-completas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 5. ABA: INVESTIMENTOS & RESERVA -->
     <section id="aba-investimentos" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -367,7 +430,6 @@
       <div id="grid-investimentos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 6. ABA: RELATÓRIOS -->
     <section id="aba-relatorios" style="display: none;" class="space-y-6">
       <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm p-6 md:p-8">
         <h2 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Divisão de Gastos por Categoria</h2>
@@ -380,8 +442,27 @@
   </main>
 
   <!-- ==============================================
-       MODAIS
+       MODAIS DO SISTEMA
        ============================================== -->
+
+  <!-- Modal Admin: Alterar E-mail -->
+  <div id="modal-admin-email" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
+      <h3 class="font-bold text-slate-800 dark:text-white text-lg mb-1">Alterar E-mail</h3>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" id="admin-modal-user-id">Atualizar endereço de acesso do usuário.</p>
+      <form onsubmit="confirmarAlterarEmailAdmin(event)" class="space-y-4">
+        <input type="hidden" id="admin-target-user-id">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Novo E-mail</label>
+          <input type="email" id="admin-new-email" required class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="novo@email.com">
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="fecharModal('modal-admin-email')" class="flex-1 py-3 text-xs font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-xl">Cancelar</button>
+          <button type="submit" class="flex-1 py-3 text-xs font-bold text-white bg-violet-600 hover:bg-violet-700 rounded-xl">Salvar Novo E-mail</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- Modal: Nova Transação -->
   <div id="modal-transacao" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -605,6 +686,7 @@
     const SUPABASE_URL = 'https://cpcrmudbnepkodruxtok.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_QwZ6A5zyJE0QG-EIiXG95w_xx6c4Aez';
     const TAXA_CDI_ANUAL = 0.1075;
+    const ADMIN_EMAIL = 'danielgatao20@gmail.com';
 
     let supabaseClient = null;
     let authModo = 'login';
@@ -629,9 +711,6 @@
       'Outro': { cor: 'bg-slate-700', txt: 'text-slate-700', icone: 'fa-wallet' }
     };
 
-    // ==========================================
-    // TEMA ESCURO / CLARO
-    // ==========================================
     function inicializarTema() {
       const temaSalvo = localStorage.getItem('financeai_theme') || 'light';
       aplicarTema(temaSalvo);
@@ -673,7 +752,6 @@
         if (factory) {
           supabaseClient = factory(SUPABASE_URL, SUPABASE_KEY);
 
-          // Escuta eventos de login/logout em tempo real
           supabaseClient.auth.onAuthStateChange((event, session) => {
             if (session && session.user) {
               definirUsuarioLogado(session.user);
@@ -685,7 +763,6 @@
             }
           });
 
-          // Checa sessão inicial
           const { data: { session } } = await supabaseClient.auth.getSession();
           if (session && session.user) {
             definirUsuarioLogado(session.user);
@@ -701,7 +778,7 @@
     });
 
     // ==========================================
-    // AUTENTICAÇÃO OBRIGATÓRIA
+    // AUTENTICAÇÃO
     // ==========================================
     function alternarAuth(modo) {
       authModo = modo;
@@ -758,6 +835,30 @@
       usuarioAtual = user;
       const nomeCurto = user.email ? user.email.split('@')[0] : 'Usuário';
       document.getElementById('user-display-name').innerText = nomeCurto;
+
+      // Trava e ativação do Painel Administrador
+      const btnAdmin = document.getElementById('tab-btn-admin');
+      const mobileBtnAdmin = document.getElementById('mobile-btn-admin');
+      const mobileBtnContas = document.getElementById('mobile-btn-contas');
+      const roleBadge = document.getElementById('user-role-badge');
+
+      if (user.email === ADMIN_EMAIL) {
+        if (btnAdmin) btnAdmin.style.display = 'inline-flex';
+        if (mobileBtnAdmin) mobileBtnAdmin.style.display = 'flex';
+        if (mobileBtnContas) mobileBtnContas.style.display = 'none';
+        if (roleBadge) {
+          roleBadge.innerText = 'Administrador';
+          roleBadge.className = 'text-[10px] text-violet-600 dark:text-violet-400 font-extrabold uppercase';
+        }
+      } else {
+        if (btnAdmin) btnAdmin.style.display = 'none';
+        if (mobileBtnAdmin) mobileBtnAdmin.style.display = 'none';
+        if (mobileBtnContas) mobileBtnContas.style.display = 'flex';
+        if (roleBadge) {
+          roleBadge.innerText = 'Usuário';
+          roleBadge.className = 'text-[10px] text-slate-400 font-medium';
+        }
+      }
     }
 
     async function fazerLogout() {
@@ -771,13 +872,20 @@
     // NAVEGAÇÃO DE ABAS
     // ==========================================
     function trocarAba(aba) {
-      const abas = ['planeje', 'limites', 'metas', 'contas', 'investimentos', 'relatorios'];
+      // Bloqueio no front caso tente acessar o admin sem ser o admin
+      if (aba === 'admin' && (!usuarioAtual || usuarioAtual.email !== ADMIN_EMAIL)) {
+        alert('Acesso restrito ao Administrador do Sistema.');
+        return;
+      }
+
+      const abas = ['planeje', 'limites', 'metas', 'contas', 'investimentos', 'relatorios', 'admin'];
       abas.forEach(a => {
         const sec = document.getElementById(`aba-${a}`);
         const btn = document.getElementById(`tab-btn-${a}`);
         if (sec) sec.style.display = 'none';
         if (btn) btn.classList.remove('active');
       });
+
       const secAtiva = document.getElementById(`aba-${aba}`);
       const btnAtiva = document.getElementById(`tab-btn-${aba}`);
       if (secAtiva) secAtiva.style.display = 'block';
@@ -790,10 +898,134 @@
       }
       if (aba === 'metas') renderizarMetas();
       if (aba === 'contas') renderizarContasCompletas();
+      if (aba === 'admin') carregarUsuariosAdmin();
     }
 
     function formatarMoeda(v) {
       return Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // ==========================================
+    // FUNÇÕES DO PAINEL ADMIN
+    // ==========================================
+    async function carregarUsuariosAdmin() {
+      if (!usuarioAtual || usuarioAtual.email !== ADMIN_EMAIL) return;
+      const tbody = document.getElementById('lista-usuarios-admin-tbody');
+      tbody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-slate-400">Carregando usuários do sistema...</td></tr>';
+
+      try {
+        const { data: users, error } = await supabaseClient.rpc('get_admin_users');
+        if (error) throw error;
+
+        tbody.innerHTML = '';
+        if (!users || users.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-slate-400">Nenhum usuário cadastrado.</td></tr>';
+          return;
+        }
+
+        let confirmados = 0;
+        let pendentes = 0;
+
+        users.forEach(u => {
+          const isConfirmed = !!u.email_confirmed_at;
+          if (isConfirmed) confirmados++; else pendentes++;
+
+          const dataCriacao = new Date(u.created_at).toLocaleDateString('pt-BR');
+          const ultimoAcesso = u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : 'Nunca acessou';
+          const isMaster = u.email === ADMIN_EMAIL;
+
+          tbody.innerHTML += `
+            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
+              <td class="py-4 px-6 font-semibold text-slate-800 dark:text-white flex items-center gap-2">
+                <i class="fa-solid fa-user-circle text-slate-400 text-base"></i>
+                <span>${u.email}</span>
+                ${isMaster ? '<span class="bg-violet-100 dark:bg-violet-950 text-violet-700 dark:text-violet-300 text-[10px] font-bold px-2 py-0.5 rounded-full ml-1">VOCÊ (ADMIN)</span>' : ''}
+              </td>
+              <td class="py-4 px-6 text-xs text-slate-500 dark:text-slate-400">${dataCriacao}</td>
+              <td class="py-4 px-6 text-xs text-slate-500 dark:text-slate-400">${ultimoAcesso}</td>
+              <td class="py-4 px-6 text-center">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold ${isConfirmed ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400' : 'bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400'}">
+                  ${isConfirmed ? 'Confirmado' : 'Pendente'}
+                </span>
+              </td>
+              <td class="py-4 px-6 text-right space-x-2">
+                <button onclick="reenviarAcessoUsuarioAdmin('${u.email}')" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition" title="Enviar e-mail para definir/recuperar senha">
+                  <i class="fa-solid fa-paper-plane text-xs mr-1"></i> Reenviar Acesso
+                </button>
+                <button onclick="abrirModalAlterarEmailAdmin('${u.id}', '${u.email}')" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition" title="Alterar endereço de e-mail">
+                  <i class="fa-solid fa-pen text-xs mr-1"></i> E-mail
+                </button>
+                ${!isMaster ? `
+                  <button onclick="excluirUsuarioAdmin('${u.id}', '${u.email}')" class="px-3 py-1.5 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-lg text-xs font-semibold transition" title="Excluir usuário e apagar dados">
+                    <i class="fa-solid fa-trash text-xs"></i>
+                  </button>
+                ` : ''}
+              </td>
+            </tr>
+          `;
+        });
+
+        document.getElementById('kpi-admin-total').innerText = users.length;
+        document.getElementById('kpi-admin-confirmados').innerText = confirmados;
+        document.getElementById('kpi-admin-pendentes').innerText = pendentes;
+
+      } catch (err) {
+        alert('Erro ao carregar usuários: ' + err.message);
+      }
+    }
+
+    async function reenviarAcessoUsuarioAdmin(email) {
+      if (!confirm(`Deseja enviar um link oficial de redefinição/acesso para o e-mail: ${email}?`)) return;
+      try {
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+        if (error) throw error;
+        alert(`Link de redefinição e ativação enviado com sucesso para ${email}!`);
+      } catch (err) {
+        alert('Erro ao enviar link: ' + err.message);
+      }
+    }
+
+    function abrirModalAlterarEmailAdmin(userId, currentEmail) {
+      document.getElementById('admin-target-user-id').value = userId;
+      document.getElementById('admin-modal-user-id').innerText = `Usuário atual: ${currentEmail}`;
+      document.getElementById('admin-new-email').value = '';
+      document.getElementById('modal-admin-email').style.display = 'flex';
+    }
+
+    async function confirmarAlterarEmailAdmin(e) {
+      e.preventDefault();
+      const targetUserId = document.getElementById('admin-target-user-id').value;
+      const newEmail = document.getElementById('admin-new-email').value;
+
+      try {
+        const { error } = await supabaseClient.rpc('admin_update_user_email', {
+          target_user_id: targetUserId,
+          new_email: newEmail
+        });
+        if (error) throw error;
+
+        alert(`E-mail atualizado para ${newEmail} com sucesso!`);
+        fecharModal('modal-admin-email');
+        carregarUsuariosAdmin();
+      } catch (err) {
+        alert('Erro ao alterar e-mail: ' + err.message);
+      }
+    }
+
+    async function excluirUsuarioAdmin(userId, email) {
+      if (!confirm(`ATENÇÃO: Deseja realmente excluir permanentemente a conta de ${email}?\n\nTodos os registros e dados desse usuário serão apagados do banco.`)) return;
+
+      try {
+        const { error } = await supabaseClient.rpc('admin_delete_user', {
+          target_user_id: userId
+        });
+        if (error) throw error;
+
+        alert(`Usuário ${email} excluído com sucesso.`);
+        carregarUsuariosAdmin();
+      } catch (err) {
+        alert('Erro ao excluir usuário: ' + err.message);
+      }
     }
 
     // ==========================================

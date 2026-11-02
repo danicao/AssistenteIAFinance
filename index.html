@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FinanceAI - Gestão Financeira Inteligente</title>
   
+  <!-- FAVICON NATIVO SVG -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%236366f1'/><stop offset='100%' stop-color='%234338ca'/></linearGradient></defs><rect width='100' height='100' rx='28' fill='url(%23g)'/><path d='M30 35 h40 a5 5 0 0 1 5 5 v25 a5 5 0 0 1 -5 5 h-40 a5 5 0 0 1 -5 -5 v-25 a5 5 0 0 1 5 -5 z' fill='none' stroke='white' stroke-width='6'/><circle cx='62' cy='52.5' r='4' fill='white'/><path d='M30 45 h45' stroke='white' stroke-width='4'/></svg>">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,11 +34,11 @@
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     .dark ::-webkit-scrollbar-thumb { background: #334155; }
-    .nav-btn { position: relative; transition: all 0.2s ease; }
+    .nav-btn { position: relative; transition: all 0.2s ease; padding: 0.5rem 0.25rem; white-space: nowrap; }
     .nav-btn.active { color: #4f46e5 !important; font-weight: 700; }
     .dark .nav-btn.active { color: #818cf8 !important; }
     .nav-btn.active::after {
-      content: ''; position: absolute; bottom: -18px; left: 0; right: 0; height: 3px;
+      content: ''; position: absolute; bottom: -14px; left: 0; right: 0; height: 3px;
       background: #4f46e5; border-radius: 3px 3px 0 0;
     }
     .dark .nav-btn.active::after { background: #818cf8; }
@@ -52,7 +53,7 @@
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans antialiased min-h-screen transition-colors duration-200">
 
   <!-- ==============================================
-       LOGIN
+       GATEKEEPER: TELA DE LOGIN OBRIGATÓRIA
        ============================================== -->
   <div id="auth-screen" class="fixed inset-0 z-50 bg-slate-900/90 dark:bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
@@ -61,7 +62,7 @@
           <i class="fa-solid fa-wallet"></i>
         </div>
         <h2 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight" id="auth-title">Acesse sua Conta</h2>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="auth-desc">Identifique-se para carregar sua base de dados financeira.</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="auth-desc">Identifique-se para carregar sua base financeira isolada.</p>
       </div>
 
       <div class="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex gap-1 mb-5">
@@ -87,19 +88,21 @@
   </div>
 
   <!-- ==============================================
-       HEADER
+       HEADER COM ABAS ESPAÇADAS
        ============================================== -->
   <header class="glass-header sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="trocarAba('planeje')">
+        <!-- Logo -->
+        <div class="flex items-center gap-3 cursor-pointer shrink-0" onclick="trocarAba('planeje')">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-violet-600 flex items-center justify-center shadow-lg shadow-brand-500/30 text-white">
             <i class="fa-solid fa-layer-group text-lg"></i>
           </div>
           <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Finance<span class="text-brand-600 dark:text-brand-400">AI</span></span>
         </div>
 
-        <nav class="hidden lg:flex space-x-6 text-sm font-medium text-slate-500 dark:text-slate-400">
+        <!-- Navegação Desktop Bem Espaçada -->
+        <nav class="hidden xl:flex items-center gap-7 text-sm font-medium text-slate-500 dark:text-slate-400 overflow-x-auto px-4">
           <button type="button" onclick="trocarAba('planeje')" id="tab-btn-planeje" class="nav-btn active flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
             <i class="fa-solid fa-chart-pie"></i> Dashboard
           </button>
@@ -118,31 +121,38 @@
           <button type="button" onclick="trocarAba('metas')" id="tab-btn-metas" class="nav-btn flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
             <i class="fa-solid fa-bullseye"></i> Metas
           </button>
-          <button type="button" onclick="trocarAba('admin')" id="tab-btn-admin" style="display: none;" class="nav-btn flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold">
-            <i class="fa-solid fa-user-shield"></i> Adm
+          <button type="button" onclick="trocarAba('relatorios')" id="tab-btn-relatorios" class="nav-btn flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
+            <i class="fa-solid fa-chart-pie"></i> Relatórios
+          </button>
+
+          <!-- Botão Painel Adm Master -->
+          <button type="button" onclick="trocarAba('admin')" id="tab-btn-admin" style="display: none;" class="nav-btn flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold hover:text-violet-700">
+            <i class="fa-solid fa-user-shield"></i> Painel Adm
           </button>
         </nav>
 
-        <div class="flex items-center gap-2.5">
-          <button type="button" onclick="abrirModalTelegram()" class="flex items-center gap-1.5 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-sky-600 dark:text-sky-400 px-3.5 py-2 rounded-full text-xs font-bold transition border border-sky-100 dark:border-sky-800">
+        <!-- Ações do Topo -->
+        <div class="flex items-center gap-2.5 shrink-0">
+          <button type="button" onclick="abrirModalTelegram()" class="flex items-center gap-1.5 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-sky-600 dark:text-sky-400 px-3.5 py-2 rounded-full text-xs font-bold transition shadow-sm border border-sky-100 dark:border-sky-800" title="Vincular Telegram">
             <i class="fa-brands fa-telegram text-sm"></i>
             <span class="hidden sm:inline">Telegram</span>
           </button>
 
-          <button type="button" onclick="alternarTema()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 flex items-center justify-center transition">
+          <button type="button" onclick="alternarTema()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition shadow-sm" title="Alternar Modo Escuro / Claro">
             <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
           </button>
 
-          <button type="button" onclick="abrirModalTransacao()" class="hidden sm:flex items-center gap-2 bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 text-white font-medium px-4 py-2 rounded-full transition active:scale-95 text-xs shadow-md">
+          <button type="button" onclick="abrirModalTransacao()" class="hidden sm:flex items-center gap-2 bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 dark:hover:bg-brand-500 text-white font-medium px-4 py-2 rounded-full transition-transform active:scale-95 shadow-md text-xs">
             <i class="fa-solid fa-plus text-xs"></i> Lançamento
           </button>
 
+          <!-- Perfil e Logout -->
           <div class="flex items-center gap-2 pl-2">
             <div class="hidden sm:flex flex-col text-right">
               <span id="user-display-name" class="text-xs font-bold text-slate-800 dark:text-white leading-tight">Usuário</span>
               <span id="user-role-badge" class="text-[10px] text-slate-400 font-medium">Logado</span>
             </div>
-            <button onclick="fazerLogout()" class="w-10 h-10 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 hover:bg-rose-100 flex items-center justify-center transition" title="Sair">
+            <button onclick="fazerLogout()" class="w-10 h-10 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 hover:bg-rose-100 flex items-center justify-center transition" title="Sair da Conta">
               <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
             </button>
           </div>
@@ -151,36 +161,36 @@
     </div>
   </header>
 
-  <!-- NAVEGAÇÃO MOBILE -->
-  <div class="lg:hidden fixed bottom-0 left-0 right-0 glass-header bg-white/90 dark:bg-slate-900/90 border-t border-slate-200 dark:border-slate-800 z-40 pb-safe">
-    <div class="flex justify-around items-center h-16 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+  <!-- NAVEGAÇÃO MOBILE INFERIOR -->
+  <div class="xl:hidden fixed bottom-0 left-0 right-0 glass-header bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 z-40 pb-safe">
+    <div class="flex justify-around items-center h-16 text-[10px] font-medium text-slate-500 dark:text-slate-400">
       <button onclick="trocarAba('planeje')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-1">
-        <i class="fa-solid fa-chart-pie text-base"></i> Início
+        <i class="fa-solid fa-chart-pie text-sm"></i> Início
       </button>
       <button onclick="trocarAba('limites')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-1">
-        <i class="fa-solid fa-gauge-high text-base"></i> Teto
+        <i class="fa-solid fa-gauge-high text-sm"></i> Teto
       </button>
-      <div class="relative -top-4">
+      <div class="relative -top-3">
         <button onclick="abrirModalTransacao()" class="w-12 h-12 bg-brand-600 text-white rounded-full shadow-lg flex items-center justify-center text-lg active:scale-90 transition">
           <i class="fa-solid fa-plus"></i>
         </button>
       </div>
       <button onclick="trocarAba('fixas')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-1">
-        <i class="fa-solid fa-calendar-check text-base"></i> Fixas
+        <i class="fa-solid fa-calendar-check text-sm"></i> Fixas
       </button>
       <button onclick="trocarAba('contas')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-1">
-        <i class="fa-solid fa-building-columns text-base"></i> Contas
+        <i class="fa-solid fa-building-columns text-sm"></i> Contas
       </button>
     </div>
   </div>
 
   <!-- CONTEÚDO PRINCIPAL -->
-  <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 mb-20 lg:mb-8">
+  <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 mb-20 xl:mb-8">
 
-    <!-- 1. DASHBOARD -->
+    <!-- 1. ABA: DASHBOARD -->
     <section id="aba-planeje" class="space-y-8">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
           <div class="flex items-center justify-between mb-3 text-slate-400 text-xs font-bold uppercase tracking-wider">
             <span>Receitas do Mês</span>
             <i class="fa-solid fa-arrow-down text-emerald-500"></i>
@@ -189,16 +199,16 @@
           <p class="text-xs font-medium text-emerald-500 mt-2">Entradas confirmadas</p>
         </div>
 
-        <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
           <div class="flex items-center justify-between mb-3 text-slate-400 text-xs font-bold uppercase tracking-wider">
             <span>Despesas do Mês</span>
             <i class="fa-solid fa-arrow-up text-rose-500"></i>
           </div>
           <div class="text-3xl font-black text-slate-800 dark:text-white" id="kpi-despesas">R$ 0,00</div>
-          <p class="text-xs font-medium text-rose-500 mt-2" id="kpi-alerta-teto">Do teto global de R$ 1.300</p>
+          <p class="text-xs font-medium text-rose-500 mt-2" id="kpi-alerta-teto">Do teto global mensal</p>
         </div>
 
-        <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
           <div class="flex items-center justify-between mb-3 text-slate-400 text-xs font-bold uppercase tracking-wider">
             <span>Saldo em Contas</span>
             <i class="fa-solid fa-building-columns text-sky-500"></i>
@@ -213,7 +223,7 @@
             <i class="fa-solid fa-shield-halved"></i>
           </div>
           <div class="text-3xl font-black" id="kpi-saldo-investido">R$ 0,00</div>
-          <p class="text-xs font-medium text-brand-200 mt-2" id="kpi-rendimento-total">+ R$ 0,00 rendimento CDI</p>
+          <p class="text-xs font-medium text-brand-200 mt-2" id="kpi-rendimento-total">+ R$ 0,00 CDI líquido</p>
         </div>
       </div>
 
@@ -222,7 +232,7 @@
         <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50/50 dark:bg-slate-800/30">
           <div>
             <h2 class="text-lg font-bold text-slate-800 dark:text-white">Transações Recentes</h2>
-            <p class="text-xs text-slate-500 dark:text-slate-400">Fluxo financeiro com baixa automática em conta</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Movimentações com baixa e crédito automáticos</p>
           </div>
           <div class="flex items-center gap-2 bg-white dark:bg-slate-800 rounded-xl p-1 border border-slate-200 dark:border-slate-700 shadow-sm">
             <button onclick="filtrar('todos', this)" class="filtro-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white transition">Todas</button>
@@ -253,42 +263,79 @@
       </div>
     </section>
 
-    <!-- 2. LIMITES E TETO GLOBAL -->
+    <!-- 2. ABA: LIMITES COM SUBTRAÇÃO AUTOMÁTICA DO TETO GLOBAL -->
     <section id="aba-limites" style="display: none;" class="space-y-6">
-      <!-- CARD TETO UNIVERSAL MENSAL (R$ 1.300) -->
-      <div class="bg-gradient-to-r from-brand-900 via-indigo-900 to-violet-900 p-8 rounded-3xl text-white shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <!-- BANNER TETO GLOBAL COM CÁLCULO DE CATEGORIAS -->
+      <div class="bg-gradient-to-r from-brand-900 via-indigo-900 to-violet-900 p-6 md:p-8 rounded-3xl text-white shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
           <span class="text-xs font-bold uppercase tracking-wider text-brand-200 flex items-center gap-1.5">
             <i class="fa-solid fa-bullseye"></i> Teto Universal de Gastos do Mês
           </span>
-          <div class="text-3xl font-black mt-2" id="display-teto-global">R$ 1.300,00</div>
-          <p class="text-xs text-brand-200 mt-1" id="display-teto-restante">Restam R$ 1.300,00 para atingir seu limite máximo.</p>
+          <div class="text-3xl md:text-4xl font-black mt-2" id="display-teto-global">R$ 1.300,00</div>
+          <p class="text-xs text-brand-200 mt-1" id="display-teto-resumo-distribuicao">Carregando divisão...</p>
         </div>
-        <div class="flex items-center gap-3">
-          <input type="number" id="input-novo-teto-global" value="1300" class="w-36 text-slate-900 px-4 py-2.5 rounded-xl font-bold text-sm outline-none">
-          <button onclick="salvarTetoGlobal()" class="bg-white hover:bg-slate-100 text-brand-900 font-bold px-5 py-2.5 rounded-xl text-xs transition shadow-md">
+        <div class="flex items-center gap-3 w-full md:w-auto">
+          <input type="number" id="input-novo-teto-global" value="1300" class="w-36 text-slate-900 dark:text-white dark:bg-slate-800 px-4 py-2.5 rounded-xl font-bold text-sm outline-none border border-slate-200 dark:border-slate-700">
+          <button onclick="salvarTetoGlobal()" class="bg-white hover:bg-slate-100 text-brand-900 font-bold px-5 py-2.5 rounded-xl text-xs transition shadow-md whitespace-nowrap">
             Atualizar Teto
           </button>
         </div>
       </div>
 
+      <!-- CARDS DE COMPOSIÇÃO DO TETO GLOBAL -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Teto Global Máximo</span>
+          <div class="text-2xl font-black text-slate-800 dark:text-white mt-1" id="card-teto-maximo">R$ 1.300,00</div>
+          <p class="text-xs text-slate-400 mt-1">Limite mensal total fixado</p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Alocado em Categorias</span>
+          <div class="text-2xl font-black text-brand-600 dark:text-brand-400 mt-1" id="card-teto-alocado">R$ 0,00</div>
+          <p class="text-xs text-slate-400 mt-1">Subtraído do teto global</p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Saldo Livre do Teto</span>
+          <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1" id="card-teto-livre">R$ 1.300,00</div>
+          <p class="text-xs text-slate-400 mt-1">Disponível para gastos livres</p>
+        </div>
+      </div>
+
+      <!-- CONSUMO REAL DO TETO -->
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm space-y-3">
+        <div class="flex justify-between items-center text-sm">
+          <span class="font-bold text-slate-800 dark:text-white">Despesas Realizadas vs Teto Global</span>
+          <span class="font-bold text-slate-700 dark:text-slate-300" id="texto-progresso-global">R$ 0,00 / R$ 1.300,00</span>
+        </div>
+        <div class="w-full bg-slate-100 dark:bg-slate-800 h-3 rounded-full overflow-hidden">
+          <div id="barra-progresso-global" class="bg-brand-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+        <p class="text-xs text-slate-400" id="alerta-restante-global">Restam R$ 1.300,00 para atingir seu limite máximo.</p>
+      </div>
+
+      <!-- LIMITES POR CATEGORIA -->
       <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-base font-bold text-slate-800 dark:text-white">Limites Específicos por Categoria</h3>
-          <button onclick="abrirModalDefinirLimite()" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition">
-            + Ajustar Categoria
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
+          <div>
+            <h3 class="text-base font-bold text-slate-800 dark:text-white">Limites Específicos por Categoria</h3>
+            <p class="text-xs text-slate-400">Cada categoria configurada consome sua fatia do teto global.</p>
+          </div>
+          <button onclick="abrirModalDefinirLimite()" class="bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-sm">
+            + Definir Limite de Categoria
           </button>
         </div>
         <div id="lista-limites-categorias" class="space-y-4"></div>
       </div>
     </section>
 
-    <!-- 3. DESPESAS FIXAS -->
+    <!-- 3. ABA: DESPESAS FIXAS -->
     <section id="aba-fixas" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
-          <h2 class="text-xl font-bold text-slate-800 dark:text-white">Despesas Fixas do Mês</h2>
-          <p class="text-sm text-slate-500 dark:text-slate-400">Contas recorrentes (aluguel, internet, condomínio, luz) conhecidas pela IA.</p>
+          <h2 class="text-xl font-bold text-slate-800 dark:text-white">Despesas Fixas Mensais</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400">Contas recorrentes com data de vencimento monitoradas pelo robô.</p>
         </div>
         <button onclick="abrirModalNovaDespesaFixa()" class="bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 text-white font-medium px-5 py-2.5 rounded-full text-xs transition shadow-sm flex items-center gap-2">
           <i class="fa-solid fa-plus text-xs"></i> Adicionar Despesa Fixa
@@ -298,12 +345,12 @@
       <div id="grid-despesas-fixas" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 4. INVESTIMENTOS (COM EDIÇÃO) -->
+    <!-- 4. ABA: INVESTIMENTOS (COM EDIÇÃO) -->
     <section id="aba-investimentos" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
           <h2 class="text-xl font-bold text-slate-800 dark:text-white">Investimentos & Renda Fixa</h2>
-          <p class="text-sm text-slate-500 dark:text-slate-400">CDBs, Tesouro Direto e Renda Fixa com cálculo automático de CDI e imposto regressivo.</p>
+          <p class="text-sm text-slate-500 dark:text-slate-400">CDBs, Tesouro Direto e Renda Fixa com rendimento diário pelo CDI.</p>
         </div>
         <button type="button" onclick="abrirModalInvestimento()" class="bg-brand-600 hover:bg-brand-700 text-white font-medium px-5 py-2.5 rounded-full transition shadow-sm text-xs flex items-center gap-2">
           <i class="fa-solid fa-chart-simple text-xs"></i> Nova Aplicação
@@ -313,12 +360,12 @@
       <div id="grid-investimentos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 5. CONTAS BANCÁRIAS (COM ESCOLHA DA CONTA PRINCIPAL) -->
+    <!-- 5. ABA: CONTAS BANCÁRIAS (COM CORES OFICIAIS RESTAURADAS) -->
     <section id="aba-contas" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
           <h2 class="text-xl font-bold text-slate-800 dark:text-white">Contas Bancárias & Carteiras</h2>
-          <p class="text-sm text-slate-500 dark:text-slate-400">Defina uma conta como <strong>Principal</strong> para débitos e créditos automáticos do bot.</p>
+          <p class="text-sm text-slate-500 dark:text-slate-400">Marque a sua <strong>Conta Principal</strong> para que o bot faça débitos e créditos nela.</p>
         </div>
         <button onclick="abrirModalNovaConta()" class="bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 text-white font-medium px-5 py-2.5 rounded-full text-xs transition shadow-sm flex items-center gap-2">
           <i class="fa-solid fa-plus text-xs"></i> Adicionar Conta
@@ -328,33 +375,89 @@
       <div id="grid-contas-completas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 6. METAS -->
+    <!-- 6. ABA: METAS -->
     <section id="aba-metas" style="display: none;" class="space-y-6">
-      <div class="flex justify-between items-center bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
           <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Acumulado em Metas</span>
           <div class="text-3xl font-black text-slate-800 dark:text-white mt-1" id="kpi-total-metas">R$ 0,00</div>
         </div>
-        <button onclick="abrirModalNovaMeta()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition">
-          + Nova Meta
+        <button onclick="abrirModalNovaMeta()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition shadow-sm">
+          + Criar Nova Meta
         </button>
       </div>
+
       <div id="grid-metas-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
     </section>
 
-    <!-- 7. PAINEL ADM -->
-    <section id="aba-admin" style="display: none;" class="space-y-6">
-      <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm flex justify-between items-center">
-        <div>
-          <h2 class="text-xl font-bold text-slate-800 dark:text-white">Painel Master de Administração</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gerencie usuários sem acesso a saldos pessoais.</p>
+    <!-- 7. ABA: RELATÓRIOS (RESTAURADA COM GRÁFICO PIZZA/DONUT) -->
+    <section id="aba-relatorios" style="display: none;" class="space-y-6">
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm p-6 md:p-8">
+        <div class="mb-6">
+          <h2 class="text-xl font-bold text-slate-800 dark:text-white">Divisão de Gastos por Categoria</h2>
+          <p class="text-xs text-slate-400 mt-1">Gráfico de distribuição das despesas registradas no mês.</p>
         </div>
-        <button onclick="carregarUsuariosAdmin()" class="bg-slate-100 dark:bg-slate-800 px-4 py-2 rounded-xl text-xs font-bold">Atualizar</button>
+        <div class="max-w-md mx-auto h-80 relative flex items-center justify-center">
+          <canvas id="graficoDonut"></canvas>
+        </div>
       </div>
-      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 overflow-hidden">
-        <table class="w-full text-left border-collapse text-sm">
-          <tbody id="lista-usuarios-admin-tbody" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
-        </table>
+    </section>
+
+    <!-- 8. ABA: PAINEL ADMINISTRATIVO MASTER -->
+    <section id="aba-admin" style="display: none;" class="space-y-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-xl font-bold text-slate-800 dark:text-white">Painel Administrativo</h2>
+            <span class="bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-violet-200 dark:border-violet-800">ADMIN MASTER</span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gerencie os usuários do sistema com privacidade de saldos garantida.</p>
+        </div>
+        <button onclick="carregarUsuariosAdmin()" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition flex items-center gap-2">
+          <i class="fa-solid fa-rotate text-xs"></i> Atualizar Lista
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total de Contas</span>
+          <div class="text-3xl font-black text-slate-800 dark:text-white mt-1" id="kpi-admin-total">0</div>
+          <p class="text-[11px] text-slate-500 mt-1">Cadastros no Supabase</p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Contas Confirmadas</span>
+          <div class="text-3xl font-black text-emerald-600 mt-1" id="kpi-admin-confirmados">0</div>
+          <p class="text-[11px] text-slate-500 mt-1">E-mails verificados</p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Confirmação Pendente</span>
+          <div class="text-3xl font-black text-amber-500 mt-1" id="kpi-admin-pendentes">0</div>
+          <p class="text-[11px] text-slate-500 mt-1">Aguardando ativação</p>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="text-base font-bold text-slate-800 dark:text-white">Usuários Cadastrados</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-100 dark:border-slate-800">
+                <th class="py-4 px-6">Usuário (E-mail)</th>
+                <th class="py-4 px-6">Data de Cadastro</th>
+                <th class="py-4 px-6">Último Acesso</th>
+                <th class="py-4 px-6 text-center">Status</th>
+                <th class="py-4 px-6 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="lista-usuarios-admin-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
+              <tr>
+                <td colspan="5" class="py-10 text-center text-slate-400">Carregando usuários...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -370,7 +473,7 @@
   </a>
 
   <!-- ==============================================
-       MODAIS
+       MODAIS DO SISTEMA
        ============================================== -->
 
   <!-- MODAL: INVESTIMENTO (CRIAÇÃO E EDIÇÃO) -->
@@ -398,7 +501,7 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Tipo de Ativo</label>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Ativo</label>
             <select id="inv-tipo" class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none">
               <option value="CDB">CDB</option>
               <option value="Tesouro Selic">Tesouro Selic</option>
@@ -422,12 +525,53 @@
     </div>
   </div>
 
+  <!-- MODAL: CONTA BANCÁRIA -->
+  <div id="modal-conta" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-bold text-slate-800 dark:text-white text-xl" id="modal-conta-titulo">Nova Conta</h3>
+        <button type="button" onclick="fecharModal('modal-conta')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="salvarContaBancaria(event)" class="space-y-4">
+        <input type="hidden" id="conta-id">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Instituição</label>
+          <select id="conta-banco-predefinido" onchange="aoMudarBancoPredefinido(this.value)" class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none">
+            <option value="Nubank">Nubank</option>
+            <option value="Banco Inter">Banco Inter</option>
+            <option value="Itaú">Itaú</option>
+            <option value="Bradesco">Bradesco</option>
+            <option value="Santander">Santander</option>
+            <option value="Caixa">Caixa Econômica</option>
+            <option value="Banco do Brasil">Banco do Brasil</option>
+            <option value="C6 Bank">C6 Bank</option>
+            <option value="Mercado Pago">Mercado Pago</option>
+            <option value="Outro">Outra Carteira / Dinheiro</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Nome da Conta</label>
+          <input type="text" id="conta-nome" required class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="Ex: Banco Inter">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Saldo Atual (R$)</label>
+          <input type="number" step="0.01" id="conta-saldo" required class="w-full text-xl font-bold text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="0,00">
+        </div>
+        <label class="flex items-center gap-3 p-3 mt-2 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+          <input type="checkbox" id="conta-is-padrao" class="w-5 h-5 text-brand-600 rounded">
+          <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Marcar como Conta Principal (onde o Bot debita)</span>
+        </label>
+        <button type="submit" class="w-full mt-4 bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 text-white font-bold py-3.5 rounded-xl transition text-sm shadow-md">Salvar Conta</button>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL: DESPESA FIXA -->
   <div id="modal-fixa" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
       <div class="flex justify-between items-center mb-6">
         <h3 class="font-bold text-slate-800 dark:text-white text-xl">Nova Despesa Fixa</h3>
-        <button type="button" onclick="fecharModal('modal-fixa')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-400 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" onclick="fecharModal('modal-fixa')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form onsubmit="salvarDespesaFixa(event)" class="space-y-4">
         <div>
@@ -449,38 +593,53 @@
     </div>
   </div>
 
-  <!-- MODAL: CONTA BANCÁRIA -->
-  <div id="modal-conta" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="font-bold text-slate-800 dark:text-white text-xl" id="modal-conta-titulo">Nova Conta</h3>
-        <button type="button" onclick="fecharModal('modal-conta')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-400 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <form onsubmit="salvarContaBancaria(event)" class="space-y-4">
-        <input type="hidden" id="conta-id">
+  <!-- MODAL: LIMITE DE CATEGORIA -->
+  <div id="modal-limite" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
+      <h3 class="font-bold text-slate-800 dark:text-white text-lg mb-2">Limite por Categoria</h3>
+      <p class="text-xs text-slate-400 mb-4">O valor definido reduz automaticamente o saldo livre do seu teto global.</p>
+      <form onsubmit="salvarLimiteCategoria(event)" class="space-y-4">
         <div>
-          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Nome da Conta / Banco</label>
-          <input type="text" id="conta-nome" required class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="Ex: Banco Inter">
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Categoria</label>
+          <select id="limite-categoria-id" required class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none"></select>
         </div>
         <div>
-          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Saldo Atual (R$)</label>
-          <input type="number" step="0.01" id="conta-saldo" required class="w-full text-xl font-bold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="0,00">
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Teto Máximo (R$)</label>
+          <input type="number" step="10" id="limite-valor" required class="w-full text-xl font-bold text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="400,00">
         </div>
-        <label class="flex items-center gap-3 p-3 mt-2 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition">
-          <input type="checkbox" id="conta-is-padrao" class="w-5 h-5 text-brand-600 rounded">
-          <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Definir como Conta Principal (onde o Bot debita/credita)</span>
-        </label>
-        <button type="submit" class="w-full mt-4 bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 text-white font-bold py-3.5 rounded-xl transition text-sm shadow-md">Salvar Conta</button>
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="fecharModal('modal-limite')" class="flex-1 py-3 text-xs font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-xl">Cancelar</button>
+          <button type="submit" class="flex-1 py-3 text-xs font-bold text-white bg-slate-900 dark:bg-brand-600 rounded-xl">Salvar Limite</button>
+        </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: TRANSAÇÃO MANUAL -->
+  <!-- MODAL: AJUSTAR SALDO DE CONTA -->
+  <div id="modal-ajuste-saldo" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
+      <h3 class="font-bold text-slate-800 dark:text-white text-lg mb-1">Ajustar Saldo</h3>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" id="ajuste-saldo-nome-conta">Conta</p>
+      <form onsubmit="executarAjusteSaldo(event)" class="space-y-4">
+        <input type="hidden" id="ajuste-conta-id">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Novo Saldo Real (R$)</label>
+          <input type="number" step="0.01" id="ajuste-novo-saldo" required class="w-full text-2xl font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="0,00">
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="fecharModal('modal-ajuste-saldo')" class="flex-1 py-3 text-xs font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-xl">Cancelar</button>
+          <button type="submit" class="flex-1 py-3 text-xs font-bold text-white bg-slate-900 dark:bg-brand-600 rounded-xl">Confirmar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVA TRANSAÇÃO MANUAL -->
   <div id="modal-transacao" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
       <div class="flex justify-between items-center mb-6">
         <h3 class="font-bold text-slate-800 dark:text-white text-xl">Novo Lançamento</h3>
-        <button type="button" onclick="fecharModal('modal-transacao')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-400 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" onclick="fecharModal('modal-transacao')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form onsubmit="salvarTransacaoManual(event)" class="space-y-4">
         <div class="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex gap-1">
@@ -489,45 +648,82 @@
         </div>
         <div>
           <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Valor (R$)</label>
-          <input type="number" step="0.01" id="t-valor" required class="w-full text-2xl font-black bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="0,00">
+          <input type="number" step="0.01" id="t-valor" required class="w-full text-2xl font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="0,00">
         </div>
         <div>
           <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Descrição</label>
-          <input type="text" id="t-descricao" required class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="Ex: Mercado BH">
+          <input type="text" id="t-descricao" required class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="Ex: Mercado BH">
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Data</label>
-            <input type="date" id="t-data" required class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 outline-none">
+            <input type="date" id="t-data" required class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 outline-none">
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Conta para Débito</label>
-            <select id="t-conta" class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 outline-none"></select>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Conta Bancária</label>
+            <select id="t-conta" class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 outline-none"></select>
           </div>
         </div>
         <div>
           <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Categoria</label>
-          <select id="t-categoria" required class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none"></select>
+          <select id="t-categoria" required class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none"></select>
         </div>
         <button type="submit" id="btn-submit-transacao" class="w-full mt-4 bg-rose-600 hover:bg-rose-700 text-white font-bold py-3.5 rounded-xl transition text-sm shadow-md">Salvar Lançamento</button>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: CONECTAR TELEGRAM -->
+  <!-- MODAL: NOVA META -->
+  <div id="modal-meta" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-bold text-slate-800 dark:text-white text-xl">Nova Meta Financeira</h3>
+        <button type="button" onclick="fecharModal('modal-meta')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="salvarNovaMeta(event)" class="space-y-4">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Nome do Objetivo</label>
+          <input type="text" id="meta-nome" required class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="Ex: Reserva de Emergência">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Valor Alvo (R$)</label>
+            <input type="number" step="0.01" id="meta-valor-alvo" required class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="5000,00">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Já Guardado (R$)</label>
+            <input type="number" step="0.01" id="meta-valor-atual" value="0" class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="0,00">
+          </div>
+        </div>
+        <button type="submit" class="w-full mt-4 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl transition text-sm shadow-md">Criar Meta</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CONECTAR TELEGRAM COM GERADOR DE CÓDIGO -->
   <div id="modal-telegram" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
       <div class="flex justify-between items-center mb-6">
-        <h3 class="font-bold text-slate-800 dark:text-white text-xl">Conectar Telegram</h3>
-        <button type="button" onclick="fecharModal('modal-telegram')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-400 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-sky-500 text-white flex items-center justify-center text-xl shadow-md">
+            <i class="fa-brands fa-telegram"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 dark:text-white text-xl">Conectar Telegram</h3>
+        </div>
+        <button type="button" onclick="fecharModal('modal-telegram')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
       </div>
+
       <div id="telegram-status-conectado" style="display: none;" class="text-center py-4 space-y-4">
-        <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-3xl">
+        <div class="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto text-3xl">
           <i class="fa-solid fa-circle-check"></i>
         </div>
-        <h4 class="font-bold text-slate-800 dark:text-white text-lg">Telegram Conectado!</h4>
-        <button onclick="desvincularTelegram()" class="w-full py-3 bg-rose-50 text-rose-600 rounded-xl text-xs font-bold transition">Desconectar</button>
+        <div>
+          <h4 class="font-bold text-slate-800 dark:text-white text-lg">Telegram Conectado!</h4>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">O bot está pronto e integrado ao seu banco.</p>
+        </div>
+        <button onclick="desvincularTelegram()" class="w-full py-3 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-bold transition">Desconectar este Telegram</button>
       </div>
+
       <div id="telegram-status-desconectado" style="display: none;" class="space-y-4">
         <div class="bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 text-center">
           <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Seu Código de Pareamento</span>
@@ -535,6 +731,25 @@
         </div>
         <button type="button" onclick="copiarComandoTelegram()" class="w-full py-3 text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl transition shadow-md">Copiar Comando (/conectar)</button>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADMIN ALTERAR EMAIL -->
+  <div id="modal-admin-email" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
+      <h3 class="font-bold text-slate-800 dark:text-white text-lg mb-1">Alterar E-mail</h3>
+      <p class="text-xs text-slate-500 mb-4" id="admin-modal-user-id">Atualizar endereço de acesso.</p>
+      <form onsubmit="confirmarAlterarEmailAdmin(event)" class="space-y-4">
+        <input type="hidden" id="admin-target-user-id">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Novo E-mail</label>
+          <input type="email" id="admin-new-email" required class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="novo@email.com">
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="fecharModal('modal-admin-email')" class="flex-1 py-3 text-xs font-bold text-slate-600 bg-slate-100 dark:bg-slate-800 rounded-xl">Cancelar</button>
+          <button type="submit" class="flex-1 py-3 text-xs font-bold text-white bg-violet-600 rounded-xl">Salvar</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -549,10 +764,25 @@
     let authModo = 'login';
     let usuarioAtual = null;
 
-    let categorias = [], transacoes = [], contas = [], investimentos = [], metas = [], fixas = [];
+    let categorias = [], transacoes = [], contas = [], investimentos = [], metas = [], fixas = [], limites = [];
     let tetoGlobal = 1300.00;
     let tipoTransacaoAtual = 'despesa';
     let filtroAtual = 'todos';
+    let chartDonut = null;
+
+    // PALETA E ÍCONES OFICIAIS DOS BANCOS RESTAURADA
+    const bancosConfig = {
+      'Nubank': { cor: 'bg-purple-600', txt: 'text-purple-600', icone: 'fa-n' },
+      'Banco Inter': { cor: 'bg-orange-500', txt: 'text-orange-500', icone: 'fa-i' },
+      'Itaú': { cor: 'bg-amber-600', txt: 'text-amber-600', icone: 'fa-building-columns' },
+      'Bradesco': { cor: 'bg-red-600', txt: 'text-red-600', icone: 'fa-landmark' },
+      'Santander': { cor: 'bg-red-700', txt: 'text-red-700', icone: 'fa-flame' },
+      'Caixa': { cor: 'bg-blue-600', txt: 'text-blue-600', icone: 'fa-x' },
+      'Banco do Brasil': { cor: 'bg-yellow-500', txt: 'text-yellow-600', icone: 'fa-brazilian-real-sign' },
+      'C6 Bank': { cor: 'bg-slate-900 dark:bg-slate-700', txt: 'text-slate-900', icone: 'fa-c' },
+      'Mercado Pago': { cor: 'bg-sky-500', txt: 'text-sky-500', icone: 'fa-handshake' },
+      'Outro': { cor: 'bg-slate-700', txt: 'text-slate-700', icone: 'fa-wallet' }
+    };
 
     function inicializarTema() {
       const temaSalvo = localStorage.getItem('financeai_theme') || 'light';
@@ -564,6 +794,7 @@
       const novoTema = temaAtual === 'dark' ? 'light' : 'dark';
       aplicarTema(novoTema);
       localStorage.setItem('financeai_theme', novoTema);
+      if (document.getElementById('aba-relatorios').style.display !== 'none') renderizarGrafico();
     }
 
     function aplicarTema(tema) {
@@ -674,7 +905,13 @@
     }
 
     function trocarAba(aba) {
-      ['planeje', 'limites', 'fixas', 'contas', 'investimentos', 'metas', 'admin'].forEach(a => {
+      if (aba === 'admin' && (!usuarioAtual || usuarioAtual.email !== ADMIN_EMAIL)) {
+        alert('Acesso restrito ao Administrador.');
+        return;
+      }
+
+      const abas = ['planeje', 'limites', 'fixas', 'contas', 'investimentos', 'metas', 'relatorios', 'admin'];
+      abas.forEach(a => {
         const sec = document.getElementById(`aba-${a}`);
         const btn = document.getElementById(`tab-btn-${a}`);
         if (sec) sec.style.display = 'none';
@@ -686,10 +923,12 @@
       if (secAtiva) secAtiva.style.display = 'block';
       if (btnAtiva) btnAtiva.classList.add('active');
 
+      if (aba === 'relatorios') renderizarGrafico();
       if (aba === 'fixas') renderizarDespesasFixas();
       if (aba === 'contas') renderizarContasCompletas();
       if (aba === 'investimentos') renderizarInvestimentos();
       if (aba === 'limites') renderizarLimites();
+      if (aba === 'admin') carregarUsuariosAdmin();
     }
 
     function formatarMoeda(v) {
@@ -697,18 +936,23 @@
     }
 
     // ==========================================
-    // CARREGAR DADOS
+    // CARREGAMENTO GERAL
     // ==========================================
     async function carregarTudo() {
       if (!supabaseClient || !usuarioAtual) return;
       try {
-        const [resCats, resContas, resTrans, resInvs, resMetas, resFixas, resCfg] = await Promise.all([
+        const now = new Date();
+        const mesAtual = now.getMonth() + 1;
+        const anoAtual = now.getFullYear();
+
+        const [resCats, resContas, resTrans, resInvs, resMetas, resFixas, resLimites, resCfg] = await Promise.all([
           supabaseClient.from('categorias').select('*').order('nome'),
           supabaseClient.from('contas_bancarias').select('*').order('is_padrao', { ascending: false }).order('nome'),
           supabaseClient.from('transacoes').select('*, categorias(nome), contas_bancarias(nome)').order('data', { ascending: false }),
           supabaseClient.from('investimentos_renda_fixa').select('*').order('data_aplicacao', { ascending: false }),
           supabaseClient.from('metas').select('*').order('created_at', { ascending: false }),
           supabaseClient.from('despesas_fixas').select('*').order('dia_vencimento'),
+          supabaseClient.from('limites_gastos').select('*').eq('mes', mesAtual).eq('ano', anoAtual),
           supabaseClient.from('configuracoes_usuario').select('*').maybeSingle()
         ]);
 
@@ -718,6 +962,7 @@
         investimentos = resInvs.data || [];
         metas = resMetas.data || [];
         fixas = resFixas.data || [];
+        limites = resLimites.data || [];
 
         if (resCfg.data && resCfg.data.teto_mensal_global) {
           tetoGlobal = Number(resCfg.data.teto_mensal_global);
@@ -731,15 +976,20 @@
         renderizarDespesasFixas();
         renderizarLimites();
       } catch (err) {
-        console.error("Falha ao sincronizar:", err);
+        console.error("Falha ao sincronizar dados:", err);
       }
     }
 
     function atualizarSelects() {
       const selCat = document.getElementById('t-categoria');
+      const selLimCat = document.getElementById('limite-categoria-id');
       if (selCat) {
         selCat.innerHTML = '<option value="">Selecione uma categoria</option>';
         categorias.forEach(c => selCat.innerHTML += `<option value="${c.id}">${c.nome}</option>`);
+      }
+      if (selLimCat) {
+        selLimCat.innerHTML = '<option value="">Selecione a categoria</option>';
+        categorias.filter(c => c.tipo === 'despesa').forEach(c => selLimCat.innerHTML += `<option value="${c.id}">${c.nome}</option>`);
       }
       const selConta = document.getElementById('t-conta');
       if (selConta) {
@@ -772,16 +1022,75 @@
     }
 
     // ==========================================
-    // TETO GLOBAL & LIMITES
+    // LIMITES COM SUBTRAÇÃO AUTOMÁTICA
     // ==========================================
     function renderizarLimites() {
       document.getElementById('display-teto-global').innerText = `R$ ${formatarMoeda(tetoGlobal)}`;
       document.getElementById('input-novo-teto-global').value = tetoGlobal;
+      document.getElementById('card-teto-maximo').innerText = `R$ ${formatarMoeda(tetoGlobal)}`;
 
-      let desp = 0;
-      transacoes.filter(t => t.tipo === 'despesa').forEach(t => desp += Number(t.valor));
-      const restante = Math.max(0, tetoGlobal - desp);
-      document.getElementById('display-teto-restante').innerText = `Você já gastou R$ ${formatarMoeda(desp)}. Restam R$ ${formatarMoeda(restante)} para o teto.`;
+      // 1. Soma dos limites definidos para categorias
+      let totalAlocadoCategorias = 0;
+      limites.forEach(l => totalAlocadoCategorias += Number(l.limite_valor));
+
+      // 2. Saldo livre do teto global (Teto Global - Soma das Categorias)
+      const tetoLivre = Math.max(0, tetoGlobal - totalAlocadoCategorias);
+
+      document.getElementById('card-teto-alocado').innerText = `R$ ${formatarMoeda(totalAlocadoCategorias)}`;
+      document.getElementById('card-teto-livre').innerText = `R$ ${formatarMoeda(tetoLivre)}`;
+      document.getElementById('display-teto-resumo-distribuicao').innerText = 
+        `R$ ${formatarMoeda(totalAlocadoCategorias)} reservados em categorias específicas | R$ ${formatarMoeda(tetoLivre)} livres para gastos gerais.`;
+
+      // 3. Progresso do gasto real em relação ao teto global
+      let gastoRealTotal = 0;
+      const gastosPorCat = {};
+      transacoes.filter(t => t.tipo === 'despesa').forEach(t => {
+        gastoRealTotal += Number(t.valor);
+        if (t.categoria_id) {
+          gastosPorCat[t.categoria_id] = (gastosPorCat[t.categoria_id] || 0) + Number(t.valor);
+        }
+      });
+
+      const percGlobal = tetoGlobal > 0 ? Math.min(100, Math.round((gastoRealTotal / tetoGlobal) * 100)) : 0;
+      document.getElementById('texto-progresso-global').innerText = `R$ ${formatarMoeda(gastoRealTotal)} / R$ ${formatarMoeda(tetoGlobal)} (${percGlobal}%)`;
+      document.getElementById('barra-progresso-global').style.width = `${percGlobal}%`;
+      document.getElementById('alerta-restante-global').innerText = `Restam R$ ${formatarMoeda(Math.max(0, tetoGlobal - gastoRealTotal))} para atingir o limite máximo mensal.`;
+
+      // 4. Renderiza lista de categorias
+      const container = document.getElementById('lista-limites-categorias');
+      if (!container) return;
+      container.innerHTML = '';
+
+      categorias.filter(c => c.tipo === 'despesa').forEach(cat => {
+        const lim = limites.find(l => l.categoria_id === cat.id);
+        const tetoCat = lim ? Number(lim.limite_valor) : 0;
+        const gastoCat = gastosPorCat[cat.id] || 0;
+        const restanteCat = tetoCat - gastoCat;
+        const percCat = tetoCat > 0 ? Math.min(100, Math.round((gastoCat / tetoCat) * 100)) : 0;
+
+        container.innerHTML += `
+          <div class="border border-slate-100 dark:border-slate-800 rounded-2xl p-4 bg-slate-50/50 dark:bg-slate-800/40 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+            <div class="min-w-[200px]">
+              <span class="font-bold text-sm text-slate-800 dark:text-white">${cat.nome}</span>
+              <p class="text-[11px] text-slate-400">${tetoCat > 0 ? `Sobra: R$ ${formatarMoeda(restanteCat)}` : 'Sem teto definido'}</p>
+            </div>
+            <div class="w-full md:w-64">
+              <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                <div class="h-full rounded-full ${percCat > 90 ? 'bg-rose-500' : 'bg-brand-500'}" style="width: ${percCat}%"></div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between md:justify-end gap-4 w-full md:w-auto">
+              <div class="text-right text-xs">
+                <span class="font-bold text-slate-800 dark:text-white">R$ ${formatarMoeda(gastoCat)}</span>
+                <span class="text-slate-400"> / ${tetoCat > 0 ? 'R$ ' + formatarMoeda(tetoCat) : '—'}</span>
+              </div>
+              <button onclick="abrirModalDefinirLimite('${cat.id}', ${tetoCat})" class="px-3 py-1.5 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-100 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl transition">
+                ${tetoCat > 0 ? 'Ajustar' : '+ Definir'}
+              </button>
+            </div>
+          </div>
+        `;
+      });
     }
 
     async function salvarTetoGlobal() {
@@ -794,11 +1103,33 @@
       tetoGlobal = novo;
       renderizarLimites();
       atualizarKPIs();
-      alert('Teto mensal global atualizado com sucesso!');
+      alert('Teto universal atualizado com sucesso!');
+    }
+
+    function abrirModalDefinirLimite(catId = '', tetoAtual = 0) {
+      if (catId) document.getElementById('limite-categoria-id').value = catId;
+      document.getElementById('limite-valor').value = tetoAtual || '';
+      document.getElementById('modal-limite').style.display = 'flex';
+    }
+
+    async function salvarLimiteCategoria(e) {
+      e.preventDefault();
+      const categoria_id = document.getElementById('limite-categoria-id').value;
+      const limite_valor = parseFloat(document.getElementById('limite-valor').value);
+      const now = new Date();
+      const mes = now.getMonth() + 1;
+      const ano = now.getFullYear();
+
+      await supabaseClient.from('limites_gastos').upsert([{ 
+        categoria_id, mes, ano, limite_valor, user_id: usuarioAtual.id 
+      }], { onConflict: 'user_id,categoria_id,mes,ano' });
+
+      fecharModal('modal-limite');
+      carregarTudo();
     }
 
     // ==========================================
-    // INVESTIMENTOS (EDIÇÃO E EXCLUSÃO)
+    // INVESTIMENTOS (COM EDIÇÃO E EXCLUSÃO)
     // ==========================================
     function calcularRendimento(inv) {
       const dataInicio = new Date(inv.data_aplicacao);
@@ -912,7 +1243,7 @@
     }
 
     // ==========================================
-    // CONTAS BANCÁRIAS (COM CONTA PRINCIPAL)
+    // CONTAS BANCÁRIAS (COM PALETA OFICIAL RESTAURADA)
     // ==========================================
     function renderizarContasCompletas() {
       const cont = document.getElementById('grid-contas-completas');
@@ -920,21 +1251,28 @@
       cont.innerHTML = '';
 
       contas.forEach(ct => {
+        const conf = bancosConfig[ct.nome] || bancosConfig['Outro'];
         cont.innerHTML += `
           <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border ${ct.is_padrao ? 'border-brand-500 ring-2 ring-brand-500/20' : 'border-slate-100 dark:border-slate-800'} shadow-sm">
             <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center gap-2">
-                <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold">
-                  <i class="fa-solid fa-building-columns"></i>
-                </div>
-                <div>
-                  <h3 class="font-bold text-slate-800 dark:text-white">${ct.nome}</h3>
-                  ${ct.is_padrao ? '<span class="text-[10px] font-black uppercase text-amber-500 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded-md">★ CONTA PRINCIPAL</span>' : ''}
-                </div>
+              <div class="w-12 h-12 rounded-2xl ${conf.cor} text-white flex items-center justify-center text-xl shadow-md">
+                <i class="fa-solid ${conf.icone}"></i>
               </div>
-              <button onclick="excluirConta('${ct.id}')" class="text-slate-300 hover:text-rose-500"><i class="fa-solid fa-trash text-xs"></i></button>
+              <div class="flex items-center gap-1">
+                <button onclick="abrirModalAjustarSaldo('${ct.id}', '${ct.nome}', ${ct.saldo_atual})" class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center transition" title="Ajustar Saldo">
+                  <i class="fa-solid fa-pen text-xs"></i>
+                </button>
+                <button onclick="excluirConta('${ct.id}')" class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 text-slate-400 hover:text-rose-600 flex items-center justify-center transition" title="Excluir">
+                  <i class="fa-solid fa-trash text-xs"></i>
+                </button>
+              </div>
             </div>
-            <div class="text-2xl font-black text-slate-900 dark:text-white mt-3">R$ ${formatarMoeda(ct.saldo_atual)}</div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-bold text-slate-800 dark:text-white text-lg">${ct.nome}</h3>
+              ${ct.is_padrao ? '<span class="text-[10px] font-black uppercase text-amber-500 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded-md">★ PRINCIPAL</span>' : ''}
+            </div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-1">Saldo Atual</p>
+            <div class="text-2xl font-black text-slate-900 dark:text-white mt-1">R$ ${formatarMoeda(ct.saldo_atual)}</div>
 
             <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex gap-2">
               ${!ct.is_padrao ? `
@@ -960,10 +1298,14 @@
 
     function abrirModalNovaConta() {
       document.getElementById('conta-id').value = '';
-      document.getElementById('conta-nome').value = '';
+      document.getElementById('conta-nome').value = 'Nubank';
       document.getElementById('conta-saldo').value = '0,00';
       document.getElementById('conta-is-padrao').checked = contas.length === 0;
       document.getElementById('modal-conta').style.display = 'flex';
+    }
+
+    function aoMudarBancoPredefinido(val) {
+      document.getElementById('conta-nome').value = val === 'Outro' ? 'Carteira' : val;
     }
 
     async function salvarContaBancaria(e) {
@@ -984,8 +1326,24 @@
       carregarTudo();
     }
 
+    function abrirModalAjustarSaldo(id, nome, saldoAtual) {
+      document.getElementById('ajuste-conta-id').value = id;
+      document.getElementById('ajuste-saldo-nome-conta').innerText = `${nome} (Atual: R$ ${formatarMoeda(saldoAtual)})`;
+      document.getElementById('ajuste-novo-saldo').value = saldoAtual;
+      document.getElementById('modal-ajuste-saldo').style.display = 'flex';
+    }
+
+    async function executarAjusteSaldo(e) {
+      e.preventDefault();
+      const id = document.getElementById('ajuste-conta-id').value;
+      const novoSaldo = parseFloat(document.getElementById('ajuste-novo-saldo').value);
+      await supabaseClient.from('contas_bancarias').update({ saldo_atual: novoSaldo }).eq('id', id);
+      fecharModal('modal-ajuste-saldo');
+      carregarTudo();
+    }
+
     async function excluirConta(id) {
-      if (!confirm('Excluir esta conta bancária?')) return;
+      if (!confirm('Deseja excluir esta conta bancária?')) return;
       await supabaseClient.from('contas_bancarias').delete().eq('id', id);
       carregarTudo();
     }
@@ -1037,9 +1395,85 @@
     }
 
     async function excluirDespesaFixa(id) {
-      if (!confirm('Excluir esta despesa fixa?')) return;
+      if (!confirm('Deseja excluir esta despesa fixa?')) return;
       await supabaseClient.from('despesas_fixas').delete().eq('id', id);
       carregarTudo();
+    }
+
+    // ==========================================
+    // METAS
+    // ==========================================
+    function renderizarMetas() {
+      const grid = document.getElementById('grid-metas-cards');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      let totalAlocado = 0;
+      metas.forEach(m => totalAlocado += Number(m.valor_atual));
+      document.getElementById('kpi-total-metas').innerText = `R$ ${formatarMoeda(totalAlocado)}`;
+
+      metas.forEach(m => {
+        const perc = Math.min(100, Math.round((Number(m.valor_atual) / Number(m.valor_alvo)) * 100));
+        grid.innerHTML += `
+          <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+            <h4 class="font-bold text-slate-800 dark:text-white text-lg mb-2">${m.nome}</h4>
+            <div class="flex justify-between items-end text-sm mb-1">
+              <span class="text-slate-500 text-xs">Guardado</span>
+              <span class="font-black text-brand-600 dark:text-brand-400">R$ ${formatarMoeda(m.valor_atual)} <span class="text-xs font-normal text-slate-400">/ ${formatarMoeda(m.valor_alvo)}</span></span>
+            </div>
+            <div class="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden mb-2">
+              <div class="bg-brand-500 h-full rounded-full" style="width: ${perc}%"></div>
+            </div>
+            <span class="text-xs font-bold text-slate-700 dark:text-slate-300">${perc}% concluído</span>
+          </div>
+        `;
+      });
+    }
+
+    function abrirModalNovaMeta() {
+      document.getElementById('meta-nome').value = '';
+      document.getElementById('meta-valor-alvo').value = '';
+      document.getElementById('meta-valor-atual').value = '0';
+      document.getElementById('modal-meta').style.display = 'flex';
+    }
+
+    async function salvarNovaMeta(e) {
+      e.preventDefault();
+      await supabaseClient.from('metas').insert([{
+        nome: document.getElementById('meta-nome').value,
+        valor_alvo: parseFloat(document.getElementById('meta-valor-alvo').value),
+        valor_atual: parseFloat(document.getElementById('meta-valor-atual').value) || 0,
+        user_id: usuarioAtual.id
+      }]);
+      fecharModal('modal-meta');
+      carregarTudo();
+    }
+
+    // ==========================================
+    // RELATÓRIOS (GRÁFICO RESTAURADO)
+    // ==========================================
+    function renderizarGrafico() {
+      const ctx = document.getElementById('graficoDonut');
+      if (!ctx) return;
+      const desp = {};
+      transacoes.filter(t => t.tipo === 'despesa').forEach(t => {
+        const c = t.categorias ? t.categorias.nome : 'Outros';
+        desp[c] = (desp[c] || 0) + Number(t.valor);
+      });
+
+      if (chartDonut) chartDonut.destroy();
+      chartDonut = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: Object.keys(desp).length ? Object.keys(desp) : ['Sem dados'],
+          datasets: [{
+            data: Object.values(desp).length ? Object.values(desp) : [1],
+            backgroundColor: ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#0ea5e9', '#8b5cf6'],
+            borderWidth: 0
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, cutout: '75%' }
+      });
     }
 
     // ==========================================
@@ -1133,7 +1567,111 @@
       carregarTudo();
     }
 
+    // ==========================================
+    // PAINEL ADMINISTRATIVO MASTER
+    // ==========================================
+    async function carregarUsuariosAdmin() {
+      if (!usuarioAtual || usuarioAtual.email !== ADMIN_EMAIL) return;
+      const tbody = document.getElementById('lista-usuarios-admin-tbody');
+      tbody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-slate-400">Carregando usuários do sistema...</td></tr>';
+
+      try {
+        const { data: users, error } = await supabaseClient.rpc('get_admin_users');
+        if (error) throw error;
+
+        tbody.innerHTML = '';
+        if (!users || users.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-slate-400">Nenhum usuário cadastrado.</td></tr>';
+          return;
+        }
+
+        let confirmados = 0;
+        let pendentes = 0;
+
+        users.forEach(u => {
+          const isConfirmed = !!u.email_confirmed_at;
+          if (isConfirmed) confirmados++; else pendentes++;
+
+          const dataCriacao = new Date(u.created_at).toLocaleDateString('pt-BR');
+          const ultimoAcesso = u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : 'Nunca acessou';
+          const isMaster = u.email === ADMIN_EMAIL;
+
+          tbody.innerHTML += `
+            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
+              <td class="py-4 px-6 font-semibold text-slate-800 dark:text-white flex items-center gap-2">
+                <i class="fa-solid fa-user-circle text-slate-400 text-base"></i>
+                <span>${u.email}</span>
+                ${isMaster ? '<span class="bg-violet-100 dark:bg-violet-950 text-violet-700 dark:text-violet-300 text-[10px] font-bold px-2 py-0.5 rounded-full ml-1">VOCÊ (ADMIN)</span>' : ''}
+              </td>
+              <td class="py-4 px-6 text-xs text-slate-500 dark:text-slate-400">${dataCriacao}</td>
+              <td class="py-4 px-6 text-xs text-slate-500 dark:text-slate-400">${ultimoAcesso}</td>
+              <td class="py-4 px-6 text-center">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold ${isConfirmed ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-600' : 'bg-amber-50 dark:bg-amber-950 text-amber-600'}">
+                  ${isConfirmed ? 'Confirmado' : 'Pendente'}
+                </span>
+              </td>
+              <td class="py-4 px-6 text-right space-x-2">
+                <button onclick="reenviarAcessoUsuarioAdmin('${u.email}')" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition">
+                  <i class="fa-solid fa-paper-plane text-xs mr-1"></i> Reenviar Acesso
+                </button>
+                <button onclick="abrirModalAlterarEmailAdmin('${u.id}', '${u.email}')" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition">
+                  <i class="fa-solid fa-pen text-xs mr-1"></i> E-mail
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+
+        document.getElementById('kpi-admin-total').innerText = users.length;
+        document.getElementById('kpi-admin-confirmados').innerText = confirmados;
+        document.getElementById('kpi-admin-pendentes').innerText = pendentes;
+
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-10 text-center text-rose-500">Erro ao carregar usuários: ${err.message}</td></tr>`;
+      }
+    }
+
+    async function reenviarAcessoUsuarioAdmin(email) {
+      if (!confirm(`Enviar link oficial de acesso para: ${email}?`)) return;
+      try {
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+        if (error) throw error;
+        alert(`Link enviado com sucesso para ${email}!`);
+      } catch (err) {
+        alert('Erro ao enviar link: ' + err.message);
+      }
+    }
+
+    function abrirModalAlterarEmailAdmin(userId, currentEmail) {
+      document.getElementById('admin-target-user-id').value = userId;
+      document.getElementById('admin-modal-user-id').innerText = `Usuário atual: ${currentEmail}`;
+      document.getElementById('admin-new-email').value = '';
+      document.getElementById('modal-admin-email').style.display = 'flex';
+    }
+
+    async function confirmarAlterarEmailAdmin(e) {
+      e.preventDefault();
+      const targetUserId = document.getElementById('admin-target-user-id').value;
+      const newEmail = document.getElementById('admin-new-email').value;
+
+      try {
+        const { error } = await supabaseClient.rpc('admin_update_user_email', {
+          target_user_id: targetUserId,
+          new_email: newEmail
+        });
+        if (error) throw error;
+
+        alert(`E-mail atualizado para ${newEmail}!`);
+        fecharModal('modal-admin-email');
+        carregarUsuariosAdmin();
+      } catch (err) {
+        alert('Erro ao alterar e-mail: ' + err.message);
+      }
+    }
+
+    // ==========================================
     // TELEGRAM MODAL
+    // ==========================================
     async function abrirModalTelegram() {
       document.getElementById('modal-telegram').style.display = 'flex';
       const { data } = await supabaseClient.from('perfis_telegram').select('*').eq('user_id', usuarioAtual.id).maybeSingle();

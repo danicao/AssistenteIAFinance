@@ -124,7 +124,19 @@
           </button>
         </nav>
 
-        <div class="flex items-center gap-2.5 shrink-0">
+        <div class="flex items-center gap-2 shrink-0">
+          <!-- BOTÃO TOUR / COMO USAR -->
+          <button type="button" onclick="iniciarTour(0)" class="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 text-amber-600 dark:text-amber-400 px-3 py-2 rounded-full text-xs font-bold transition shadow-sm border border-amber-200 dark:border-amber-900" title="Como funciona o sistema">
+            <i class="fa-solid fa-lightbulb"></i>
+            <span class="hidden sm:inline">Tour</span>
+          </button>
+
+          <!-- BOTÃO BACKUP E RESTAURAÇÃO -->
+          <button type="button" onclick="abrirModalBackup()" class="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 px-3 py-2 rounded-full text-xs font-bold transition shadow-sm" title="Fazer backup ou restaurar">
+            <i class="fa-solid fa-database"></i>
+            <span class="hidden sm:inline">Backup</span>
+          </button>
+
           <button type="button" onclick="abrirModalTelegram()" class="flex items-center gap-1.5 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-sky-600 dark:text-sky-400 px-3.5 py-2 rounded-full text-xs font-bold transition shadow-sm border border-sky-100 dark:border-sky-800">
             <i class="fa-brands fa-telegram text-sm"></i>
             <span class="hidden sm:inline">Telegram</span>
@@ -138,7 +150,7 @@
             <i class="fa-solid fa-plus text-xs"></i> Lançamento
           </button>
 
-          <div class="flex items-center gap-2 pl-2">
+          <div class="flex items-center gap-2 pl-1">
             <div class="hidden sm:flex flex-col text-right">
               <span id="user-display-name" class="text-xs font-bold text-slate-800 dark:text-white leading-tight">Usuário</span>
               <span id="user-role-badge" class="text-[10px] text-slate-400 font-medium">Logado</span>
@@ -218,7 +230,7 @@
         </div>
       </div>
 
-      <!-- Tabela de Transações com Emojis e Seletor Direto de Categorias -->
+      <!-- Tabela de Transações -->
       <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
         <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50/50 dark:bg-slate-800/30">
           <div>
@@ -421,7 +433,7 @@
       </div>
     </section>
 
-    <!-- 8. PAINEL ADM (COM TODOS OS BOTÕES DE AÇÃO) -->
+    <!-- 8. PAINEL ADM -->
     <section id="aba-admin" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -482,6 +494,66 @@
        MODAIS
        ============================================== -->
 
+  <!-- MODAL: TOUR INTERATIVO PARA NOVOS USUÁRIOS -->
+  <div id="modal-tour" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
+      <div class="flex justify-between items-center mb-6">
+        <span class="text-xs font-bold px-3 py-1 bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-300 rounded-full" id="tour-step-badge">Passo 1 de 5</span>
+        <button type="button" onclick="fecharModal('modal-tour')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="text-center py-4">
+        <div class="w-16 h-16 rounded-2xl bg-brand-100 dark:bg-brand-950 text-brand-600 dark:text-brand-400 flex items-center justify-center text-3xl mx-auto mb-4" id="tour-icon">
+          <i class="fa-solid fa-chart-pie"></i>
+        </div>
+        <h3 class="text-xl font-bold text-slate-800 dark:text-white" id="tour-title">Título do Passo</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed" id="tour-desc">Descrição explicativa...</p>
+      </div>
+
+      <div class="flex justify-between items-center mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <button type="button" id="tour-btn-voltar" onclick="avancarTour(-1)" class="px-4 py-2 text-xs font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 rounded-xl transition">Voltar</button>
+        <div class="flex gap-1" id="tour-dots"></div>
+        <button type="button" id="tour-btn-proximo" onclick="avancarTour(1)" class="px-5 py-2 text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md transition">Próximo →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: BACKUP E RESTAURAÇÃO (JSON) -->
+  <div id="modal-backup" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
+      <div class="flex justify-between items-center mb-6">
+        <div class="flex items-center gap-2">
+          <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center text-lg">
+            <i class="fa-solid fa-database"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 dark:text-white text-xl">Backup & Restauração</h3>
+        </div>
+        <button type="button" onclick="fecharModal('modal-backup')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="space-y-4">
+        <!-- EXPORTAR -->
+        <div class="p-5 border border-slate-200 dark:border-slate-700 rounded-2xl bg-slate-50/50 dark:bg-slate-800/40">
+          <h4 class="font-bold text-sm text-slate-800 dark:text-white mb-1">Exportar Base Completa</h4>
+          <p class="text-xs text-slate-400 mb-3">Baixe um arquivo seguro com todos os seus lançamentos, investimentos, contas e metas.</p>
+          <button onclick="exportarBackupJSON()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center justify-center gap-2">
+            <i class="fa-solid fa-download"></i> Baixar Arquivo de Backup (.json)
+          </button>
+        </div>
+
+        <!-- IMPORTAR -->
+        <div class="p-5 border border-slate-200 dark:border-slate-700 rounded-2xl bg-slate-50/50 dark:bg-slate-800/40">
+          <h4 class="font-bold text-sm text-slate-800 dark:text-white mb-1">Restaurar de um Backup</h4>
+          <p class="text-xs text-slate-400 mb-3">Selecione um arquivo de backup baixado anteriormente para recuperar seus dados.</p>
+          <input type="file" id="input-arquivo-backup" accept=".json" class="hidden" onchange="processarArquivoImportacao(event)">
+          <button onclick="document.getElementById('input-arquivo-backup').click()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center justify-center gap-2">
+            <i class="fa-solid fa-upload"></i> Selecionar Arquivo e Restaurar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: ADMIN ALTERAR EMAIL -->
   <div id="modal-admin-email" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
@@ -494,7 +566,7 @@
           <input type="email" id="admin-new-email" required class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="novo@email.com">
         </div>
         <div class="flex gap-2 pt-2">
-          <button type="button" onclick="fecharModal('modal-admin-email')" class="flex-1 py-3 text-xs font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-xl">Cancelar</button>
+          <button type="button" onclick="fecharModal('modal-admin-email')" class="flex-1 py-3 text-xs font-bold text-slate-600 bg-slate-100 dark:bg-slate-800 rounded-xl">Cancelar</button>
           <button type="submit" class="flex-1 py-3 text-xs font-bold text-white bg-violet-600 rounded-xl">Salvar</button>
         </div>
       </form>
@@ -792,6 +864,7 @@
     let tipoTransacaoAtual = 'despesa';
     let filtroAtual = 'todos';
     let chartDonut = null;
+    let tourEtapaAtual = 0;
 
     const bancosConfig = {
       'Nubank': { cor: 'bg-purple-600', txt: 'text-purple-600', icone: 'fa-n' },
@@ -829,6 +902,207 @@
       if (c.includes('moradia')) return '🏠';
 
       return '💸';
+    }
+
+    // ==========================================
+    // ETAPAS DO TOUR INTERATIVO
+    // ==========================================
+    const dadosTour = [
+      {
+        titulo: "Bem-vindo ao FinanceAI! 🪙",
+        icone: "fa-solid fa-wand-magic-sparkles",
+        desc: "O FinanceAI é o seu gestor financeiro inteligente conectado com inteligência artificial no Telegram. Vamos te mostrar os pontos principais em menos de 1 minuto!"
+      },
+      {
+        titulo: "Conecte seu Telegram 📲",
+        icone: "fa-brands fa-telegram",
+        desc: "Clique no botão 'Telegram' no topo da tela para gerar seu código de 6 dígitos. Depois, abra nosso robô no Telegram e envie: '/conectar SEU_CODIGO'. A partir daí você pode registrar despesas por texto, áudio ou fotos de recibos!"
+      },
+      {
+        titulo: "Defina sua Conta Principal 🏦",
+        icone: "fa-solid fa-building-columns",
+        desc: "Na aba 'Contas Bancárias', cadastre seus bancos e clique em '★ Tornar Principal' no seu banco preferido. Assim, cada gasto ou entrada enviada no Telegram abaterá ou somará automaticamente no saldo dele!"
+      },
+      {
+        titulo: "Teto Global e Limites 🎯",
+        icone: "fa-solid fa-gauge-high",
+        desc: "Você possui um Teto Universal (ex: R$ 1.300,00). Ao definir limites para categorias como Alimentação ou Transporte, esse valor é reservado e subtraído automaticamente do seu saldo livre para gastar."
+      },
+      {
+        titulo: "Despesas Fixas e Lembretes 🗓️",
+        icone: "fa-solid fa-calendar-check",
+        desc: "Cadastre contas que se repetem todo mês (luz, internet, aluguel). O robô no Telegram avisa você 1 dia antes e no próprio dia do vencimento para não atrasar nenhum boleto!"
+      }
+    ];
+
+    function iniciarTour(passo = 0) {
+      tourEtapaAtual = passo;
+      atualizarViewTour();
+      document.getElementById('modal-tour').style.display = 'flex';
+    }
+
+    function avancarTour(direcao) {
+      tourEtapaAtual += direcao;
+      if (tourEtapaAtual < 0) tourEtapaAtual = 0;
+      if (tourEtapaAtual >= dadosTour.length) {
+        fecharModal('modal-tour');
+        localStorage.setItem('financeai_tour_concluido', 'true');
+        return;
+      }
+      atualizarViewTour();
+    }
+
+    function atualizarViewTour() {
+      const step = dadosTour[tourEtapaAtual];
+      document.getElementById('tour-step-badge').innerText = `Passo ${tourEtapaAtual + 1} de ${dadosTour.length}`;
+      document.getElementById('tour-title').innerText = step.titulo;
+      document.getElementById('tour-desc').innerText = step.desc;
+      document.getElementById('tour-icon').innerHTML = `<i class="${step.icone}"></i>`;
+
+      document.getElementById('tour-btn-voltar').style.visibility = tourEtapaAtual === 0 ? 'hidden' : 'visible';
+      document.getElementById('tour-btn-proximo').innerText = tourEtapaAtual === dadosTour.length - 1 ? 'Concluir ✓' : 'Próximo →';
+
+      const dots = document.getElementById('tour-dots');
+      dots.innerHTML = '';
+      dadosTour.forEach((_, idx) => {
+        dots.innerHTML += `<div class="w-2 h-2 rounded-full transition-all ${idx === tourEtapaAtual ? 'w-5 bg-brand-600' : 'bg-slate-300 dark:bg-slate-700'}"></div>`;
+      });
+    }
+
+    // ==========================================
+    // BACKUP E RESTAURAÇÃO (JSON)
+    // ==========================================
+    function abrirModalBackup() {
+      document.getElementById('modal-backup').style.display = 'flex';
+    }
+
+    async function exportarBackupJSON() {
+      try {
+        const backupData = {
+          versao: "2.0",
+          data_exportacao: new Date().toISOString(),
+          usuario_email: usuarioAtual.email,
+          teto_global: tetoGlobal,
+          contas_bancarias: contas,
+          transacoes: transacoes,
+          investimentos_renda_fixa: investimentos,
+          despesas_fixas: fixas,
+          metas: metas,
+          limites_gastos: limites
+        };
+
+        const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        const dataStr = new Date().toISOString().split('T')[0];
+        a.href = url;
+        a.download = `financeai_backup_${dataStr}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        alert('✅ Backup baixado com sucesso! Guarde este arquivo em segurança.');
+      } catch (err) {
+        alert('Erro ao exportar backup: ' + err.message);
+      }
+    }
+
+    function processarArquivoImportacao(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (evento) => {
+        try {
+          const dados = JSON.parse(evento.target.result);
+          if (!dados.transacoes && !dados.contas_bancarias) {
+            throw new Error('Arquivo de backup inválido ou corrompido.');
+          }
+
+          if (!confirm(`Deseja restaurar este backup de ${dados.data_exportacao ? new Date(dados.data_exportacao).toLocaleDateString('pt-BR') : 'data desconhecida'}? Lançamentos existentes serão preservados.`)) {
+            return;
+          }
+
+          // Importa Contas
+          if (dados.contas_bancarias && dados.contas_bancarias.length) {
+            for (const c of dados.contas_bancarias) {
+              await supabaseClient.from('contas_bancarias').upsert({
+                id: c.id,
+                user_id: usuarioAtual.id,
+                nome: c.nome,
+                saldo_atual: c.saldo_atual,
+                is_padrao: !!c.is_padrao
+              });
+            }
+          }
+
+          // Importa Transações
+          if (dados.transacoes && dados.transacoes.length) {
+            for (const t of dados.transacoes) {
+              await supabaseClient.from('transacoes').upsert({
+                id: t.id,
+                user_id: usuarioAtual.id,
+                descricao: t.descricao,
+                valor: t.valor,
+                tipo: t.tipo,
+                data: t.data,
+                categoria_id: t.categoria_id,
+                conta_id: t.conta_id
+              });
+            }
+          }
+
+          // Importa Investimentos
+          if (dados.investimentos_renda_fixa && dados.investimentos_renda_fixa.length) {
+            for (const inv of dados.investimentos_renda_fixa) {
+              await supabaseClient.from('investimentos_renda_fixa').upsert({
+                id: inv.id,
+                user_id: usuarioAtual.id,
+                nome: inv.nome,
+                tipo: inv.tipo,
+                valor_aplicado: inv.valor_aplicado,
+                percentual_cdi: inv.percentual_cdi,
+                data_aplicacao: inv.data_aplicacao,
+                is_reserva: !!inv.is_reserva
+              });
+            }
+          }
+
+          // Importa Despesas Fixas
+          if (dados.despesas_fixas && dados.despesas_fixas.length) {
+            for (const f of dados.despesas_fixas) {
+              await supabaseClient.from('despesas_fixas').upsert({
+                id: f.id,
+                user_id: usuarioAtual.id,
+                descricao: f.descricao,
+                valor: f.valor,
+                dia_vencimento: f.dia_vencimento
+              });
+            }
+          }
+
+          // Importa Metas
+          if (dados.metas && dados.metas.length) {
+            for (const m of dados.metas) {
+              await supabaseClient.from('metas').upsert({
+                id: m.id,
+                user_id: usuarioAtual.id,
+                nome: m.nome,
+                valor_alvo: m.valor_alvo,
+                valor_atual: m.valor_atual
+              });
+            }
+          }
+
+          alert('🎉 Dados restaurados com sucesso!');
+          fecharModal('modal-backup');
+          carregarTudo();
+
+        } catch (err) {
+          alert('Falha ao restaurar: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
     }
 
     function inicializarTema() {
@@ -874,6 +1148,10 @@
               definirUsuarioLogado(session.user);
               document.getElementById('auth-screen').style.display = 'none';
               carregarTudo();
+              // Abre tour automaticamente no primeiro acesso
+              if (!localStorage.getItem('financeai_tour_concluido')) {
+                iniciarTour(0);
+              }
             } else {
               usuarioAtual = null;
               document.getElementById('auth-screen').style.display = 'flex';
@@ -885,6 +1163,9 @@
             definirUsuarioLogado(session.user);
             document.getElementById('auth-screen').style.display = 'none';
             carregarTudo();
+            if (!localStorage.getItem('financeai_tour_concluido')) {
+              iniciarTour(0);
+            }
           } else {
             document.getElementById('auth-screen').style.display = 'flex';
           }
@@ -1071,7 +1352,7 @@
     }
 
     // ==========================================
-    // TRANSAÇÕES
+    // TRANSAÇÕES (COM EMOJI E TROCA RÁPIDA DE CATEGORIA)
     // ==========================================
     function setTipoTransacao(tipo) {
       tipoTransacaoAtual = tipo;

@@ -33,17 +33,22 @@
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     .dark ::-webkit-scrollbar-thumb { background: #334155; }
-    .nav-btn { position: relative; transition: all 0.2s ease; padding: 0.5rem 0.25rem; white-space: nowrap; }
-    .nav-btn.active { color: #4f46e5 !important; font-weight: 700; }
-    .dark .nav-btn.active { color: #818cf8 !important; }
-    .nav-btn.active::after {
-      content: ''; position: absolute; bottom: -14px; left: 0; right: 0; height: 3px;
-      background: #4f46e5; border-radius: 3px 3px 0 0;
-    }
-    .dark .nav-btn.active::after { background: #818cf8; }
     .glass-header {
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .glass-drawer {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .nav-item-active {
+      background: rgba(99, 102, 241, 0.12);
+      color: #4f46e5 !important;
+      font-weight: 700;
+    }
+    .dark .nav-item-active {
+      background: rgba(99, 102, 241, 0.25);
+      color: #a5b4fc !important;
     }
   </style>
 </head>
@@ -85,110 +90,125 @@
   </div>
 
   <!-- ==============================================
-       HEADER
+       HEADER LIMPO (COM GAVETA DE MENU MODERNA)
        ============================================== -->
   <header class="glass-header sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo e Indicador de Seção Atual -->
         <div class="flex items-center gap-3 cursor-pointer shrink-0" onclick="trocarAba('planeje')">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-violet-600 flex items-center justify-center shadow-lg shadow-brand-500/30 text-white">
-            <i class="fa-solid fa-layer-group text-lg"></i>
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-brand-500 to-violet-600 flex items-center justify-center shadow-lg shadow-brand-500/30 text-white">
+            <i class="fa-solid fa-layer-group text-xl"></i>
           </div>
-          <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Finance<span class="text-brand-600 dark:text-brand-400">AI</span></span>
+          <div class="flex flex-col">
+            <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white leading-tight">Finance<span class="text-brand-600 dark:text-brand-400">AI</span></span>
+            <span id="nome-aba-ativa" class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Dashboard</span>
+          </div>
         </div>
 
-        <nav class="hidden xl:flex items-center gap-7 text-sm font-medium text-slate-500 dark:text-slate-400 overflow-x-auto px-4">
-          <button type="button" onclick="trocarAba('planeje')" id="tab-btn-planeje" class="nav-btn active flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
-            <i class="fa-solid fa-chart-pie"></i> Dashboard
-          </button>
-          <button type="button" onclick="trocarAba('limites')" id="tab-btn-limites" class="nav-btn flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
-            <i class="fa-solid fa-gauge-high"></i> Limites & Teto
-          </button>
-          <button type="button" onclick="trocarAba('fixas')" id="tab-btn-fixas" class="nav-btn flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
-            <i class="fa-solid fa-calendar-check"></i> Despesas Fixas
-          </button>
-          <button type="button" onclick="trocarAba('investimentos')" id="tab-btn-investimentos" class="nav-btn flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
-            <i class="fa-solid fa-shield-halved"></i> Investimentos
-          </button>
-          <button type="button" onclick="trocarAba('contas')" id="tab-btn-contas" class="nav-btn flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
-            <i class="fa-solid fa-building-columns"></i> Contas Bancárias
-          </button>
-          <button type="button" onclick="trocarAba('metas')" id="tab-btn-metas" class="nav-btn flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
-            <i class="fa-solid fa-bullseye"></i> Metas
-          </button>
-          <button type="button" onclick="trocarAba('relatorios')" id="tab-btn-relatorios" class="nav-btn flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
-            <i class="fa-solid fa-chart-pie"></i> Relatórios
-          </button>
-          <button type="button" onclick="trocarAba('admin')" id="tab-btn-admin" style="display: none;" class="nav-btn flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold hover:text-violet-700">
-            <i class="fa-solid fa-user-shield"></i> Painel Adm
-          </button>
-        </nav>
-
-        <div class="flex items-center gap-2 shrink-0">
-          <!-- BOTÃO TOUR / COMO USAR -->
-          <button type="button" onclick="iniciarTour(0)" class="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 text-amber-600 dark:text-amber-400 px-3 py-2 rounded-full text-xs font-bold transition shadow-sm border border-amber-200 dark:border-amber-900" title="Como funciona o sistema">
-            <i class="fa-solid fa-lightbulb"></i>
-            <span class="hidden sm:inline">Tour</span>
-          </button>
-
-          <!-- BOTÃO BACKUP E RESTAURAÇÃO -->
-          <button type="button" onclick="abrirModalBackup()" class="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 px-3 py-2 rounded-full text-xs font-bold transition shadow-sm" title="Fazer backup ou restaurar">
-            <i class="fa-solid fa-database"></i>
-            <span class="hidden sm:inline">Backup</span>
-          </button>
-
+        <!-- Ações do Topo -->
+        <div class="flex items-center gap-2.5 shrink-0">
           <button type="button" onclick="abrirModalTelegram()" class="flex items-center gap-1.5 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-sky-600 dark:text-sky-400 px-3.5 py-2 rounded-full text-xs font-bold transition shadow-sm border border-sky-100 dark:border-sky-800">
             <i class="fa-brands fa-telegram text-sm"></i>
             <span class="hidden sm:inline">Telegram</span>
           </button>
 
-          <button type="button" onclick="alternarTema()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition shadow-sm">
+          <button type="button" onclick="alternarTema()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition shadow-sm" title="Alternar Modo Escuro / Claro">
             <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
           </button>
 
-          <button type="button" onclick="abrirModalTransacao()" class="hidden sm:flex items-center gap-2 bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 dark:hover:bg-brand-500 text-white font-medium px-4 py-2 rounded-full transition-transform active:scale-95 shadow-md text-xs">
-            <i class="fa-solid fa-plus text-xs"></i> Lançamento
+          <button type="button" onclick="abrirModalTransacao()" class="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-bold px-4 py-2 rounded-full transition-transform active:scale-95 shadow-md text-xs">
+            <i class="fa-solid fa-plus text-xs"></i> <span>Lançamento</span>
           </button>
 
-          <div class="flex items-center gap-2 pl-1">
-            <div class="hidden sm:flex flex-col text-right">
-              <span id="user-display-name" class="text-xs font-bold text-slate-800 dark:text-white leading-tight">Usuário</span>
-              <span id="user-role-badge" class="text-[10px] text-slate-400 font-medium">Logado</span>
-            </div>
-            <button onclick="fazerLogout()" class="w-10 h-10 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 hover:bg-rose-100 flex items-center justify-center transition" title="Sair da Conta">
-              <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
-            </button>
+          <!-- Perfil resumido -->
+          <div class="hidden sm:flex flex-col text-right pl-2">
+            <span id="user-display-name" class="text-xs font-bold text-slate-800 dark:text-white leading-tight">Usuário</span>
+            <span id="user-role-badge" class="text-[10px] text-slate-400 font-medium">Logado</span>
           </div>
+
+          <!-- BOTÃO EXPANSÍVEL (3 BARRINHAS / HAMBÚRGUER) -->
+          <button type="button" onclick="abrirMenuGaveta()" class="w-11 h-11 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center transition shadow-sm active:scale-95 ml-1" title="Abrir Menu">
+            <i class="fa-solid fa-bars text-lg"></i>
+          </button>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- NAVEGAÇÃO MOBILE -->
-  <div class="xl:hidden fixed bottom-0 left-0 right-0 glass-header bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 z-40 pb-safe">
-    <div class="flex justify-around items-center h-16 text-[10px] font-medium text-slate-500 dark:text-slate-400">
-      <button onclick="trocarAba('planeje')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-1">
-        <i class="fa-solid fa-chart-pie text-sm"></i> Início
-      </button>
-      <button onclick="trocarAba('limites')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-1">
-        <i class="fa-solid fa-gauge-high text-sm"></i> Teto
-      </button>
-      <div class="relative -top-3">
-        <button onclick="abrirModalTransacao()" class="w-12 h-12 bg-brand-600 text-white rounded-full shadow-lg flex items-center justify-center text-lg active:scale-90 transition">
-          <i class="fa-solid fa-plus"></i>
-        </button>
+  <!-- ==============================================
+       MENU GAVETA SUSPENSO (EFEITO VIDRO FOSCO)
+       ============================================== -->
+  <div id="menu-gaveta" style="display: none;" class="fixed inset-0 z-50 overflow-hidden">
+    <!-- Fundo ofuscado com backdrop-blur -->
+    <div onclick="fecharMenuGaveta()" class="absolute inset-0 bg-slate-950/60 backdrop-blur-md transition-opacity"></div>
+
+    <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+      <div class="w-screen max-w-sm glass-drawer bg-white/90 dark:bg-slate-900/90 border-l border-slate-200/60 dark:border-slate-800/60 shadow-2xl p-6 flex flex-col justify-between overflow-y-auto">
+        
+        <div>
+          <!-- Topo da Gaveta -->
+          <div class="flex items-center justify-between pb-6 border-b border-slate-200 dark:border-slate-800">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-violet-600 flex items-center justify-center text-white shadow-md">
+                <i class="fa-solid fa-wallet text-base"></i>
+              </div>
+              <span class="font-extrabold text-lg text-slate-900 dark:text-white">Menu Principal</span>
+            </div>
+            <button onclick="fecharMenuGaveta()" class="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-slate-200 flex items-center justify-center transition">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Lista de Navegação Principal -->
+          <nav class="mt-6 space-y-1.5">
+            <button onclick="navegarMenu('planeje')" id="gaveta-btn-planeje" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+              <i class="fa-solid fa-chart-pie text-brand-500 w-5 text-center"></i> Dashboard
+            </button>
+            <button onclick="navegarMenu('limites')" id="gaveta-btn-limites" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+              <i class="fa-solid fa-gauge-high text-indigo-500 w-5 text-center"></i> Limites & Teto
+            </button>
+            <button onclick="navegarMenu('fixas')" id="gaveta-btn-fixas" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+              <i class="fa-solid fa-calendar-check text-rose-500 w-5 text-center"></i> Despesas Fixas
+            </button>
+            <button onclick="navegarMenu('investimentos')" id="gaveta-btn-investimentos" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+              <i class="fa-solid fa-shield-halved text-emerald-500 w-5 text-center"></i> Investimentos
+            </button>
+            <button onclick="navegarMenu('contas')" id="gaveta-btn-contas" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+              <i class="fa-solid fa-building-columns text-sky-500 w-5 text-center"></i> Contas Bancárias
+            </button>
+            <button onclick="navegarMenu('metas')" id="gaveta-btn-metas" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+              <i class="fa-solid fa-bullseye text-amber-500 w-5 text-center"></i> Metas Financeiras
+            </button>
+            <button onclick="navegarMenu('relatorios')" id="gaveta-btn-relatorios" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+              <i class="fa-solid fa-chart-pie text-pink-500 w-5 text-center"></i> Relatórios
+            </button>
+            <button onclick="navegarMenu('admin')" id="gaveta-btn-admin" style="display: none;" class="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-bold text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950/40 transition">
+              <i class="fa-solid fa-user-shield w-5 text-center"></i> Painel Adm Master
+            </button>
+          </nav>
+        </div>
+
+        <!-- Ferramentas e Configurações Rápidas no Rodapé da Gaveta -->
+        <div class="pt-6 border-t border-slate-200 dark:border-slate-800 space-y-2">
+          <button onclick="iniciarTour(0); fecharMenuGaveta();" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 transition">
+            <i class="fa-solid fa-lightbulb"></i> Tour Guiado
+          </button>
+          <button onclick="abrirModalBackup(); fecharMenuGaveta();" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 transition">
+            <i class="fa-solid fa-database"></i> Backup & Restauração
+          </button>
+          <button onclick="fazerLogout()" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Desconectar Conta
+          </button>
+        </div>
+
       </div>
-      <button onclick="trocarAba('fixas')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-1">
-        <i class="fa-solid fa-calendar-check text-sm"></i> Fixas
-      </button>
-      <button onclick="trocarAba('contas')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-1">
-        <i class="fa-solid fa-building-columns text-sm"></i> Contas
-      </button>
     </div>
   </div>
 
   <!-- CONTEÚDO PRINCIPAL -->
-  <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 mb-20 xl:mb-8">
+  <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 mb-12">
 
     <!-- 1. DASHBOARD -->
     <section id="aba-planeje" class="space-y-8">
@@ -433,7 +453,7 @@
       </div>
     </section>
 
-    <!-- 8. PAINEL ADM -->
+    <!-- 8. PAINEL ADM (COM CARD DEDICADO DE BACKUP GLOBAL) -->
     <section id="aba-admin" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -446,6 +466,26 @@
         <button onclick="carregarUsuariosAdmin()" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition flex items-center gap-2">
           <i class="fa-solid fa-rotate text-xs"></i> Atualizar Lista
         </button>
+      </div>
+
+      <!-- CARD EXCLUSIVO DE BACKUP GLOBAL MASTER -->
+      <div class="bg-gradient-to-r from-violet-900 via-purple-900 to-indigo-900 p-6 md:p-8 rounded-3xl text-white shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-violet-200 flex items-center gap-1.5">
+            <i class="fa-solid fa-database"></i> Backup & Recuperação Global de Todos os Usuários
+          </span>
+          <h3 class="text-2xl font-black mt-1">Base Central do Sistema</h3>
+          <p class="text-xs text-violet-200 mt-1 max-w-xl">Exporte todos os registros, transações e saldos de cada usuário com seus devidos IDs vinculados em um único arquivo de segurança.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          <button onclick="exportarBackupGlobal()" class="flex-1 md:flex-none bg-white hover:bg-slate-100 text-violet-950 font-bold px-5 py-3 rounded-2xl text-xs transition shadow-md flex items-center justify-center gap-2 whitespace-nowrap">
+            <i class="fa-solid fa-download"></i> Exportar Global (.json)
+          </button>
+          <input type="file" id="input-backup-global" accept=".json" class="hidden" onchange="processarRestauracaoGlobal(event)">
+          <button onclick="document.getElementById('input-backup-global').click()" class="flex-1 md:flex-none bg-violet-800/80 hover:bg-violet-700 text-white font-bold px-5 py-3 rounded-2xl text-xs transition shadow-md border border-violet-400/30 flex items-center justify-center gap-2 whitespace-nowrap">
+            <i class="fa-solid fa-upload"></i> Restaurar Global
+          </button>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -485,7 +525,7 @@
   <a href="https://t.me/financeiroIAgestor_bot" 
      target="_blank" 
      rel="noopener noreferrer"
-     class="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 flex items-center gap-2.5 bg-[#229ED9] hover:bg-[#1e8bc0] text-white px-4 py-3 rounded-full shadow-xl shadow-sky-500/30 transition-all hover:scale-105 active:scale-95 group">
+     class="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 bg-[#229ED9] hover:bg-[#1e8bc0] text-white px-4 py-3 rounded-full shadow-xl shadow-sky-500/30 transition-all hover:scale-105 active:scale-95 group">
     <i class="fa-brands fa-telegram text-2xl group-hover:rotate-12 transition-transform"></i>
     <span class="text-xs font-bold tracking-wide pr-1">Falar com Assessor</span>
   </a>
@@ -495,7 +535,7 @@
        ============================================== -->
 
   <!-- MODAL: TOUR INTERATIVO PARA NOVOS USUÁRIOS -->
-  <div id="modal-tour" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+  <div id="modal-tour" style="display: none;" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
       <div class="flex justify-between items-center mb-6">
         <span class="text-xs font-bold px-3 py-1 bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-300 rounded-full" id="tour-step-badge">Passo 1 de 5</span>
@@ -518,7 +558,7 @@
     </div>
   </div>
 
-  <!-- MODAL: BACKUP E RESTAURAÇÃO (JSON) -->
+  <!-- MODAL: BACKUP PESSOAL -->
   <div id="modal-backup" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
       <div class="flex justify-between items-center mb-6">
@@ -526,25 +566,23 @@
           <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center text-lg">
             <i class="fa-solid fa-database"></i>
           </div>
-          <h3 class="font-bold text-slate-800 dark:text-white text-xl">Backup & Restauração</h3>
+          <h3 class="font-bold text-slate-800 dark:text-white text-xl">Backup Pessoal</h3>
         </div>
         <button type="button" onclick="fecharModal('modal-backup')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
       <div class="space-y-4">
-        <!-- EXPORTAR -->
         <div class="p-5 border border-slate-200 dark:border-slate-700 rounded-2xl bg-slate-50/50 dark:bg-slate-800/40">
-          <h4 class="font-bold text-sm text-slate-800 dark:text-white mb-1">Exportar Base Completa</h4>
-          <p class="text-xs text-slate-400 mb-3">Baixe um arquivo seguro com todos os seus lançamentos, investimentos, contas e metas.</p>
+          <h4 class="font-bold text-sm text-slate-800 dark:text-white mb-1">Exportar Meus Dados</h4>
+          <p class="text-xs text-slate-400 mb-3">Baixe um arquivo seguro com seus lançamentos, investimentos, contas e metas.</p>
           <button onclick="exportarBackupJSON()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center justify-center gap-2">
-            <i class="fa-solid fa-download"></i> Baixar Arquivo de Backup (.json)
+            <i class="fa-solid fa-download"></i> Baixar Backup (.json)
           </button>
         </div>
 
-        <!-- IMPORTAR -->
         <div class="p-5 border border-slate-200 dark:border-slate-700 rounded-2xl bg-slate-50/50 dark:bg-slate-800/40">
-          <h4 class="font-bold text-sm text-slate-800 dark:text-white mb-1">Restaurar de um Backup</h4>
-          <p class="text-xs text-slate-400 mb-3">Selecione um arquivo de backup baixado anteriormente para recuperar seus dados.</p>
+          <h4 class="font-bold text-sm text-slate-800 dark:text-white mb-1">Restaurar Meus Dados</h4>
+          <p class="text-xs text-slate-400 mb-3">Selecione seu arquivo de backup pessoal para restaurar.</p>
           <input type="file" id="input-arquivo-backup" accept=".json" class="hidden" onchange="processarArquivoImportacao(event)">
           <button onclick="document.getElementById('input-arquivo-backup').click()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center justify-center gap-2">
             <i class="fa-solid fa-upload"></i> Selecionar Arquivo e Restaurar
@@ -904,34 +942,46 @@
       return '💸';
     }
 
-    // ==========================================
-    // ETAPAS DO TOUR INTERATIVO
-    // ==========================================
+    // CONTROLE DA GAVETA DE MENU
+    function abrirMenuGaveta() {
+      document.getElementById('menu-gaveta').style.display = 'block';
+    }
+
+    function fecharMenuGaveta() {
+      document.getElementById('menu-gaveta').style.display = 'none';
+    }
+
+    function navegarMenu(aba) {
+      trocarAba(aba);
+      fecharMenuGaveta();
+    }
+
+    // TOUR GUIADO
     const dadosTour = [
       {
         titulo: "Bem-vindo ao FinanceAI! 🪙",
         icone: "fa-solid fa-wand-magic-sparkles",
-        desc: "O FinanceAI é o seu gestor financeiro inteligente conectado com inteligência artificial no Telegram. Vamos te mostrar os pontos principais em menos de 1 minuto!"
+        desc: "O FinanceAI é o seu gestor financeiro pessoal e familiar conectado à inteligência artificial no Telegram. Veja como aproveitar tudo em 1 minuto!"
       },
       {
         titulo: "Conecte seu Telegram 📲",
         icone: "fa-brands fa-telegram",
-        desc: "Clique no botão 'Telegram' no topo da tela para gerar seu código de 6 dígitos. Depois, abra nosso robô no Telegram e envie: '/conectar SEU_CODIGO'. A partir daí você pode registrar despesas por texto, áudio ou fotos de recibos!"
+        desc: "Abra o menu ou clique em 'Telegram' no topo para gerar seu código de 6 dígitos. Depois envie '/conectar SEU_CODIGO' no robô. A partir daí, basta mandar mensagens, áudios ou fotos de recibos!"
       },
       {
         titulo: "Defina sua Conta Principal 🏦",
         icone: "fa-solid fa-building-columns",
-        desc: "Na aba 'Contas Bancárias', cadastre seus bancos e clique em '★ Tornar Principal' no seu banco preferido. Assim, cada gasto ou entrada enviada no Telegram abaterá ou somará automaticamente no saldo dele!"
+        desc: "Na aba 'Contas Bancárias', cadastre seus bancos e clique em '★ Tornar Principal' no seu banco padrão. Assim, cada gasto ou entrada enviada pelo bot abaterá ou somará automaticamente no saldo dele!"
       },
       {
-        titulo: "Teto Global e Limites 🎯",
+        titulo: "Teto Universal e Limites 🎯",
         icone: "fa-solid fa-gauge-high",
         desc: "Você possui um Teto Universal (ex: R$ 1.300,00). Ao definir limites para categorias como Alimentação ou Transporte, esse valor é reservado e subtraído automaticamente do seu saldo livre para gastar."
       },
       {
         titulo: "Despesas Fixas e Lembretes 🗓️",
         icone: "fa-solid fa-calendar-check",
-        desc: "Cadastre contas que se repetem todo mês (luz, internet, aluguel). O robô no Telegram avisa você 1 dia antes e no próprio dia do vencimento para não atrasar nenhum boleto!"
+        desc: "Cadastre contas que vencem todo mês (luz, internet, condomínio). O robô no Telegram avisa você 1 dia antes e no próprio dia do vencimento para não esquecer de pagar!"
       }
     ];
 
@@ -969,9 +1019,7 @@
       });
     }
 
-    // ==========================================
-    // BACKUP E RESTAURAÇÃO (JSON)
-    // ==========================================
+    // BACKUP PESSOAL
     function abrirModalBackup() {
       document.getElementById('modal-backup').style.display = 'flex';
     }
@@ -996,12 +1044,12 @@
         const a = document.createElement("a");
         const dataStr = new Date().toISOString().split('T')[0];
         a.href = url;
-        a.download = `financeai_backup_${dataStr}.json`;
+        a.download = `financeai_backup_pessoal_${dataStr}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        alert('✅ Backup baixado com sucesso! Guarde este arquivo em segurança.');
+        alert('✅ Backup pessoal baixado com sucesso!');
       } catch (err) {
         alert('Erro ao exportar backup: ' + err.message);
       }
@@ -1015,91 +1063,104 @@
       reader.onload = async (evento) => {
         try {
           const dados = JSON.parse(evento.target.result);
-          if (!dados.transacoes && !dados.contas_bancarias) {
-            throw new Error('Arquivo de backup inválido ou corrompido.');
+          if (!confirm(`Deseja restaurar este backup pessoal? Lançamentos existentes serão preservados.`)) return;
+
+          if (dados.contas_bancarias) {
+            for (const c of dados.contas_bancarias) {
+              await supabaseClient.from('contas_bancarias').upsert({
+                id: c.id, user_id: usuarioAtual.id, nome: c.nome, saldo_atual: c.saldo_atual, is_padrao: !!c.is_padrao
+              });
+            }
           }
 
-          if (!confirm(`Deseja restaurar este backup de ${dados.data_exportacao ? new Date(dados.data_exportacao).toLocaleDateString('pt-BR') : 'data desconhecida'}? Lançamentos existentes serão preservados.`)) {
+          if (dados.transacoes) {
+            for (const t of dados.transacoes) {
+              await supabaseClient.from('transacoes').upsert({
+                id: t.id, user_id: usuarioAtual.id, descricao: t.descricao, valor: t.valor, tipo: t.tipo, data: t.data, categoria_id: t.categoria_id, conta_id: t.conta_id
+              });
+            }
+          }
+
+          if (dados.investimentos_renda_fixa) {
+            for (const inv of dados.investimentos_renda_fixa) {
+              await supabaseClient.from('investimentos_renda_fixa').upsert({
+                id: inv.id, user_id: usuarioAtual.id, nome: inv.nome, tipo: inv.tipo, valor_aplicado: inv.valor_aplicado, percentual_cdi: inv.percentual_cdi, data_aplicacao: inv.data_aplicacao, is_reserva: !!inv.is_reserva
+              });
+            }
+          }
+
+          if (dados.despesas_fixas) {
+            for (const f of dados.despesas_fixas) {
+              await supabaseClient.from('despesas_fixas').upsert({
+                id: f.id, user_id: usuarioAtual.id, descricao: f.descricao, valor: f.valor, dia_vencimento: f.dia_vencimento
+              });
+            }
+          }
+
+          if (dados.metas) {
+            for (const m of dados.metas) {
+              await supabaseClient.from('metas').upsert({
+                id: m.id, user_id: usuarioAtual.id, nome: m.nome, valor_alvo: m.valor_alvo, valor_atual: m.valor_atual
+              });
+            }
+          }
+
+          alert('🎉 Dados pessoais restaurados com sucesso!');
+          fecharModal('modal-backup');
+          carregarTudo();
+        } catch (err) {
+          alert('Falha ao restaurar: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // ==========================================
+    // BACKUP GLOBAL MASTER (PAINEL ADM)
+    // ==========================================
+    async function exportarBackupGlobal() {
+      if (!usuarioAtual || usuarioAtual.email !== ADMIN_EMAIL) return;
+      try {
+        const { data, error } = await supabaseClient.rpc('admin_exportar_backup_global');
+        if (error) throw error;
+
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        const dataStr = new Date().toISOString().split('T')[0];
+        a.href = url;
+        a.download = `financeai_backup_GLOBAL_completo_${dataStr}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        alert('✅ Backup Global baixado com sucesso! Contém todos os usuários e dados completos.');
+      } catch (err) {
+        alert('Erro ao exportar backup global: ' + err.message);
+      }
+    }
+
+    function processarRestauracaoGlobal(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (evento) => {
+        try {
+          const dados = JSON.parse(evento.target.result);
+          if (prompt(`⚠️ ATENÇÃO: Digite "RESTAURAR" para restaurar o banco global de todos os usuários:`) !== 'RESTAURAR') {
+            alert('Operação cancelada.');
             return;
           }
 
-          // Importa Contas
-          if (dados.contas_bancarias && dados.contas_bancarias.length) {
-            for (const c of dados.contas_bancarias) {
-              await supabaseClient.from('contas_bancarias').upsert({
-                id: c.id,
-                user_id: usuarioAtual.id,
-                nome: c.nome,
-                saldo_atual: c.saldo_atual,
-                is_padrao: !!c.is_padrao
-              });
-            }
-          }
+          const { data, error } = await supabaseClient.rpc('admin_restaurar_backup_global', { p_dados: dados });
+          if (error) throw error;
 
-          // Importa Transações
-          if (dados.transacoes && dados.transacoes.length) {
-            for (const t of dados.transacoes) {
-              await supabaseClient.from('transacoes').upsert({
-                id: t.id,
-                user_id: usuarioAtual.id,
-                descricao: t.descricao,
-                valor: t.valor,
-                tipo: t.tipo,
-                data: t.data,
-                categoria_id: t.categoria_id,
-                conta_id: t.conta_id
-              });
-            }
-          }
-
-          // Importa Investimentos
-          if (dados.investimentos_renda_fixa && dados.investimentos_renda_fixa.length) {
-            for (const inv of dados.investimentos_renda_fixa) {
-              await supabaseClient.from('investimentos_renda_fixa').upsert({
-                id: inv.id,
-                user_id: usuarioAtual.id,
-                nome: inv.nome,
-                tipo: inv.tipo,
-                valor_aplicado: inv.valor_aplicado,
-                percentual_cdi: inv.percentual_cdi,
-                data_aplicacao: inv.data_aplicacao,
-                is_reserva: !!inv.is_reserva
-              });
-            }
-          }
-
-          // Importa Despesas Fixas
-          if (dados.despesas_fixas && dados.despesas_fixas.length) {
-            for (const f of dados.despesas_fixas) {
-              await supabaseClient.from('despesas_fixas').upsert({
-                id: f.id,
-                user_id: usuarioAtual.id,
-                descricao: f.descricao,
-                valor: f.valor,
-                dia_vencimento: f.dia_vencimento
-              });
-            }
-          }
-
-          // Importa Metas
-          if (dados.metas && dados.metas.length) {
-            for (const m of dados.metas) {
-              await supabaseClient.from('metas').upsert({
-                id: m.id,
-                user_id: usuarioAtual.id,
-                nome: m.nome,
-                valor_alvo: m.valor_alvo,
-                valor_atual: m.valor_atual
-              });
-            }
-          }
-
-          alert('🎉 Dados restaurados com sucesso!');
-          fecharModal('modal-backup');
+          alert('🎉 Base global restaurada com sucesso!');
           carregarTudo();
-
+          carregarUsuariosAdmin();
         } catch (err) {
-          alert('Falha ao restaurar: ' + err.message);
+          alert('Falha na restauração global: ' + err.message);
         }
       };
       reader.readAsText(file);
@@ -1148,7 +1209,6 @@
               definirUsuarioLogado(session.user);
               document.getElementById('auth-screen').style.display = 'none';
               carregarTudo();
-              // Abre tour automaticamente no primeiro acesso
               if (!localStorage.getItem('financeai_tour_concluido')) {
                 iniciarTour(0);
               }
@@ -1221,8 +1281,8 @@
     function definirUsuarioLogado(user) {
       usuarioAtual = user;
       document.getElementById('user-display-name').innerText = user.email ? user.email.split('@')[0] : 'Usuário';
-      const btnAdmin = document.getElementById('tab-btn-admin');
-      if (user.email === ADMIN_EMAIL && btnAdmin) btnAdmin.style.display = 'inline-flex';
+      const btnAdmin = document.getElementById('gaveta-btn-admin');
+      if (user.email === ADMIN_EMAIL && btnAdmin) btnAdmin.style.display = 'flex';
     }
 
     async function fazerLogout() {
@@ -1238,18 +1298,31 @@
         return;
       }
 
+      const titulos = {
+        'planeje': 'Dashboard',
+        'limites': 'Limites & Teto',
+        'fixas': 'Despesas Fixas',
+        'investimentos': 'Investimentos',
+        'contas': 'Contas Bancárias',
+        'metas': 'Metas Financeiras',
+        'relatorios': 'Relatórios',
+        'admin': 'Painel Adm Master'
+      };
+
+      document.getElementById('nome-aba-ativa').innerText = titulos[aba] || 'Dashboard';
+
       const abas = ['planeje', 'limites', 'fixas', 'contas', 'investimentos', 'metas', 'relatorios', 'admin'];
       abas.forEach(a => {
         const sec = document.getElementById(`aba-${a}`);
-        const btn = document.getElementById(`tab-btn-${a}`);
+        const btn = document.getElementById(`gaveta-btn-${a}`);
         if (sec) sec.style.display = 'none';
-        if (btn) btn.classList.remove('active');
+        if (btn) btn.classList.remove('nav-item-active');
       });
 
       const secAtiva = document.getElementById(`aba-${aba}`);
-      const btnAtiva = document.getElementById(`tab-btn-${aba}`);
+      const btnAtiva = document.getElementById(`gaveta-btn-${aba}`);
       if (secAtiva) secAtiva.style.display = 'block';
-      if (btnAtiva) btnAtiva.classList.add('active');
+      if (btnAtiva) btnAtiva.classList.add('nav-item-active');
 
       if (aba === 'relatorios') renderizarGrafico();
       if (aba === 'metas') renderizarMetas();
@@ -1264,9 +1337,7 @@
       return Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    // ==========================================
     // CARREGAMENTO GERAL
-    // ==========================================
     async function carregarTudo() {
       if (!supabaseClient || !usuarioAtual) return;
       try {
@@ -1351,9 +1422,7 @@
       document.getElementById('kpi-alerta-teto').innerText = `Do teto global de R$ ${formatarMoeda(tetoGlobal)}`;
     }
 
-    // ==========================================
-    // TRANSAÇÕES (COM EMOJI E TROCA RÁPIDA DE CATEGORIA)
-    // ==========================================
+    // TRANSAÇÕES
     function setTipoTransacao(tipo) {
       tipoTransacaoAtual = tipo;
       const bDesp = document.getElementById('btn-tipo-despesa');
@@ -1439,10 +1508,7 @@
     }
 
     async function alterarCategoriaTransacao(transacaoId, novaCategoriaId) {
-      await supabaseClient.from('transacoes').update({
-        categoria_id: novaCategoriaId || null
-      }).eq('id', transacaoId);
-
+      await supabaseClient.from('transacoes').update({ categoria_id: novaCategoriaId || null }).eq('id', transacaoId);
       carregarTudo();
     }
 
@@ -1462,9 +1528,7 @@
       carregarTudo();
     }
 
-    // ==========================================
-    // PAINEL ADM (COM TODOS OS BOTÕES)
-    // ==========================================
+    // PAINEL ADM MASTER
     async function carregarUsuariosAdmin() {
       if (!usuarioAtual || usuarioAtual.email !== ADMIN_EMAIL) return;
       const tbody = document.getElementById('lista-usuarios-admin-tbody');
@@ -1562,7 +1626,7 @@
       }
 
       try {
-        const { data, error } = await supabaseClient.rpc('admin_zerar_dados_usuario', { target_user_id: userId });
+        const { error } = await supabaseClient.rpc('admin_zerar_dados_usuario', { target_user_id: userId });
         if (error) throw error;
 
         alert(`✅ Base da conta ${email} foi zerada com sucesso!`);
@@ -1585,9 +1649,7 @@
       }
     }
 
-    // ==========================================
     // METAS FINANCEIRAS
-    // ==========================================
     function renderizarMetas() {
       const grid = document.getElementById('grid-metas-cards');
       if (!grid) return;
@@ -1598,7 +1660,7 @@
       document.getElementById('kpi-total-metas').innerText = `R$ ${formatarMoeda(totalAlocado)}`;
 
       if (metas.length === 0) {
-        grid.innerHTML = '<div class="col-span-full py-12 text-center text-slate-400 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl">Nenhuma meta criada ainda. Escolha uma das opções acima para começar!</div>';
+        grid.innerHTML = '<div class="col-span-full py-12 text-center text-slate-400 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl">Nenhuma meta criada ainda.</div>';
         return;
       }
 
@@ -1673,9 +1735,7 @@
       carregarTudo();
     }
 
-    // ==========================================
-    // LIMITES COM SUBTRAÇÃO AUTOMÁTICA
-    // ==========================================
+    // LIMITES
     function renderizarLimites() {
       document.getElementById('display-teto-global').innerText = `R$ ${formatarMoeda(tetoGlobal)}`;
       document.getElementById('input-novo-teto-global').value = tetoGlobal;
@@ -1776,9 +1836,7 @@
       carregarTudo();
     }
 
-    // ==========================================
     // INVESTIMENTOS
-    // ==========================================
     function calcularRendimento(inv) {
       const dataInicio = new Date(inv.data_aplicacao);
       const dataHoje = new Date();
@@ -1890,9 +1948,7 @@
       carregarTudo();
     }
 
-    // ==========================================
     // CONTAS BANCÁRIAS
-    // ==========================================
     function renderizarContasCompletas() {
       const cont = document.getElementById('grid-contas-completas');
       if (!cont) return;
@@ -1996,16 +2052,14 @@
       carregarTudo();
     }
 
-    // ==========================================
     // DESPESAS FIXAS
-    // ==========================================
     function renderizarDespesasFixas() {
       const grid = document.getElementById('grid-despesas-fixas');
       if (!grid) return;
       grid.innerHTML = '';
 
       if (fixas.length === 0) {
-        grid.innerHTML = '<div class="col-span-full py-10 text-center text-slate-400 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl">Nenhuma conta fixa cadastrada. Cadastre seu aluguel, internet, luz, etc.</div>';
+        grid.innerHTML = '<div class="col-span-full py-10 text-center text-slate-400 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl">Nenhuma conta fixa cadastrada.</div>';
         return;
       }
 
@@ -2048,9 +2102,7 @@
       carregarTudo();
     }
 
-    // ==========================================
     // RELATÓRIOS
-    // ==========================================
     function renderizarGrafico() {
       const ctx = document.getElementById('graficoDonut');
       if (!ctx) return;

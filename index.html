@@ -421,7 +421,7 @@
       </div>
     </section>
 
-    <!-- 8. PAINEL ADM (COM BOTÃO ZERAR DADOS) -->
+    <!-- 8. PAINEL ADM (COM TODOS OS BOTÕES DE AÇÃO) -->
     <section id="aba-admin" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -429,7 +429,7 @@
             <h2 class="text-xl font-bold text-slate-800 dark:text-white">Painel Administrativo</h2>
             <span class="bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-violet-200 dark:border-violet-800">ADMIN MASTER</span>
           </div>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gerencie os acessos e resete contas de teste.</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gerencie os acessos, redefina e-mails e resete contas de teste.</p>
         </div>
         <button onclick="carregarUsuariosAdmin()" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition flex items-center gap-2">
           <i class="fa-solid fa-rotate text-xs"></i> Atualizar Lista
@@ -481,6 +481,25 @@
   <!-- ==============================================
        MODAIS
        ============================================== -->
+
+  <!-- MODAL: ADMIN ALTERAR EMAIL -->
+  <div id="modal-admin-email" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
+      <h3 class="font-bold text-slate-800 dark:text-white text-lg mb-1">Alterar E-mail</h3>
+      <p class="text-xs text-slate-500 mb-4" id="admin-modal-user-id">Atualizar endereço de acesso.</p>
+      <form onsubmit="confirmarAlterarEmailAdmin(event)" class="space-y-4">
+        <input type="hidden" id="admin-target-user-id">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Novo E-mail</label>
+          <input type="email" id="admin-new-email" required class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="novo@email.com">
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="fecharModal('modal-admin-email')" class="flex-1 py-3 text-xs font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-xl">Cancelar</button>
+          <button type="submit" class="flex-1 py-3 text-xs font-bold text-white bg-violet-600 rounded-xl">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- MODAL: NOVA META -->
   <div id="modal-meta" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -787,7 +806,6 @@
       'Outro': { cor: 'bg-slate-700', txt: 'text-slate-700', icone: 'fa-wallet' }
     };
 
-    // IDENTIFICADOR AUTOMÁTICO DE EMOJIS CONTEXTUAIS
     function obterEmojiItem(descricao, catNome) {
       const d = (descricao || '').toLowerCase();
       const c = (catNome || '').toLowerCase();
@@ -1053,7 +1071,7 @@
     }
 
     // ==========================================
-    // TRANSAÇÕES (COM EMOJI E TROCA RÁPIDA DE CATEGORIA)
+    // TRANSAÇÕES
     // ==========================================
     function setTipoTransacao(tipo) {
       tipoTransacaoAtual = tipo;
@@ -1111,7 +1129,6 @@
         const contaNome = t.contas_bancarias ? t.contas_bancarias.nome : '—';
         const emojiItem = obterEmojiItem(t.descricao, catNome);
 
-        // Seletor inline rápido de categoria
         const seletorCategorias = `
           <select onchange="alterarCategoriaTransacao('${t.id}', this.value)" class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold rounded-lg px-2.5 py-1.5 outline-none border border-transparent hover:border-slate-300 dark:hover:border-slate-600 transition cursor-pointer">
             <option value="">Geral / Sem Categoria</option>
@@ -1140,7 +1157,6 @@
       });
     }
 
-    // Altera categoria diretamente da tabela
     async function alterarCategoriaTransacao(transacaoId, novaCategoriaId) {
       await supabaseClient.from('transacoes').update({
         categoria_id: novaCategoriaId || null
@@ -1166,7 +1182,7 @@
     }
 
     // ==========================================
-    // PAINEL ADM (COM FUNÇÃO ZERAR DADOS)
+    // PAINEL ADM (COM TODOS OS BOTÕES)
     // ==========================================
     async function carregarUsuariosAdmin() {
       if (!usuarioAtual || usuarioAtual.email !== ADMIN_EMAIL) return;
@@ -1210,6 +1226,9 @@
                 <button onclick="reenviarAcessoUsuarioAdmin('${u.email}')" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition" title="Reenviar link de recuperação">
                   <i class="fa-solid fa-paper-plane text-xs mr-1"></i> Acesso
                 </button>
+                <button onclick="abrirModalAlterarEmailAdmin('${u.id}', '${u.email}')" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition" title="Alterar endereço de e-mail">
+                  <i class="fa-solid fa-pen text-xs mr-1"></i> E-mail
+                </button>
                 <button onclick="zerarDadosUsuarioAdmin('${u.id}', '${u.email}')" class="px-3 py-1.5 bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-lg text-xs font-bold transition" title="Resetar todos os lançamentos e saldo">
                   <i class="fa-solid fa-trash-can text-xs mr-1"></i> Zerar Dados
                 </button>
@@ -1224,6 +1243,33 @@
 
       } catch (err) {
         tbody.innerHTML = `<tr><td colspan="5" class="py-10 text-center text-rose-500">Erro: ${err.message}</td></tr>`;
+      }
+    }
+
+    function abrirModalAlterarEmailAdmin(userId, currentEmail) {
+      document.getElementById('admin-target-user-id').value = userId;
+      document.getElementById('admin-modal-user-id').innerText = `Usuário atual: ${currentEmail}`;
+      document.getElementById('admin-new-email').value = '';
+      document.getElementById('modal-admin-email').style.display = 'flex';
+    }
+
+    async function confirmarAlterarEmailAdmin(e) {
+      e.preventDefault();
+      const targetUserId = document.getElementById('admin-target-user-id').value;
+      const newEmail = document.getElementById('admin-new-email').value;
+
+      try {
+        const { error } = await supabaseClient.rpc('admin_update_user_email', {
+          target_user_id: targetUserId,
+          new_email: newEmail
+        });
+        if (error) throw error;
+
+        alert(`E-mail atualizado para ${newEmail}!`);
+        fecharModal('modal-admin-email');
+        carregarUsuariosAdmin();
+      } catch (err) {
+        alert('Erro ao alterar e-mail: ' + err.message);
       }
     }
 

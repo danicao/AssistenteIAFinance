@@ -45,8 +45,6 @@
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
     }
-    .row-hover .action-btns { opacity: 0; transition: opacity 0.2s; }
-    .row-hover:hover .action-btns { opacity: 1; }
   </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans antialiased min-h-screen transition-colors duration-200">
@@ -61,7 +59,7 @@
           <i class="fa-solid fa-wallet"></i>
         </div>
         <h2 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight" id="auth-title">Acesse sua Conta</h2>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="auth-desc">Identifique-se para carregar sua base de dados financeira.</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="auth-desc">Identifique-se para carregar sua base financeira.</p>
       </div>
 
       <div class="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex gap-1 mb-5">
@@ -87,12 +85,11 @@
   </div>
 
   <!-- ==============================================
-       HEADER COM ABAS ESPAÇADAS
+       HEADER
        ============================================== -->
   <header class="glass-header sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
-        <!-- Logo -->
         <div class="flex items-center gap-3 cursor-pointer shrink-0" onclick="trocarAba('planeje')">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-violet-600 flex items-center justify-center shadow-lg shadow-brand-500/30 text-white">
             <i class="fa-solid fa-layer-group text-lg"></i>
@@ -100,7 +97,6 @@
           <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Finance<span class="text-brand-600 dark:text-brand-400">AI</span></span>
         </div>
 
-        <!-- Navegação Desktop -->
         <nav class="hidden xl:flex items-center gap-7 text-sm font-medium text-slate-500 dark:text-slate-400 overflow-x-auto px-4">
           <button type="button" onclick="trocarAba('planeje')" id="tab-btn-planeje" class="nav-btn active flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
             <i class="fa-solid fa-chart-pie"></i> Dashboard
@@ -123,14 +119,11 @@
           <button type="button" onclick="trocarAba('relatorios')" id="tab-btn-relatorios" class="nav-btn flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
             <i class="fa-solid fa-chart-pie"></i> Relatórios
           </button>
-
-          <!-- Painel Adm Master -->
           <button type="button" onclick="trocarAba('admin')" id="tab-btn-admin" style="display: none;" class="nav-btn flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold hover:text-violet-700">
             <i class="fa-solid fa-user-shield"></i> Painel Adm
           </button>
         </nav>
 
-        <!-- Ações do Topo -->
         <div class="flex items-center gap-2.5 shrink-0">
           <button type="button" onclick="abrirModalTelegram()" class="flex items-center gap-1.5 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-sky-600 dark:text-sky-400 px-3.5 py-2 rounded-full text-xs font-bold transition shadow-sm border border-sky-100 dark:border-sky-800">
             <i class="fa-brands fa-telegram text-sm"></i>
@@ -225,12 +218,12 @@
         </div>
       </div>
 
-      <!-- Tabela de Transações -->
+      <!-- Tabela de Transações com Emojis e Seletor Direto de Categorias -->
       <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
         <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50/50 dark:bg-slate-800/30">
           <div>
             <h2 class="text-lg font-bold text-slate-800 dark:text-white">Transações Recentes</h2>
-            <p class="text-xs text-slate-500 dark:text-slate-400">Movimentações com baixa e crédito automáticos</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Clique na categoria para alterá-la imediatamente</p>
           </div>
           <div class="flex items-center gap-2 bg-white dark:bg-slate-800 rounded-xl p-1 border border-slate-200 dark:border-slate-700 shadow-sm">
             <button onclick="filtrar('todos', this)" class="filtro-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white transition">Todas</button>
@@ -367,9 +360,8 @@
       <div id="grid-contas-completas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 6. METAS FINANCEIRAS (RESTAURADA E COMPLETA) -->
+    <!-- 6. METAS FINANCEIRAS -->
     <section id="aba-metas" style="display: none;" class="space-y-6">
-      <!-- CARDS DE INSPIRAÇÃO E CRIAÇÃO RÁPIDA -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-slate-900 dark:to-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 p-6 rounded-3xl flex justify-between items-center shadow-sm">
           <div>
@@ -400,7 +392,6 @@
         </div>
       </div>
 
-      <!-- KPI TOTAL DE METAS -->
       <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Acumulado em Metas</span>
@@ -411,7 +402,6 @@
         </button>
       </div>
 
-      <!-- GRID DE CARDS COM BARRA E BOTÃO +GUARDAR -->
       <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm p-6">
         <h3 class="text-base font-bold text-slate-800 dark:text-white mb-4">Suas Metas em Andamento</h3>
         <div id="grid-metas-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
@@ -431,7 +421,7 @@
       </div>
     </section>
 
-    <!-- 8. PAINEL ADM -->
+    <!-- 8. PAINEL ADM (COM BOTÃO ZERAR DADOS) -->
     <section id="aba-admin" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -439,7 +429,7 @@
             <h2 class="text-xl font-bold text-slate-800 dark:text-white">Painel Administrativo</h2>
             <span class="bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-violet-200 dark:border-violet-800">ADMIN MASTER</span>
           </div>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gerencie os usuários do sistema com total privacidade.</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gerencie os acessos e resete contas de teste.</p>
         </div>
         <button onclick="carregarUsuariosAdmin()" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition flex items-center gap-2">
           <i class="fa-solid fa-rotate text-xs"></i> Atualizar Lista
@@ -754,7 +744,7 @@
         </div>
         <h4 class="font-bold text-slate-800 dark:text-white text-lg">Telegram Conectado!</h4>
         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">O bot está pronto e integrado ao seu banco.</p>
-        <button onclick="desvincularTelegram()" class="w-full py-3 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-bold transition">Desconectar</button>
+        <button onclick="desvincularTelegram()" class="w-full py-3 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-bold transition">Desconectar este Telegram</button>
       </div>
 
       <div id="telegram-status-desconectado" style="display: none;" class="space-y-4">
@@ -796,6 +786,32 @@
       'Mercado Pago': { cor: 'bg-sky-500', txt: 'text-sky-500', icone: 'fa-handshake' },
       'Outro': { cor: 'bg-slate-700', txt: 'text-slate-700', icone: 'fa-wallet' }
     };
+
+    // IDENTIFICADOR AUTOMÁTICO DE EMOJIS CONTEXTUAIS
+    function obterEmojiItem(descricao, catNome) {
+      const d = (descricao || '').toLowerCase();
+      const c = (catNome || '').toLowerCase();
+
+      if (/gasolina|combustivel|posto|etanol|diesel/.test(d)) return '⛽';
+      if (/sapato|tenis|sandalia|roupa|camisa|calca|vestido|calcado|vestuario/.test(d)) return '👞';
+      if (/supermercado|mercado|atacadao|compras|acougue|hortifruti/.test(d)) return '🛒';
+      if (/distribuidora|cerveja|bebida|chopp|adega|bar/.test(d)) return '🍻';
+      if (/almoco|jantar|lanche|pizza|burger|hamburguer|restaurante|ifood|acai|padaria/.test(d)) return '🍔';
+      if (/pagamento|salario|frete|pix recebido|deposito|rendimento/.test(d)) return '💰';
+      if (/farmacia|drogaria|remedio|medico|hospital|exame|saude/.test(d)) return '💊';
+      if (/uber|99|taxi|onibus|metro|pedagio/.test(d)) return '🚗';
+      if (/internet|luz|agua|aluguel|condominio|energia|celular|fatura/.test(d)) return '📄';
+      if (/cinema|jogos|game|show|festa|lazer/.test(d)) return '🎮';
+
+      if (c.includes('alimentacao')) return '🍽️';
+      if (c.includes('transporte')) return '🚗';
+      if (c.includes('roupa') || c.includes('vestuario')) return '👕';
+      if (c.includes('saude')) return '🩺';
+      if (c.includes('lazer')) return '🎉';
+      if (c.includes('moradia')) return '🏠';
+
+      return '💸';
+    }
 
     function inicializarTema() {
       const temaSalvo = localStorage.getItem('financeai_theme') || 'light';
@@ -1034,6 +1050,212 @@
         document.getElementById('kpi-conta-principal-texto').innerText = `Conta Principal: ${cPadrao.nome} (R$ ${formatarMoeda(cPadrao.saldo_atual)})`;
       }
       document.getElementById('kpi-alerta-teto').innerText = `Do teto global de R$ ${formatarMoeda(tetoGlobal)}`;
+    }
+
+    // ==========================================
+    // TRANSAÇÕES (COM EMOJI E TROCA RÁPIDA DE CATEGORIA)
+    // ==========================================
+    function setTipoTransacao(tipo) {
+      tipoTransacaoAtual = tipo;
+      const bDesp = document.getElementById('btn-tipo-despesa');
+      const bRec = document.getElementById('btn-tipo-receita');
+      if (tipo === 'despesa') {
+        bDesp.className = 'flex-1 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-700 text-rose-600 shadow-sm transition';
+        bRec.className = 'flex-1 py-2 text-xs font-bold rounded-lg text-slate-500 transition';
+      } else {
+        bRec.className = 'flex-1 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-700 text-emerald-600 shadow-sm transition';
+        bDesp.className = 'flex-1 py-2 text-xs font-bold rounded-lg text-slate-500 transition';
+      }
+    }
+
+    async function salvarTransacaoManual(e) {
+      e.preventDefault();
+      const valor = parseFloat(document.getElementById('t-valor').value);
+      const contaId = document.getElementById('t-conta').value || null;
+
+      await supabaseClient.from('transacoes').insert([{
+        descricao: document.getElementById('t-descricao').value,
+        valor,
+        tipo: tipoTransacaoAtual,
+        data: document.getElementById('t-data').value,
+        categoria_id: document.getElementById('t-categoria').value || null,
+        conta_id: contaId,
+        user_id: usuarioAtual.id
+      }]);
+
+      if (contaId) {
+        const c = contas.find(x => x.id === contaId);
+        if (c) {
+          const nSaldo = tipoTransacaoAtual === 'receita' ? (Number(c.saldo_atual) + valor) : (Number(c.saldo_atual) - valor);
+          await supabaseClient.from('contas_bancarias').update({ saldo_atual: nSaldo }).eq('id', contaId);
+        }
+      }
+
+      fecharModal('modal-transacao');
+      carregarTudo();
+    }
+
+    function renderizarTransacoes() {
+      const tbody = document.getElementById('lista-transacoes-tbody');
+      tbody.innerHTML = '';
+      const filtradas = transacoes.filter(t => filtroAtual === 'todos' ? true : t.tipo === filtroAtual);
+
+      if (filtradas.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-10 text-center text-sm text-slate-400">Nenhum lançamento encontrado.</td></tr>`;
+        return;
+      }
+
+      filtradas.forEach(t => {
+        const isDesp = t.tipo === 'despesa';
+        const catNome = t.categorias ? t.categorias.nome : 'Geral';
+        const contaNome = t.contas_bancarias ? t.contas_bancarias.nome : '—';
+        const emojiItem = obterEmojiItem(t.descricao, catNome);
+
+        // Seletor inline rápido de categoria
+        const seletorCategorias = `
+          <select onchange="alterarCategoriaTransacao('${t.id}', this.value)" class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold rounded-lg px-2.5 py-1.5 outline-none border border-transparent hover:border-slate-300 dark:hover:border-slate-600 transition cursor-pointer">
+            <option value="">Geral / Sem Categoria</option>
+            ${categorias.filter(c => c.tipo === t.tipo || !c.tipo).map(c => `
+              <option value="${c.id}" ${t.categoria_id === c.id ? 'selected' : ''}>${c.nome}</option>
+            `).join('')}
+          </select>
+        `;
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+            <td class="py-4 px-6 font-bold text-slate-800 dark:text-white text-sm">
+              <span class="mr-2 text-base">${emojiItem}</span>${t.descricao}
+            </td>
+            <td class="py-4 px-6 text-xs">${seletorCategorias}</td>
+            <td class="py-4 px-6 text-xs font-semibold text-slate-600 dark:text-slate-300">${contaNome}</td>
+            <td class="py-4 px-6 text-xs text-slate-400">${t.data}</td>
+            <td class="py-4 px-6 text-right font-bold ${isDesp ? 'text-slate-800 dark:text-slate-200' : 'text-emerald-600'}">
+              ${isDesp ? '- ' : '+ '}R$ ${formatarMoeda(t.valor)}
+            </td>
+            <td class="py-4 px-6 text-center">
+              <button onclick="excluirTransacao('${t.id}')" class="text-slate-300 hover:text-rose-500"><i class="fa-solid fa-trash-can text-xs"></i></button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // Altera categoria diretamente da tabela
+    async function alterarCategoriaTransacao(transacaoId, novaCategoriaId) {
+      await supabaseClient.from('transacoes').update({
+        categoria_id: novaCategoriaId || null
+      }).eq('id', transacaoId);
+
+      carregarTudo();
+    }
+
+    function filtrar(tipo, btn) {
+      filtroAtual = tipo;
+      document.querySelectorAll('.filtro-btn').forEach(b => {
+        b.classList.remove('bg-slate-100', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white');
+        b.classList.add('text-slate-500');
+      });
+      btn.classList.add('bg-slate-100', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white');
+      renderizarTransacoes();
+    }
+
+    async function excluirTransacao(id) {
+      if (!confirm('Excluir lançamento?')) return;
+      await supabaseClient.from('transacoes').delete().eq('id', id);
+      carregarTudo();
+    }
+
+    // ==========================================
+    // PAINEL ADM (COM FUNÇÃO ZERAR DADOS)
+    // ==========================================
+    async function carregarUsuariosAdmin() {
+      if (!usuarioAtual || usuarioAtual.email !== ADMIN_EMAIL) return;
+      const tbody = document.getElementById('lista-usuarios-admin-tbody');
+      tbody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-slate-400">Carregando usuários do sistema...</td></tr>';
+
+      try {
+        const { data: users, error } = await supabaseClient.rpc('get_admin_users');
+        if (error) throw error;
+
+        tbody.innerHTML = '';
+        if (!users || users.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-slate-400">Nenhum usuário cadastrado.</td></tr>';
+          return;
+        }
+
+        let confirmados = 0, pendentes = 0;
+        users.forEach(u => {
+          const isConfirmed = !!u.email_confirmed_at;
+          if (isConfirmed) confirmados++; else pendentes++;
+
+          const dataCriacao = new Date(u.created_at).toLocaleDateString('pt-BR');
+          const ultimoAcesso = u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : 'Nunca acessou';
+          const isMaster = u.email === ADMIN_EMAIL;
+
+          tbody.innerHTML += `
+            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
+              <td class="py-4 px-6 font-semibold text-slate-800 dark:text-white flex items-center gap-2">
+                <i class="fa-solid fa-user-circle text-slate-400 text-base"></i>
+                <span>${u.email}</span>
+                ${isMaster ? '<span class="bg-violet-100 dark:bg-violet-950 text-violet-700 dark:text-violet-300 text-[10px] font-bold px-2 py-0.5 rounded-full ml-1">VOCÊ (ADMIN)</span>' : ''}
+              </td>
+              <td class="py-4 px-6 text-xs text-slate-500">${dataCriacao}</td>
+              <td class="py-4 px-6 text-xs text-slate-500">${ultimoAcesso}</td>
+              <td class="py-4 px-6 text-center">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold ${isConfirmed ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-600' : 'bg-amber-50 dark:bg-amber-950 text-amber-600'}">
+                  ${isConfirmed ? 'Confirmado' : 'Pendente'}
+                </span>
+              </td>
+              <td class="py-4 px-6 text-right space-x-2">
+                <button onclick="reenviarAcessoUsuarioAdmin('${u.email}')" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition" title="Reenviar link de recuperação">
+                  <i class="fa-solid fa-paper-plane text-xs mr-1"></i> Acesso
+                </button>
+                <button onclick="zerarDadosUsuarioAdmin('${u.id}', '${u.email}')" class="px-3 py-1.5 bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-lg text-xs font-bold transition" title="Resetar todos os lançamentos e saldo">
+                  <i class="fa-solid fa-trash-can text-xs mr-1"></i> Zerar Dados
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+
+        document.getElementById('kpi-admin-total').innerText = users.length;
+        document.getElementById('kpi-admin-confirmados').innerText = confirmados;
+        document.getElementById('kpi-admin-pendentes').innerText = pendentes;
+
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-10 text-center text-rose-500">Erro: ${err.message}</td></tr>`;
+      }
+    }
+
+    async function zerarDadosUsuarioAdmin(userId, email) {
+      const confirmacao = prompt(`⚠️ ATENÇÃO: Digite "ZERAR" para apagar todas as transações, investimentos, metas e resetar o saldo bancário da conta:\n${email}`);
+      if (confirmacao !== 'ZERAR') {
+        alert('Operação cancelada.');
+        return;
+      }
+
+      try {
+        const { data, error } = await supabaseClient.rpc('admin_zerar_dados_usuario', { target_user_id: userId });
+        if (error) throw error;
+
+        alert(`✅ Base da conta ${email} foi zerada com sucesso!`);
+        if (usuarioAtual && usuarioAtual.id === userId) {
+          carregarTudo();
+        }
+      } catch (err) {
+        alert('Falha ao zerar dados: ' + err.message);
+      }
+    }
+
+    async function reenviarAcessoUsuarioAdmin(email) {
+      if (!confirm(`Enviar link oficial de acesso para: ${email}?`)) return;
+      try {
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+        if (error) throw error;
+        alert(`Link enviado com sucesso para ${email}!`);
+      } catch (err) {
+        alert('Erro ao enviar link: ' + err.message);
+      }
     }
 
     // ==========================================
@@ -1518,173 +1740,12 @@
           labels: Object.keys(desp).length ? Object.keys(desp) : ['Sem dados'],
           datasets: [{
             data: Object.values(desp).length ? Object.values(desp) : [1],
-            backgroundColor: ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#0ea5e9', '#8b5cf6'],
+            backgroundColor: ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#0ea5e9', '#8b5cf6', '#14b8a6'],
             borderWidth: 0
           }]
         },
         options: { responsive: true, maintainAspectRatio: false, cutout: '75%' }
       });
-    }
-
-    // ==========================================
-    // TRANSAÇÕES
-    // ==========================================
-    function setTipoTransacao(tipo) {
-      tipoTransacaoAtual = tipo;
-      const bDesp = document.getElementById('btn-tipo-despesa');
-      const bRec = document.getElementById('btn-tipo-receita');
-      if (tipo === 'despesa') {
-        bDesp.className = 'flex-1 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-700 text-rose-600 shadow-sm transition';
-        bRec.className = 'flex-1 py-2 text-xs font-bold rounded-lg text-slate-500 transition';
-      } else {
-        bRec.className = 'flex-1 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-700 text-emerald-600 shadow-sm transition';
-        bDesp.className = 'flex-1 py-2 text-xs font-bold rounded-lg text-slate-500 transition';
-      }
-    }
-
-    async function salvarTransacaoManual(e) {
-      e.preventDefault();
-      const valor = parseFloat(document.getElementById('t-valor').value);
-      const contaId = document.getElementById('t-conta').value || null;
-
-      await supabaseClient.from('transacoes').insert([{
-        descricao: document.getElementById('t-descricao').value,
-        valor,
-        tipo: tipoTransacaoAtual,
-        data: document.getElementById('t-data').value,
-        categoria_id: document.getElementById('t-categoria').value || null,
-        conta_id: contaId,
-        user_id: usuarioAtual.id
-      }]);
-
-      if (contaId) {
-        const c = contas.find(x => x.id === contaId);
-        if (c) {
-          const nSaldo = tipoTransacaoAtual === 'receita' ? (Number(c.saldo_atual) + valor) : (Number(c.saldo_atual) - valor);
-          await supabaseClient.from('contas_bancarias').update({ saldo_atual: nSaldo }).eq('id', contaId);
-        }
-      }
-
-      fecharModal('modal-transacao');
-      carregarTudo();
-    }
-
-    function renderizarTransacoes() {
-      const tbody = document.getElementById('lista-transacoes-tbody');
-      tbody.innerHTML = '';
-      const filtradas = transacoes.filter(t => filtroAtual === 'todos' ? true : t.tipo === filtroAtual);
-
-      if (filtradas.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="py-10 text-center text-sm text-slate-400">Nenhum lançamento encontrado.</td></tr>`;
-        return;
-      }
-
-      filtradas.forEach(t => {
-        const isDesp = t.tipo === 'despesa';
-        const catNome = t.categorias ? t.categorias.nome : 'Geral';
-        const contaNome = t.contas_bancarias ? t.contas_bancarias.nome : '—';
-
-        tbody.innerHTML += `
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
-            <td class="py-4 px-6 font-bold text-slate-800 dark:text-white text-sm">${t.descricao}</td>
-            <td class="py-4 px-6 text-xs text-slate-500">${catNome}</td>
-            <td class="py-4 px-6 text-xs font-semibold text-slate-600 dark:text-slate-300">${contaNome}</td>
-            <td class="py-4 px-6 text-xs text-slate-400">${t.data}</td>
-            <td class="py-4 px-6 text-right font-bold ${isDesp ? 'text-slate-800 dark:text-slate-200' : 'text-emerald-600'}">
-              ${isDesp ? '- ' : '+ '}R$ ${formatarMoeda(t.valor)}
-            </td>
-            <td class="py-4 px-6 text-center">
-              <button onclick="excluirTransacao('${t.id}')" class="text-slate-300 hover:text-rose-500"><i class="fa-solid fa-trash-can text-xs"></i></button>
-            </td>
-          </tr>
-        `;
-      });
-    }
-
-    function filtrar(tipo, btn) {
-      filtroAtual = tipo;
-      document.querySelectorAll('.filtro-btn').forEach(b => {
-        b.classList.remove('bg-slate-100', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white');
-        b.classList.add('text-slate-500');
-      });
-      btn.classList.add('bg-slate-100', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white');
-      renderizarTransacoes();
-    }
-
-    async function excluirTransacao(id) {
-      if (!confirm('Excluir lançamento?')) return;
-      await supabaseClient.from('transacoes').delete().eq('id', id);
-      carregarTudo();
-    }
-
-    // ==========================================
-    // PAINEL ADM
-    // ==========================================
-    async function carregarUsuariosAdmin() {
-      if (!usuarioAtual || usuarioAtual.email !== ADMIN_EMAIL) return;
-      const tbody = document.getElementById('lista-usuarios-admin-tbody');
-      tbody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-slate-400">Carregando usuários do sistema...</td></tr>';
-
-      try {
-        const { data: users, error } = await supabaseClient.rpc('get_admin_users');
-        if (error) throw error;
-
-        tbody.innerHTML = '';
-        if (!users || users.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5" class="py-10 text-center text-slate-400">Nenhum usuário cadastrado.</td></tr>';
-          return;
-        }
-
-        let confirmados = 0, pendentes = 0;
-        users.forEach(u => {
-          const isConfirmed = !!u.email_confirmed_at;
-          if (isConfirmed) confirmados++; else pendentes++;
-
-          const dataCriacao = new Date(u.created_at).toLocaleDateString('pt-BR');
-          const ultimoAcesso = u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : 'Nunca acessou';
-          const isMaster = u.email === ADMIN_EMAIL;
-
-          tbody.innerHTML += `
-            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
-              <td class="py-4 px-6 font-semibold text-slate-800 dark:text-white flex items-center gap-2">
-                <i class="fa-solid fa-user-circle text-slate-400 text-base"></i>
-                <span>${u.email}</span>
-                ${isMaster ? '<span class="bg-violet-100 dark:bg-violet-950 text-violet-700 dark:text-violet-300 text-[10px] font-bold px-2 py-0.5 rounded-full ml-1">VOCÊ (ADMIN)</span>' : ''}
-              </td>
-              <td class="py-4 px-6 text-xs text-slate-500">${dataCriacao}</td>
-              <td class="py-4 px-6 text-xs text-slate-500">${ultimoAcesso}</td>
-              <td class="py-4 px-6 text-center">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold ${isConfirmed ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-600' : 'bg-amber-50 dark:bg-amber-950 text-amber-600'}">
-                  ${isConfirmed ? 'Confirmado' : 'Pendente'}
-                </span>
-              </td>
-              <td class="py-4 px-6 text-right space-x-2">
-                <button onclick="reenviarAcessoUsuarioAdmin('${u.email}')" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition">
-                  <i class="fa-solid fa-paper-plane text-xs mr-1"></i> Reenviar Acesso
-                </button>
-              </td>
-            </tr>
-          `;
-        });
-
-        document.getElementById('kpi-admin-total').innerText = users.length;
-        document.getElementById('kpi-admin-confirmados').innerText = confirmados;
-        document.getElementById('kpi-admin-pendentes').innerText = pendentes;
-
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-10 text-center text-rose-500">Erro: ${err.message}</td></tr>`;
-      }
-    }
-
-    async function reenviarAcessoUsuarioAdmin(email) {
-      if (!confirm(`Enviar link oficial de acesso para: ${email}?`)) return;
-      try {
-        const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
-        if (error) throw error;
-        alert(`Link enviado com sucesso para ${email}!`);
-      } catch (err) {
-        alert('Erro ao enviar link: ' + err.message);
-      }
     }
 
     // TELEGRAM MODAL

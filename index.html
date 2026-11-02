@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FinanceAI - Gestão Financeira Inteligente</title>
   
-  <!-- FAVICON NATIVO SVG -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%236366f1'/><stop offset='100%' stop-color='%234338ca'/></linearGradient></defs><rect width='100' height='100' rx='28' fill='url(%23g)'/><path d='M30 35 h40 a5 5 0 0 1 5 5 v25 a5 5 0 0 1 -5 5 h-40 a5 5 0 0 1 -5 -5 v-25 a5 5 0 0 1 5 -5 z' fill='none' stroke='white' stroke-width='6'/><circle cx='62' cy='52.5' r='4' fill='white'/><path d='M30 45 h45' stroke='white' stroke-width='4'/></svg>">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,7 +52,7 @@
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans antialiased min-h-screen transition-colors duration-200">
 
   <!-- ==============================================
-       GATEKEEPER: TELA DE LOGIN OBRIGATÓRIA
+       LOGIN
        ============================================== -->
   <div id="auth-screen" class="fixed inset-0 z-50 bg-slate-900/90 dark:bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
@@ -62,7 +61,7 @@
           <i class="fa-solid fa-wallet"></i>
         </div>
         <h2 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight" id="auth-title">Acesse sua Conta</h2>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="auth-desc">Identifique-se para carregar sua base financeira isolada.</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="auth-desc">Identifique-se para carregar sua base de dados financeira.</p>
       </div>
 
       <div class="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex gap-1 mb-5">
@@ -101,7 +100,7 @@
           <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Finance<span class="text-brand-600 dark:text-brand-400">AI</span></span>
         </div>
 
-        <!-- Navegação Desktop Bem Espaçada -->
+        <!-- Navegação Desktop -->
         <nav class="hidden xl:flex items-center gap-7 text-sm font-medium text-slate-500 dark:text-slate-400 overflow-x-auto px-4">
           <button type="button" onclick="trocarAba('planeje')" id="tab-btn-planeje" class="nav-btn active flex items-center gap-2 hover:text-slate-900 dark:hover:text-white">
             <i class="fa-solid fa-chart-pie"></i> Dashboard
@@ -125,7 +124,7 @@
             <i class="fa-solid fa-chart-pie"></i> Relatórios
           </button>
 
-          <!-- Botão Painel Adm Master -->
+          <!-- Painel Adm Master -->
           <button type="button" onclick="trocarAba('admin')" id="tab-btn-admin" style="display: none;" class="nav-btn flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold hover:text-violet-700">
             <i class="fa-solid fa-user-shield"></i> Painel Adm
           </button>
@@ -133,12 +132,12 @@
 
         <!-- Ações do Topo -->
         <div class="flex items-center gap-2.5 shrink-0">
-          <button type="button" onclick="abrirModalTelegram()" class="flex items-center gap-1.5 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-sky-600 dark:text-sky-400 px-3.5 py-2 rounded-full text-xs font-bold transition shadow-sm border border-sky-100 dark:border-sky-800" title="Vincular Telegram">
+          <button type="button" onclick="abrirModalTelegram()" class="flex items-center gap-1.5 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-sky-600 dark:text-sky-400 px-3.5 py-2 rounded-full text-xs font-bold transition shadow-sm border border-sky-100 dark:border-sky-800">
             <i class="fa-brands fa-telegram text-sm"></i>
             <span class="hidden sm:inline">Telegram</span>
           </button>
 
-          <button type="button" onclick="alternarTema()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition shadow-sm" title="Alternar Modo Escuro / Claro">
+          <button type="button" onclick="alternarTema()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition shadow-sm">
             <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
           </button>
 
@@ -146,7 +145,6 @@
             <i class="fa-solid fa-plus text-xs"></i> Lançamento
           </button>
 
-          <!-- Perfil e Logout -->
           <div class="flex items-center gap-2 pl-2">
             <div class="hidden sm:flex flex-col text-right">
               <span id="user-display-name" class="text-xs font-bold text-slate-800 dark:text-white leading-tight">Usuário</span>
@@ -161,7 +159,7 @@
     </div>
   </header>
 
-  <!-- NAVEGAÇÃO MOBILE INFERIOR -->
+  <!-- NAVEGAÇÃO MOBILE -->
   <div class="xl:hidden fixed bottom-0 left-0 right-0 glass-header bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 z-40 pb-safe">
     <div class="flex justify-around items-center h-16 text-[10px] font-medium text-slate-500 dark:text-slate-400">
       <button onclick="trocarAba('planeje')" class="flex flex-col items-center gap-1 hover:text-brand-600 w-full py-1">
@@ -187,7 +185,7 @@
   <!-- CONTEÚDO PRINCIPAL -->
   <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 mb-20 xl:mb-8">
 
-    <!-- 1. ABA: DASHBOARD -->
+    <!-- 1. DASHBOARD -->
     <section id="aba-planeje" class="space-y-8">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
@@ -263,9 +261,8 @@
       </div>
     </section>
 
-    <!-- 2. ABA: LIMITES COM SUBTRAÇÃO AUTOMÁTICA DO TETO GLOBAL -->
+    <!-- 2. LIMITES E TETO GLOBAL -->
     <section id="aba-limites" style="display: none;" class="space-y-6">
-      <!-- BANNER TETO GLOBAL COM CÁLCULO DE CATEGORIAS -->
       <div class="bg-gradient-to-r from-brand-900 via-indigo-900 to-violet-900 p-6 md:p-8 rounded-3xl text-white shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
           <span class="text-xs font-bold uppercase tracking-wider text-brand-200 flex items-center gap-1.5">
@@ -282,20 +279,17 @@
         </div>
       </div>
 
-      <!-- CARDS DE COMPOSIÇÃO DO TETO GLOBAL -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
         <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
           <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Teto Global Máximo</span>
           <div class="text-2xl font-black text-slate-800 dark:text-white mt-1" id="card-teto-maximo">R$ 1.300,00</div>
           <p class="text-xs text-slate-400 mt-1">Limite mensal total fixado</p>
         </div>
-
         <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
           <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Alocado em Categorias</span>
           <div class="text-2xl font-black text-brand-600 dark:text-brand-400 mt-1" id="card-teto-alocado">R$ 0,00</div>
           <p class="text-xs text-slate-400 mt-1">Subtraído do teto global</p>
         </div>
-
         <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
           <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Saldo Livre do Teto</span>
           <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1" id="card-teto-livre">R$ 1.300,00</div>
@@ -303,7 +297,6 @@
         </div>
       </div>
 
-      <!-- CONSUMO REAL DO TETO -->
       <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm space-y-3">
         <div class="flex justify-between items-center text-sm">
           <span class="font-bold text-slate-800 dark:text-white">Despesas Realizadas vs Teto Global</span>
@@ -315,7 +308,6 @@
         <p class="text-xs text-slate-400" id="alerta-restante-global">Restam R$ 1.300,00 para atingir seu limite máximo.</p>
       </div>
 
-      <!-- LIMITES POR CATEGORIA -->
       <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm p-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
           <div>
@@ -330,12 +322,12 @@
       </div>
     </section>
 
-    <!-- 3. ABA: DESPESAS FIXAS -->
+    <!-- 3. DESPESAS FIXAS -->
     <section id="aba-fixas" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
           <h2 class="text-xl font-bold text-slate-800 dark:text-white">Despesas Fixas Mensais</h2>
-          <p class="text-sm text-slate-500 dark:text-slate-400">Contas recorrentes com data de vencimento monitoradas pelo robô.</p>
+          <p class="text-sm text-slate-500 dark:text-slate-400">O robô lembra você 1 dia antes e no próprio dia do vencimento! 🗓️</p>
         </div>
         <button onclick="abrirModalNovaDespesaFixa()" class="bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 text-white font-medium px-5 py-2.5 rounded-full text-xs transition shadow-sm flex items-center gap-2">
           <i class="fa-solid fa-plus text-xs"></i> Adicionar Despesa Fixa
@@ -345,7 +337,7 @@
       <div id="grid-despesas-fixas" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 4. ABA: INVESTIMENTOS (COM EDIÇÃO) -->
+    <!-- 4. INVESTIMENTOS -->
     <section id="aba-investimentos" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -360,12 +352,12 @@
       <div id="grid-investimentos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 5. ABA: CONTAS BANCÁRIAS (COM CORES OFICIAIS RESTAURADAS) -->
+    <!-- 5. CONTAS BANCÁRIAS -->
     <section id="aba-contas" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
           <h2 class="text-xl font-bold text-slate-800 dark:text-white">Contas Bancárias & Carteiras</h2>
-          <p class="text-sm text-slate-500 dark:text-slate-400">Marque a sua <strong>Conta Principal</strong> para que o bot faça débitos e créditos nela.</p>
+          <p class="text-sm text-slate-500 dark:text-slate-400">Marque sua <strong>Conta Principal</strong> para os débitos automáticos do bot.</p>
         </div>
         <button onclick="abrirModalNovaConta()" class="bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 text-white font-medium px-5 py-2.5 rounded-full text-xs transition shadow-sm flex items-center gap-2">
           <i class="fa-solid fa-plus text-xs"></i> Adicionar Conta
@@ -375,27 +367,63 @@
       <div id="grid-contas-completas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 6. ABA: METAS -->
+    <!-- 6. METAS FINANCEIRAS (RESTAURADA E COMPLETA) -->
     <section id="aba-metas" style="display: none;" class="space-y-6">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+      <!-- CARDS DE INSPIRAÇÃO E CRIAÇÃO RÁPIDA -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-slate-900 dark:to-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 p-6 rounded-3xl flex justify-between items-center shadow-sm">
+          <div>
+            <span class="text-[10px] font-bold bg-white dark:bg-slate-800 text-brand-600 dark:text-brand-300 px-2.5 py-1 rounded-full shadow-sm">Nova Conquista</span>
+            <h3 class="text-lg font-bold text-slate-800 dark:text-white mt-2">Crie sua próxima meta</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs">Planeje uma viagem, a compra de um carro, celular ou equipamento.</p>
+            <button onclick="abrirModalNovaMeta()" class="mt-4 bg-brand-600 hover:bg-brand-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-sm">
+              Criar meta →
+            </button>
+          </div>
+          <div class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 shadow-md flex items-center justify-center text-3xl text-brand-500 shrink-0">
+            <i class="fa-solid fa-car-side"></i>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-900 dark:to-emerald-950/40 border border-emerald-100 dark:border-emerald-900/50 p-6 rounded-3xl flex justify-between items-center shadow-sm">
+          <div>
+            <span class="text-[10px] font-bold bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 px-2.5 py-1 rounded-full shadow-sm">Segurança</span>
+            <h3 class="text-lg font-bold text-slate-800 dark:text-white mt-2">Reserva de emergência</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs">Guarde de 6 a 12 meses do seu custo de vida em liquidez diária.</p>
+            <button onclick="abrirModalNovaMeta('Reserva de Emergência')" class="mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-sm">
+              Criar reserva →
+            </button>
+          </div>
+          <div class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 shadow-md flex items-center justify-center text-3xl text-emerald-500 shrink-0">
+            <i class="fa-solid fa-vault"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI TOTAL DE METAS -->
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Acumulado em Metas</span>
           <div class="text-3xl font-black text-slate-800 dark:text-white mt-1" id="kpi-total-metas">R$ 0,00</div>
         </div>
         <button onclick="abrirModalNovaMeta()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition shadow-sm">
-          + Criar Nova Meta
+          + Nova Meta
         </button>
       </div>
 
-      <div id="grid-metas-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+      <!-- GRID DE CARDS COM BARRA E BOTÃO +GUARDAR -->
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm p-6">
+        <h3 class="text-base font-bold text-slate-800 dark:text-white mb-4">Suas Metas em Andamento</h3>
+        <div id="grid-metas-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+      </div>
     </section>
 
-    <!-- 7. ABA: RELATÓRIOS (RESTAURADA COM GRÁFICO PIZZA/DONUT) -->
+    <!-- 7. RELATÓRIOS -->
     <section id="aba-relatorios" style="display: none;" class="space-y-6">
       <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm p-6 md:p-8">
         <div class="mb-6">
           <h2 class="text-xl font-bold text-slate-800 dark:text-white">Divisão de Gastos por Categoria</h2>
-          <p class="text-xs text-slate-400 mt-1">Gráfico de distribuição das despesas registradas no mês.</p>
+          <p class="text-xs text-slate-400 mt-1">Gráfico de distribuição das despesas do mês.</p>
         </div>
         <div class="max-w-md mx-auto h-80 relative flex items-center justify-center">
           <canvas id="graficoDonut"></canvas>
@@ -403,7 +431,7 @@
       </div>
     </section>
 
-    <!-- 8. ABA: PAINEL ADMINISTRATIVO MASTER -->
+    <!-- 8. PAINEL ADM -->
     <section id="aba-admin" style="display: none;" class="space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
@@ -411,7 +439,7 @@
             <h2 class="text-xl font-bold text-slate-800 dark:text-white">Painel Administrativo</h2>
             <span class="bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-violet-200 dark:border-violet-800">ADMIN MASTER</span>
           </div>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gerencie os usuários do sistema com privacidade de saldos garantida.</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gerencie os usuários do sistema com total privacidade.</p>
         </div>
         <button onclick="carregarUsuariosAdmin()" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition flex items-center gap-2">
           <i class="fa-solid fa-rotate text-xs"></i> Atualizar Lista
@@ -422,48 +450,36 @@
         <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
           <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total de Contas</span>
           <div class="text-3xl font-black text-slate-800 dark:text-white mt-1" id="kpi-admin-total">0</div>
-          <p class="text-[11px] text-slate-500 mt-1">Cadastros no Supabase</p>
         </div>
         <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
           <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Contas Confirmadas</span>
           <div class="text-3xl font-black text-emerald-600 mt-1" id="kpi-admin-confirmados">0</div>
-          <p class="text-[11px] text-slate-500 mt-1">E-mails verificados</p>
         </div>
         <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
           <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Confirmação Pendente</span>
           <div class="text-3xl font-black text-amber-500 mt-1" id="kpi-admin-pendentes">0</div>
-          <p class="text-[11px] text-slate-500 mt-1">Aguardando ativação</p>
         </div>
       </div>
 
       <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
-        <div class="p-6 border-b border-slate-100 dark:border-slate-800">
-          <h3 class="text-base font-bold text-slate-800 dark:text-white">Usuários Cadastrados</h3>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-sm">
-            <thead>
-              <tr class="text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-100 dark:border-slate-800">
-                <th class="py-4 px-6">Usuário (E-mail)</th>
-                <th class="py-4 px-6">Data de Cadastro</th>
-                <th class="py-4 px-6">Último Acesso</th>
-                <th class="py-4 px-6 text-center">Status</th>
-                <th class="py-4 px-6 text-right">Ações</th>
-              </tr>
-            </thead>
-            <tbody id="lista-usuarios-admin-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
-              <tr>
-                <td colspan="5" class="py-10 text-center text-slate-400">Carregando usuários...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-100 dark:border-slate-800">
+              <th class="py-4 px-6">Usuário (E-mail)</th>
+              <th class="py-4 px-6">Data de Cadastro</th>
+              <th class="py-4 px-6">Último Acesso</th>
+              <th class="py-4 px-6 text-center">Status</th>
+              <th class="py-4 px-6 text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="lista-usuarios-admin-tbody" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+        </table>
       </div>
     </section>
 
   </main>
 
-  <!-- BOTÃO FLUTUANTE DO TELEGRAM -->
+  <!-- BOTÃO FLUTUANTE TELEGRAM -->
   <a href="https://t.me/financeiroIAgestor_bot" 
      target="_blank" 
      rel="noopener noreferrer"
@@ -473,10 +489,56 @@
   </a>
 
   <!-- ==============================================
-       MODAIS DO SISTEMA
+       MODAIS
        ============================================== -->
 
-  <!-- MODAL: INVESTIMENTO (CRIAÇÃO E EDIÇÃO) -->
+  <!-- MODAL: NOVA META -->
+  <div id="modal-meta" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-bold text-slate-800 dark:text-white text-xl">Nova Meta Financeira</h3>
+        <button type="button" onclick="fecharModal('modal-meta')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="salvarNovaMeta(event)" class="space-y-4">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Nome do Objetivo</label>
+          <input type="text" id="meta-nome" required class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="Ex: Viagem de Fim de Ano">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Valor Alvo (R$)</label>
+            <input type="number" step="0.01" id="meta-valor-alvo" required class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="5000,00">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Já Guardado (R$)</label>
+            <input type="number" step="0.01" id="meta-valor-atual" value="0" class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="0,00">
+          </div>
+        </div>
+        <button type="submit" class="w-full mt-4 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl transition text-sm shadow-md">Criar Meta</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: APORTE EM META (+GUARDAR) -->
+  <div id="modal-aporte-meta" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
+      <h3 class="font-bold text-slate-800 dark:text-white text-lg mb-1">Guardar Dinheiro</h3>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" id="aporte-meta-nome">Nome da Meta</p>
+      <form onsubmit="executarAporteMeta(event)" class="space-y-4">
+        <input type="hidden" id="aporte-meta-id">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Valor do Aporte (R$)</label>
+          <input type="number" step="0.01" id="aporte-meta-valor" required class="w-full text-2xl font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="100,00">
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="fecharModal('modal-aporte-meta')" class="flex-1 py-3 text-xs font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-xl">Cancelar</button>
+          <button type="submit" class="flex-1 py-3 text-xs font-bold text-white bg-brand-600 rounded-xl">Adicionar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: INVESTIMENTO -->
   <div id="modal-investimento" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
       <div class="flex justify-between items-center mb-6">
@@ -597,7 +659,7 @@
   <div id="modal-limite" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
       <h3 class="font-bold text-slate-800 dark:text-white text-lg mb-2">Limite por Categoria</h3>
-      <p class="text-xs text-slate-400 mb-4">O valor definido reduz automaticamente o saldo livre do seu teto global.</p>
+      <p class="text-xs text-slate-400 mb-4">O valor definido reduz automaticamente o saldo livre do teto global.</p>
       <form onsubmit="salvarLimiteCategoria(event)" class="space-y-4">
         <div>
           <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Categoria</label>
@@ -615,7 +677,7 @@
     </div>
   </div>
 
-  <!-- MODAL: AJUSTAR SALDO DE CONTA -->
+  <!-- MODAL: AJUSTAR SALDO -->
   <div id="modal-ajuste-saldo" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
       <h3 class="font-bold text-slate-800 dark:text-white text-lg mb-1">Ajustar Saldo</h3>
@@ -634,7 +696,7 @@
     </div>
   </div>
 
-  <!-- MODAL: NOVA TRANSAÇÃO MANUAL -->
+  <!-- MODAL: TRANSAÇÃO MANUAL -->
   <div id="modal-transacao" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
       <div class="flex justify-between items-center mb-6">
@@ -648,20 +710,20 @@
         </div>
         <div>
           <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Valor (R$)</label>
-          <input type="number" step="0.01" id="t-valor" required class="w-full text-2xl font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="0,00">
+          <input type="number" step="0.01" id="t-valor" required class="w-full text-2xl font-black bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="0,00">
         </div>
         <div>
           <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Descrição</label>
-          <input type="text" id="t-descricao" required class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="Ex: Mercado BH">
+          <input type="text" id="t-descricao" required class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="Ex: Mercado BH">
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Data</label>
-            <input type="date" id="t-data" required class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 outline-none">
+            <input type="date" id="t-data" required class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 outline-none">
           </div>
           <div>
             <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Conta Bancária</label>
-            <select id="t-conta" class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 outline-none"></select>
+            <select id="t-conta" class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 outline-none"></select>
           </div>
         </div>
         <div>
@@ -673,34 +735,7 @@
     </div>
   </div>
 
-  <!-- MODAL: NOVA META -->
-  <div id="modal-meta" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="font-bold text-slate-800 dark:text-white text-xl">Nova Meta Financeira</h3>
-        <button type="button" onclick="fecharModal('modal-meta')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <form onsubmit="salvarNovaMeta(event)" class="space-y-4">
-        <div>
-          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Nome do Objetivo</label>
-          <input type="text" id="meta-nome" required class="w-full text-sm text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="Ex: Reserva de Emergência">
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Valor Alvo (R$)</label>
-            <input type="number" step="0.01" id="meta-valor-alvo" required class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="5000,00">
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 ml-1">Já Guardado (R$)</label>
-            <input type="number" step="0.01" id="meta-valor-atual" value="0" class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="0,00">
-          </div>
-        </div>
-        <button type="submit" class="w-full mt-4 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl transition text-sm shadow-md">Criar Meta</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL: CONECTAR TELEGRAM COM GERADOR DE CÓDIGO -->
+  <!-- MODAL: TELEGRAM COM CÓDIGO -->
   <div id="modal-telegram" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
       <div class="flex justify-between items-center mb-6">
@@ -717,11 +752,9 @@
         <div class="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto text-3xl">
           <i class="fa-solid fa-circle-check"></i>
         </div>
-        <div>
-          <h4 class="font-bold text-slate-800 dark:text-white text-lg">Telegram Conectado!</h4>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">O bot está pronto e integrado ao seu banco.</p>
-        </div>
-        <button onclick="desvincularTelegram()" class="w-full py-3 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-bold transition">Desconectar este Telegram</button>
+        <h4 class="font-bold text-slate-800 dark:text-white text-lg">Telegram Conectado!</h4>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">O bot está pronto e integrado ao seu banco.</p>
+        <button onclick="desvincularTelegram()" class="w-full py-3 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-bold transition">Desconectar</button>
       </div>
 
       <div id="telegram-status-desconectado" style="display: none;" class="space-y-4">
@@ -731,25 +764,6 @@
         </div>
         <button type="button" onclick="copiarComandoTelegram()" class="w-full py-3 text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl transition shadow-md">Copiar Comando (/conectar)</button>
       </div>
-    </div>
-  </div>
-
-  <!-- MODAL: ADMIN ALTERAR EMAIL -->
-  <div id="modal-admin-email" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-800 relative">
-      <h3 class="font-bold text-slate-800 dark:text-white text-lg mb-1">Alterar E-mail</h3>
-      <p class="text-xs text-slate-500 mb-4" id="admin-modal-user-id">Atualizar endereço de acesso.</p>
-      <form onsubmit="confirmarAlterarEmailAdmin(event)" class="space-y-4">
-        <input type="hidden" id="admin-target-user-id">
-        <div>
-          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Novo E-mail</label>
-          <input type="email" id="admin-new-email" required class="w-full text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none" placeholder="novo@email.com">
-        </div>
-        <div class="flex gap-2 pt-2">
-          <button type="button" onclick="fecharModal('modal-admin-email')" class="flex-1 py-3 text-xs font-bold text-slate-600 bg-slate-100 dark:bg-slate-800 rounded-xl">Cancelar</button>
-          <button type="submit" class="flex-1 py-3 text-xs font-bold text-white bg-violet-600 rounded-xl">Salvar</button>
-        </div>
-      </form>
     </div>
   </div>
 
@@ -770,7 +784,6 @@
     let filtroAtual = 'todos';
     let chartDonut = null;
 
-    // PALETA E ÍCONES OFICIAIS DOS BANCOS RESTAURADA
     const bancosConfig = {
       'Nubank': { cor: 'bg-purple-600', txt: 'text-purple-600', icone: 'fa-n' },
       'Banco Inter': { cor: 'bg-orange-500', txt: 'text-orange-500', icone: 'fa-i' },
@@ -924,6 +937,7 @@
       if (btnAtiva) btnAtiva.classList.add('active');
 
       if (aba === 'relatorios') renderizarGrafico();
+      if (aba === 'metas') renderizarMetas();
       if (aba === 'fixas') renderizarDespesasFixas();
       if (aba === 'contas') renderizarContasCompletas();
       if (aba === 'investimentos') renderizarInvestimentos();
@@ -974,6 +988,7 @@
         renderizarInvestimentos();
         renderizarContasCompletas();
         renderizarDespesasFixas();
+        renderizarMetas();
         renderizarLimites();
       } catch (err) {
         console.error("Falha ao sincronizar dados:", err);
@@ -1022,6 +1037,94 @@
     }
 
     // ==========================================
+    // METAS FINANCEIRAS
+    // ==========================================
+    function renderizarMetas() {
+      const grid = document.getElementById('grid-metas-cards');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      let totalAlocado = 0;
+      metas.forEach(m => totalAlocado += Number(m.valor_atual));
+      document.getElementById('kpi-total-metas').innerText = `R$ ${formatarMoeda(totalAlocado)}`;
+
+      if (metas.length === 0) {
+        grid.innerHTML = '<div class="col-span-full py-12 text-center text-slate-400 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl">Nenhuma meta criada ainda. Escolha uma das opções acima para começar!</div>';
+        return;
+      }
+
+      metas.forEach(m => {
+        const perc = Math.min(100, Math.round((Number(m.valor_atual) / Number(m.valor_alvo)) * 100));
+        grid.innerHTML += `
+          <div class="bg-slate-50/50 dark:bg-slate-800/40 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden group hover:shadow-md transition">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Meta</span>
+              <button onclick="excluirMeta('${m.id}')" class="text-slate-300 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-trash text-xs"></i></button>
+            </div>
+            <h4 class="font-bold text-slate-800 dark:text-white text-lg mb-2">${m.nome}</h4>
+            <div class="flex justify-between items-end text-sm mb-1.5">
+              <span class="text-slate-500 text-xs">Guardado</span>
+              <span class="font-black text-brand-600 dark:text-brand-400">R$ ${formatarMoeda(m.valor_atual)} <span class="text-xs font-normal text-slate-400">/ ${formatarMoeda(m.valor_alvo)}</span></span>
+            </div>
+            <div class="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden mb-4">
+              <div class="bg-brand-500 h-full rounded-full transition-all duration-500" style="width: ${perc}%"></div>
+            </div>
+            <div class="flex justify-between items-center pt-2 border-t border-slate-200/50 dark:border-slate-700/50">
+              <span class="text-xs font-bold text-slate-700 dark:text-slate-300">${perc}% concluído</span>
+              <button onclick="abrirModalAporte('${m.id}', '${m.nome}')" class="bg-brand-50 dark:bg-brand-950/60 hover:bg-brand-100 text-brand-700 dark:text-brand-300 font-bold px-3 py-1.5 rounded-xl text-xs transition">
+                + Guardar
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function abrirModalNovaMeta(nomePadrao = '') {
+      document.getElementById('meta-nome').value = nomePadrao;
+      document.getElementById('meta-valor-alvo').value = '';
+      document.getElementById('meta-valor-atual').value = '0';
+      document.getElementById('modal-meta').style.display = 'flex';
+    }
+
+    async function salvarNovaMeta(e) {
+      e.preventDefault();
+      await supabaseClient.from('metas').insert([{
+        nome: document.getElementById('meta-nome').value,
+        valor_alvo: parseFloat(document.getElementById('meta-valor-alvo').value),
+        valor_atual: parseFloat(document.getElementById('meta-valor-atual').value) || 0,
+        user_id: usuarioAtual.id
+      }]);
+      fecharModal('modal-meta');
+      carregarTudo();
+    }
+
+    function abrirModalAporte(id, nome) {
+      document.getElementById('aporte-meta-id').value = id;
+      document.getElementById('aporte-meta-nome').innerText = nome;
+      document.getElementById('aporte-meta-valor').value = '';
+      document.getElementById('modal-aporte-meta').style.display = 'flex';
+    }
+
+    async function executarAporteMeta(e) {
+      e.preventDefault();
+      const id = document.getElementById('aporte-meta-id').value;
+      const v = parseFloat(document.getElementById('aporte-meta-valor').value);
+      const m = metas.find(x => x.id === id);
+      if (m) {
+        await supabaseClient.from('metas').update({ valor_atual: Number(m.valor_atual) + v }).eq('id', id);
+      }
+      fecharModal('modal-aporte-meta');
+      carregarTudo();
+    }
+
+    async function excluirMeta(id) {
+      if (!confirm('Deseja excluir esta meta?')) return;
+      await supabaseClient.from('metas').delete().eq('id', id);
+      carregarTudo();
+    }
+
+    // ==========================================
     // LIMITES COM SUBTRAÇÃO AUTOMÁTICA
     // ==========================================
     function renderizarLimites() {
@@ -1029,11 +1132,9 @@
       document.getElementById('input-novo-teto-global').value = tetoGlobal;
       document.getElementById('card-teto-maximo').innerText = `R$ ${formatarMoeda(tetoGlobal)}`;
 
-      // 1. Soma dos limites definidos para categorias
       let totalAlocadoCategorias = 0;
       limites.forEach(l => totalAlocadoCategorias += Number(l.limite_valor));
 
-      // 2. Saldo livre do teto global (Teto Global - Soma das Categorias)
       const tetoLivre = Math.max(0, tetoGlobal - totalAlocadoCategorias);
 
       document.getElementById('card-teto-alocado').innerText = `R$ ${formatarMoeda(totalAlocadoCategorias)}`;
@@ -1041,7 +1142,6 @@
       document.getElementById('display-teto-resumo-distribuicao').innerText = 
         `R$ ${formatarMoeda(totalAlocadoCategorias)} reservados em categorias específicas | R$ ${formatarMoeda(tetoLivre)} livres para gastos gerais.`;
 
-      // 3. Progresso do gasto real em relação ao teto global
       let gastoRealTotal = 0;
       const gastosPorCat = {};
       transacoes.filter(t => t.tipo === 'despesa').forEach(t => {
@@ -1056,7 +1156,6 @@
       document.getElementById('barra-progresso-global').style.width = `${percGlobal}%`;
       document.getElementById('alerta-restante-global').innerText = `Restam R$ ${formatarMoeda(Math.max(0, tetoGlobal - gastoRealTotal))} para atingir o limite máximo mensal.`;
 
-      // 4. Renderiza lista de categorias
       const container = document.getElementById('lista-limites-categorias');
       if (!container) return;
       container.innerHTML = '';
@@ -1129,7 +1228,7 @@
     }
 
     // ==========================================
-    // INVESTIMENTOS (COM EDIÇÃO E EXCLUSÃO)
+    // INVESTIMENTOS
     // ==========================================
     function calcularRendimento(inv) {
       const dataInicio = new Date(inv.data_aplicacao);
@@ -1243,7 +1342,7 @@
     }
 
     // ==========================================
-    // CONTAS BANCÁRIAS (COM PALETA OFICIAL RESTAURADA)
+    // CONTAS BANCÁRIAS
     // ==========================================
     function renderizarContasCompletas() {
       const cont = document.getElementById('grid-contas-completas');
@@ -1357,7 +1456,7 @@
       grid.innerHTML = '';
 
       if (fixas.length === 0) {
-        grid.innerHTML = '<div class="col-span-full py-10 text-center text-slate-400 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl">Nenhuma conta fixa cadastrada. Cadastre seu aluguel, internet, etc.</div>';
+        grid.innerHTML = '<div class="col-span-full py-10 text-center text-slate-400 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl">Nenhuma conta fixa cadastrada. Cadastre seu aluguel, internet, luz, etc.</div>';
         return;
       }
 
@@ -1365,7 +1464,7 @@
         grid.innerHTML += `
           <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm flex justify-between items-center">
             <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-rose-500 bg-rose-50 dark:bg-rose-950/40 px-2 py-0.5 rounded">Vencimento Dia ${f.dia_vencimento}</span>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-rose-500 bg-rose-50 dark:bg-rose-950/40 px-2 py-0.5 rounded">Vencimento Todo Dia ${f.dia_vencimento}</span>
               <h3 class="font-bold text-slate-800 dark:text-white text-base mt-2">${f.descricao}</h3>
               <p class="text-xl font-black text-slate-900 dark:text-white mt-1">R$ ${formatarMoeda(f.valor)}</p>
             </div>
@@ -1401,56 +1500,7 @@
     }
 
     // ==========================================
-    // METAS
-    // ==========================================
-    function renderizarMetas() {
-      const grid = document.getElementById('grid-metas-cards');
-      if (!grid) return;
-      grid.innerHTML = '';
-
-      let totalAlocado = 0;
-      metas.forEach(m => totalAlocado += Number(m.valor_atual));
-      document.getElementById('kpi-total-metas').innerText = `R$ ${formatarMoeda(totalAlocado)}`;
-
-      metas.forEach(m => {
-        const perc = Math.min(100, Math.round((Number(m.valor_atual) / Number(m.valor_alvo)) * 100));
-        grid.innerHTML += `
-          <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden group">
-            <h4 class="font-bold text-slate-800 dark:text-white text-lg mb-2">${m.nome}</h4>
-            <div class="flex justify-between items-end text-sm mb-1">
-              <span class="text-slate-500 text-xs">Guardado</span>
-              <span class="font-black text-brand-600 dark:text-brand-400">R$ ${formatarMoeda(m.valor_atual)} <span class="text-xs font-normal text-slate-400">/ ${formatarMoeda(m.valor_alvo)}</span></span>
-            </div>
-            <div class="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden mb-2">
-              <div class="bg-brand-500 h-full rounded-full" style="width: ${perc}%"></div>
-            </div>
-            <span class="text-xs font-bold text-slate-700 dark:text-slate-300">${perc}% concluído</span>
-          </div>
-        `;
-      });
-    }
-
-    function abrirModalNovaMeta() {
-      document.getElementById('meta-nome').value = '';
-      document.getElementById('meta-valor-alvo').value = '';
-      document.getElementById('meta-valor-atual').value = '0';
-      document.getElementById('modal-meta').style.display = 'flex';
-    }
-
-    async function salvarNovaMeta(e) {
-      e.preventDefault();
-      await supabaseClient.from('metas').insert([{
-        nome: document.getElementById('meta-nome').value,
-        valor_alvo: parseFloat(document.getElementById('meta-valor-alvo').value),
-        valor_atual: parseFloat(document.getElementById('meta-valor-atual').value) || 0,
-        user_id: usuarioAtual.id
-      }]);
-      fecharModal('modal-meta');
-      carregarTudo();
-    }
-
-    // ==========================================
-    // RELATÓRIOS (GRÁFICO RESTAURADO)
+    // RELATÓRIOS
     // ==========================================
     function renderizarGrafico() {
       const ctx = document.getElementById('graficoDonut');
@@ -1568,7 +1618,7 @@
     }
 
     // ==========================================
-    // PAINEL ADMINISTRATIVO MASTER
+    // PAINEL ADM
     // ==========================================
     async function carregarUsuariosAdmin() {
       if (!usuarioAtual || usuarioAtual.email !== ADMIN_EMAIL) return;
@@ -1585,9 +1635,7 @@
           return;
         }
 
-        let confirmados = 0;
-        let pendentes = 0;
-
+        let confirmados = 0, pendentes = 0;
         users.forEach(u => {
           const isConfirmed = !!u.email_confirmed_at;
           if (isConfirmed) confirmados++; else pendentes++;
@@ -1603,8 +1651,8 @@
                 <span>${u.email}</span>
                 ${isMaster ? '<span class="bg-violet-100 dark:bg-violet-950 text-violet-700 dark:text-violet-300 text-[10px] font-bold px-2 py-0.5 rounded-full ml-1">VOCÊ (ADMIN)</span>' : ''}
               </td>
-              <td class="py-4 px-6 text-xs text-slate-500 dark:text-slate-400">${dataCriacao}</td>
-              <td class="py-4 px-6 text-xs text-slate-500 dark:text-slate-400">${ultimoAcesso}</td>
+              <td class="py-4 px-6 text-xs text-slate-500">${dataCriacao}</td>
+              <td class="py-4 px-6 text-xs text-slate-500">${ultimoAcesso}</td>
               <td class="py-4 px-6 text-center">
                 <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold ${isConfirmed ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-600' : 'bg-amber-50 dark:bg-amber-950 text-amber-600'}">
                   ${isConfirmed ? 'Confirmado' : 'Pendente'}
@@ -1613,9 +1661,6 @@
               <td class="py-4 px-6 text-right space-x-2">
                 <button onclick="reenviarAcessoUsuarioAdmin('${u.email}')" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition">
                   <i class="fa-solid fa-paper-plane text-xs mr-1"></i> Reenviar Acesso
-                </button>
-                <button onclick="abrirModalAlterarEmailAdmin('${u.id}', '${u.email}')" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition">
-                  <i class="fa-solid fa-pen text-xs mr-1"></i> E-mail
                 </button>
               </td>
             </tr>
@@ -1627,7 +1672,7 @@
         document.getElementById('kpi-admin-pendentes').innerText = pendentes;
 
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-10 text-center text-rose-500">Erro ao carregar usuários: ${err.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="py-10 text-center text-rose-500">Erro: ${err.message}</td></tr>`;
       }
     }
 
@@ -1642,36 +1687,7 @@
       }
     }
 
-    function abrirModalAlterarEmailAdmin(userId, currentEmail) {
-      document.getElementById('admin-target-user-id').value = userId;
-      document.getElementById('admin-modal-user-id').innerText = `Usuário atual: ${currentEmail}`;
-      document.getElementById('admin-new-email').value = '';
-      document.getElementById('modal-admin-email').style.display = 'flex';
-    }
-
-    async function confirmarAlterarEmailAdmin(e) {
-      e.preventDefault();
-      const targetUserId = document.getElementById('admin-target-user-id').value;
-      const newEmail = document.getElementById('admin-new-email').value;
-
-      try {
-        const { error } = await supabaseClient.rpc('admin_update_user_email', {
-          target_user_id: targetUserId,
-          new_email: newEmail
-        });
-        if (error) throw error;
-
-        alert(`E-mail atualizado para ${newEmail}!`);
-        fecharModal('modal-admin-email');
-        carregarUsuariosAdmin();
-      } catch (err) {
-        alert('Erro ao alterar e-mail: ' + err.message);
-      }
-    }
-
-    // ==========================================
     // TELEGRAM MODAL
-    // ==========================================
     async function abrirModalTelegram() {
       document.getElementById('modal-telegram').style.display = 'flex';
       const { data } = await supabaseClient.from('perfis_telegram').select('*').eq('user_id', usuarioAtual.id).maybeSingle();
